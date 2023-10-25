@@ -1,10 +1,10 @@
 import { Avatar, Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import ItemFavChat from '../components/listItems/ItemFavChat.tsx'
 import React from 'react'
 import ItemChat from '../components/listItems/ItemChat.tsx'
+import ItemFavChat from '../components/listItems/ItemFavChat.tsx'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
 const ChatsFragment: React.FC = () => {
     return (
@@ -53,8 +53,8 @@ const ChatsFragment: React.FC = () => {
                 </div>
             </div>
 
-            {/*Fav chats list*/}
             <div className={'no-scrollbar overflow-y-auto'}>
+                {/*Fav chats list*/}
                 <div>
                     <div className={'flex flex-col'}>
                         <div className={'flex flex-row m-4'}>
@@ -103,7 +103,7 @@ const ChatsFragment: React.FC = () => {
                                 primaryText={`Item ${item}`}
                                 secondaryText={`Item ${item}`}
                                 time={'10:00'}
-                                notification={item}
+                                notification={1}
                             />
                         ))}
                     </div>
