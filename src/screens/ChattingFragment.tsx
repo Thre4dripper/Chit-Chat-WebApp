@@ -1,9 +1,115 @@
-import { Typography } from "@mui/material";
+import CircularImage from '../components/CircularImage.tsx'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import SendIcon from '@mui/icons-material/Send'
+import React, { useState } from 'react'
 
-export const ChattingFragment = () => {
+const ChattingFragment: React.FC = () => {
+    const [inputValue, setInputValue] = useState('')
+    const [keyboardHeight, setKeyboardHeight] = useState(40)
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault()
+            // Handle sending the message here, e.g., sendMessage(inputValue);
+            setInputValue('')
+            setKeyboardHeight(40)
+        } else if (event.key === 'Enter' && event.shiftKey) {
+            setKeyboardHeight((prev) => {
+                if (prev < 100) {
+                    return prev + 20
+                } else {
+                    return prev
+                }
+            })
+        } else if (event.key === 'Backspace') {
+            const lines = inputValue.split('\n')
+            if (lines.length <= 4 && lines[lines.length - 1].length === 0) {
+                setKeyboardHeight((prev) => {
+                    if (prev > 40) {
+                        return prev - 20
+                    } else {
+                        return prev
+                    }
+                })
+            }
+        }
+    }
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInputValue(event.target.value)
+    }
     return (
-        <Typography className={"bg-blue-100 h-screen"} variant={"h4"}>
-            placeholder
-        </Typography>
-    );
+        <div className={'bg-blue-50 h-screen rounded-tl-3xl rounded-bl-3xl'}>
+            <div className={'flex flex-col h-screen'}>
+                {/*Header section*/}
+                <div className={'bg-slate-300  rounded-tl-3xl'}>
+                    <div className={'flex flex-row px-4 pt-4 pb-2'}>
+                        <CircularImage image={'https://i.pravatar.cc/300'} size={48} />
+                        <div className={'mx-4 flex flex-col flex-auto justify-center'}>
+                            <div className={'flex flex-row justify-between'}>
+                                <span className={'text-black text-lg font-bold'}>
+                                    {'Chat Name'}
+                                </span>
+                            </div>
+                            <div className={'flex flex-row justify-between'}>
+                                <span className={'text-gray-500 text-sm'}>{'Online'}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div className={'mt-2'}>
+                                <IconButton>
+                                    <MoreVertIcon className={'text-gray-500'} />
+                                </IconButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/*Chatting section*/}
+                <div className={'flex-1 bg-white'}></div>
+                {/*Keyboard section*/}
+                <div className={'bg-slate-300 rounded-bl-3xl'}>
+                    <div className={'flex flex-row px-4 py-2 h-fit'}>
+                        <div className={'flex flex-row gap-2 flex-auto'}>
+                            <div className={'flex flex-col justify-end'}>
+                                <div className={'flex flex-row gap-2'}>
+                                    <IconButton>
+                                        <AddIcon className={'text-gray-700'} />
+                                    </IconButton>
+                                </div>
+                            </div>
+                            <div className={'flex flex-row flex-auto'}>
+                                <textarea
+                                    className={
+                                        'flex-1 rounded-md h-10 px-4 py-2 no-scrollbar overflow-scroll'
+                                    }
+                                    style={{
+                                        backgroundColor: '#1e2a31',
+                                        border: 'none',
+                                        color: 'white',
+                                        resize: 'none',
+                                        height: keyboardHeight,
+                                    }}
+                                    value={inputValue}
+                                    onChange={handleInputChange}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder='Type a message'
+                                />
+                            </div>
+                            <div className={'flex flex-col justify-end'}>
+                                <div className={'flex flex-row'}>
+                                    <IconButton>
+                                        <SendIcon className={'text-gray-700'} />
+                                    </IconButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
+
+export default ChattingFragment
