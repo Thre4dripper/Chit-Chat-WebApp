@@ -2,8 +2,9 @@ import { Avatar, Badge, IconButton, Typography } from "@mui/material";
 import { GlobalConstants } from "../constants/GlobalConstants.ts";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FavChat from "../components/FavChat.tsx";
+import ItemFavChat from "../components/listItems/ItemFavChat.tsx";
 import React from "react";
+import ItemChat from "../components/listItems/ItemChat.tsx";
 
 export const ChatsFragment: React.FC = () => {
     return (
@@ -53,55 +54,67 @@ export const ChatsFragment: React.FC = () => {
             </div>
 
             {/*Fav chats list*/}
-            <div>
-                <div className={"flex flex-col"}>
-                    <div className={"flex flex-row m-4"}>
-                        <Typography
-                            className={"select-none"}
-                            color={"white"}
-                            variant={"h6"}
-                        >
-                            Favourites
-                        </Typography>
-                    </div>
-                    <div className="flex overflow-hidden">
-                        <div className={"flex flex-row gap-4"}>
-                            {[1, 2, 3].map((item) => (
-                                <FavChat
-                                    key={item}
-                                    image={"https://picsum.photos/200"}
-                                    name={`Item ${item}`}
-                                />
-                            ))}
+            <div className={'no-scrollbar overflow-y-auto'}>
+                <div>
+                    <div className={"flex flex-col"}>
+                        <div className={"flex flex-row m-4"}>
+                            <Typography
+                                className={"select-none"}
+                                color={"white"}
+                                variant={"h6"}
+                            >
+                                Favourites
+                            </Typography>
                         </div>
-                        <div className={'flex-auto flex justify-center'}>
-                            <div className={'flex flex-col justify-center'}>
-                                <IconButton>
-                                    <ArrowForwardIosIcon
-                                        className={'text-white'}
-                                        sx={{ width: 30, height: 30 }}
+                        <div className="flex overflow-hidden">
+                            <div className={"flex flex-row gap-4"}>
+                                {[1, 2, 3].map((item) => (
+                                    <ItemFavChat
+                                        key={item}
+                                        image={"https://picsum.photos/200"}
+                                        name={`Item ${item}`}
                                     />
-                                </IconButton>
+                                ))}
+                            </div>
+                            <div className={'flex-auto flex justify-center'}>
+                                <div className={'flex flex-col justify-center'}>
+                                    <IconButton>
+                                        <ArrowForwardIosIcon
+                                            className={'text-white'}
+                                            sx={{ width: 30, height: 30 }}
+                                        />
+                                    </IconButton>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/*Chats list*/}
-            <div>
-                <div className={"flex flex-col"}>
-                    <div className={"flex flex-row m-4"}>
-                        <Typography
-                            className={"select-none"}
-                            color={"white"}
-                            variant={"h6"}
-                        >
-                            Chats
-                        </Typography>
+                {/*Chats list*/}
+                <div>
+                    <div className={"flex flex-col"}>
+                        <div className={"flex flex-row m-4"}>
+                            <Typography
+                                className={"select-none"}
+                                color={"white"}
+                                variant={"h6"}
+                            >
+                                Chats
+                            </Typography>
+                        </div>
+                    </div>
+                    <div className={"flex flex-col"}>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((item) => (
+                            <ItemChat key={item}
+                                      image={"https://picsum.photos/200"}
+                                      primaryText={`Item ${item}`}
+                                      secondaryText={`Item ${item}`}
+                                      time={"10:00"}
+                                      notification={item}
+                            />
+                        ))}
                     </div>
                 </div>
-
             </div>
         </div>
     );
