@@ -3,10 +3,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SendIcon from '@mui/icons-material/Send'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import stickerData from '../assets/stickers/sticker_ghost_1.json'
 import LeftChatMessage from '../components/chatMessages/LeftChatMessage.tsx'
 import { ChatMessageType } from '../enums/ChatMessageType.ts'
+import RightChatMessage from '../components/chatMessages/RightChatMessage.tsx'
 
 const ChattingFragment: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
@@ -43,6 +44,13 @@ const ChattingFragment: React.FC = () => {
     const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setInputValue(event.target.value)
     }
+
+    // for scrolling to bottom
+    const bottomRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [])
     return (
         <div className={'bg-blue-50 h-screen rounded-tl-3xl rounded-bl-3xl'}>
             <div className={'flex flex-col h-screen'}>
@@ -98,6 +106,31 @@ const ChattingFragment: React.FC = () => {
                                 sticker={stickerData}
                                 time={'10:00'}
                             />
+
+                            <RightChatMessage
+                                type={ChatMessageType.TEXT}
+                                profileImage={'https://i.pravatar.cc/300'}
+                                message={'Hello world'}
+                                time={'10:00'}
+                            />
+
+                            <RightChatMessage
+                                type={ChatMessageType.IMAGE}
+                                profileImage={'https://i.pravatar.cc/300'}
+                                image={
+                                    'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'
+                                }
+                                time={'10:00'}
+                            />
+
+                            <RightChatMessage
+                                type={ChatMessageType.STICKER}
+                                profileImage={'https://i.pravatar.cc/300'}
+                                sticker={stickerData}
+                                time={'10:00'}
+                            />
+
+                            <div ref={bottomRef} />
                         </div>
                     </div>
                 </div>
