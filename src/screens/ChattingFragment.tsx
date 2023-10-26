@@ -4,7 +4,8 @@ import { IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SendIcon from '@mui/icons-material/Send'
 import React, { useState } from 'react'
-import ItemLeftImageMsg from '../components/chatMessages/ItemLeftImageMsg.tsx'
+import ItemLeftStickerMsg from '../components/chatMessages/ItemLeftStickerMsg.tsx'
+import stickerData from '../assets/stickers/sticker_ghost_1.json'
 
 const ChattingFragment: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
@@ -74,11 +75,23 @@ const ChattingFragment: React.FC = () => {
                     <div>
                         {/*Chatting list*/}
                         <div className={'flex flex-col gap-2'}>
-                            <ItemLeftImageMsg
+                            {/*<ItemLeftTextMsg*/}
+                            {/*    profileImage={'https://i.pravatar.cc/300'}*/}
+                            {/*    message={'Hello world'}*/}
+                            {/*    time={'10:00'}*/}
+                            {/*/>*/}
+
+                            {/*<ItemLeftImageMsg*/}
+                            {/*    profileImage={'https://i.pravatar.cc/300'}*/}
+                            {/*    image={*/}
+                            {/*        'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'*/}
+                            {/*    }*/}
+                            {/*    time={'10:00'}*/}
+                            {/*/>*/}
+
+                            <ItemLeftStickerMsg
                                 profileImage={'https://i.pravatar.cc/300'}
-                                image={
-                                    'https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
-                                }
+                                stickerData={stickerData}
                                 time={'10:00'}
                             />
                         </div>
