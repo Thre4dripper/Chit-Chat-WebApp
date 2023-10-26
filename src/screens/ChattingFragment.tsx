@@ -4,6 +4,7 @@ import { IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SendIcon from '@mui/icons-material/Send'
 import React, { useState } from 'react'
+import ItemLeftTextMsg from '../components/chatMessages/ItemLeftTextMsg.tsx'
 
 const ChattingFragment: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
@@ -54,7 +55,9 @@ const ChattingFragment: React.FC = () => {
                                 </span>
                             </div>
                             <div className={'flex flex-row justify-between'}>
-                                <span className={'text-gray-500 text-sm'}>{'Online'}</span>
+                                <span className={'text-green-600 font-medium text-sm'}>
+                                    {'Online'}
+                                </span>
                             </div>
                         </div>
                         <div>
@@ -67,7 +70,18 @@ const ChattingFragment: React.FC = () => {
                     </div>
                 </div>
                 {/*Chatting section*/}
-                <div className={'flex-1 bg-white'}></div>
+                <div className={'flex-1 bg-white'}>
+                    <div>
+                        {/*Chatting list*/}
+                        <div className={'flex flex-col gap-2'}>
+                            <ItemLeftTextMsg
+                                profileImage={'https://i.pravatar.cc/300'}
+                                message={'fa aga fyufj cgjc gaeg aeg aegh aeh hes eh seh seh'}
+                                time={'10:00'}
+                            />
+                        </div>
+                    </div>
+                </div>
                 {/*Keyboard section*/}
                 <div className={'bg-slate-300 rounded-bl-3xl'}>
                     <div className={'flex flex-row px-4 py-2 h-fit'}>
