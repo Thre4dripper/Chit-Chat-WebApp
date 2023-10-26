@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SendIcon from '@mui/icons-material/Send'
 import React, { useState } from 'react'
-import ItemLeftTextMsg from '../components/chatMessages/ItemLeftTextMsg.tsx'
+import ItemLeftImageMsg from '../components/chatMessages/ItemLeftImageMsg.tsx'
 
 const ChattingFragment: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
@@ -70,13 +70,15 @@ const ChattingFragment: React.FC = () => {
                     </div>
                 </div>
                 {/*Chatting section*/}
-                <div className={'flex-1 bg-white'}>
+                <div className={'flex-1 bg-white no-scrollbar overflow-y-scroll'}>
                     <div>
                         {/*Chatting list*/}
                         <div className={'flex flex-col gap-2'}>
-                            <ItemLeftTextMsg
+                            <ItemLeftImageMsg
                                 profileImage={'https://i.pravatar.cc/300'}
-                                message={'fa aga fyufj cgjc gaeg aeg aegh aeh hes eh seh seh'}
+                                image={
+                                    'https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+                                }
                                 time={'10:00'}
                             />
                         </div>
