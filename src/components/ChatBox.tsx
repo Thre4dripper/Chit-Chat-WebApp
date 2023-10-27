@@ -12,7 +12,11 @@ const ChatBox: React.FC = () => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [])
     return (
-        <div className={'flex-1 bg-white no-scrollbar overflow-y-scroll'}>
+        <div
+            className={
+                'z-0 flex-1 bg-white overflow-y-scroll ' +
+                'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
+            }>
             <div>
                 {/*Chatting list*/}
                 <div className={'flex flex-col gap-2'}>

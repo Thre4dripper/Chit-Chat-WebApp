@@ -5,7 +5,10 @@ import React from 'react'
 
 const ChatHeader: React.FC = () => {
     return (
-        <div className={'bg-slate-300  rounded-tl-3xl'}>
+        <div
+            className={
+                'z-10 bg-slate-300 rounded-tl-3xl rounded-bl-3xl shadow-slate-950/20 shadow-md rounded-tr-3xl'
+            }>
             <div className={'flex flex-row px-4 pt-4 pb-2'}>
                 <CircularImage image={'https://i.pravatar.cc/300'} size={48} />
                 <div className={'mx-4 flex flex-col flex-auto justify-center'}>

@@ -8,7 +8,7 @@ const App: React.FC = () => {
             <div className={'w-[25rem]'}>
                 <ChatsFragment />
             </div>
-            <div className={'flex-1 w-2/3'}>
+            <div className={'flex-1 w-2/3 rounded-3xl'}>
                 <ChattingFragment />
             </div>
         </div>

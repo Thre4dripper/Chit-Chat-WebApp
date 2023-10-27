@@ -53,7 +53,10 @@ const ChatsFragment: React.FC = () => {
                 </div>
             </div>
 
-            <div className={'no-scrollbar overflow-y-auto'}>
+            <div
+                className={
+                    'overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-800/10 scrollbar-thumb-rounded-full'
+                }>
                 {/*Fav chats list*/}
                 <div>
                     <div className={'flex flex-col'}>
