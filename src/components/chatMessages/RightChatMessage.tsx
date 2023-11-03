@@ -4,10 +4,11 @@ import LeftText from './common/LeftText.tsx'
 import LeftImage from './common/LeftImage.tsx'
 import LeftSticker from './common/LeftSticker.tsx'
 import { LottieOptions } from 'lottie-react'
+import CircularImage from '../CircularImage.tsx'
 
 interface ItemChatRightMsgProps {
     type: ChatMessageType
-    profileImage: string
+    seen: string[]
     message?: string
     image?: string
     sticker?: LottieOptions['animationData']
@@ -16,6 +17,7 @@ interface ItemChatRightMsgProps {
 
 const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
     type,
+    seen,
     message,
     image,
     sticker,
@@ -32,8 +34,23 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
                     {type === ChatMessageType.STICKER && (
                         <LeftSticker stickerData={sticker ?? ''} />
                     )}
-                    <div className={'flex justify-end py-1'}>
-                        <span className={'text-slate-400 font-bold text-xs'}>{time}</span>
+                    <div className={'flex justify-end'}>
+                        <div className={'flex flex-row-reverse'}>
+                            {seen.map((item) => {
+                                return (
+                                    <div className={'-ml-6'}>
+                                        <CircularImage
+                                            image={item}
+                                            size={20}
+                                            alt={'Sender Image'}
+                                        />
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div className={'flex flex-col justify-center'}>
+                            <span className={'text-slate-400 font-bold text-xs'}>{time}</span>
+                        </div>
                     </div>
                 </div>
             </div>
