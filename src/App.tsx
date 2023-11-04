@@ -1,18 +1,21 @@
 import React from 'react'
-import ChattingFragment from './screens/ChattingFragment.tsx'
-import ChatsFragment from './screens/ChatsFragment.tsx'
+import HomeScreen from './screens/HomeScreen.tsx'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import AuthScreen from './screens/AuthScreen.tsx'
+import ProtectiveRoute from './utils/ProtectiveRoute.tsx'
 
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <ProtectiveRoute component={HomeScreen} />,
+    },
+    {
+        path: '/auth',
+        element: <AuthScreen />,
+    },
+])
 const App: React.FC = () => {
-    return (
-        <div className={'flex flex-row bg-slate-900/90 '}>
-            <div className={'w-[25rem]'}>
-                <ChatsFragment />
-            </div>
-            <div className={'flex-1 w-2/3 rounded-3xl'}>
-                <ChattingFragment />
-            </div>
-        </div>
-    )
+    return <RouterProvider router={router} />
 }
 
 export default App

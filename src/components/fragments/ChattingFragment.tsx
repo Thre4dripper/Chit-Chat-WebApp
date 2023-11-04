@@ -1,7 +1,7 @@
 import React from 'react'
-import ChatInput from '../components/ChatInput.tsx'
-import ChatHeader from '../components/ChatHeader.tsx'
-import ChatBox from '../components/ChatBox.tsx'
+import ChatInput from '../ChatInput.tsx'
+import ChatHeader from '../ChatHeader.tsx'
+import ChatBox from '../ChatBox.tsx'
 
 const ChattingFragment: React.FC = () => {
     return (

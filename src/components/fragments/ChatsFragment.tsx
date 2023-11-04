@@ -1,9 +1,9 @@
 import { Avatar, Badge, IconButton, Typography } from '@mui/material'
-import { GlobalConstants } from '../constants/GlobalConstants.ts'
+import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
 import React from 'react'
-import ItemChat from '../components/listItems/ItemChat.tsx'
-import ItemFavChat from '../components/listItems/ItemFavChat.tsx'
+import ItemChat from '../listItems/ItemChat.tsx'
+import ItemFavChat from '../listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
 const ChatsFragment: React.FC = () => {
