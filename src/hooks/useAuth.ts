@@ -1,23 +1,21 @@
-import { useEffect, useState } from 'react'
-import { User } from 'firebase/auth'
+import { useState } from 'react'
+import { User, getAuth } from 'firebase/auth'
+import { firebaseSignInWithGoogle, firebaseSignOut } from '../firebase/auth/FirebaseSignIn.ts'
 
 const useAuth = () => {
-    const [user, setUser] = useState<User | null>(null)
+    const [user, setUser] = useState<User | null>(getAuth().currentUser)
 
-    const login = (userData: User) => {
-        //login logic
-        setUser(userData)
+    const login = () => {
+        firebaseSignInWithGoogle((userData: User | null) => {
+            setUser(userData)
+        })
     }
 
     const logout = () => {
         //logout logic
+        firebaseSignOut()
         setUser(null)
     }
-
-    useEffect(() => {
-        //check if user is logged in
-        setUser(null)
-    }, [])
 
     return { user, login, logout }
 }
