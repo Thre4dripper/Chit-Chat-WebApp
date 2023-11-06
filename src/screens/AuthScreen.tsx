@@ -3,17 +3,25 @@ import { Button } from '@mui/material'
 import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 import LottieLoading from '../components/LottieLoading.tsx'
+import useLocalStorage from '../hooks/useLocalStorage.ts'
+import { GlobalConstants } from '../constants/GlobalConstants.ts'
 
 const AuthScreen: React.FC = () => {
     const { user, loading, googleLogin, githubLogin, logout } = useAuth()
+    const [, setUsername] = useLocalStorage(GlobalConstants.USERNAME, '')
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!loading && user) {
+        if (loading) {
+            // do nothing when loading
+            return
+        }
+        if (user) {
+            setUsername(user.displayName || '')
             navigate('/')
             console.log(user)
         }
-    }, [loading, navigate, user])
+    }, [loading, navigate, setUsername, user])
 
     if (loading) {
         return <LottieLoading />
