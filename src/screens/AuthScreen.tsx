@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@mui/material'
 import useAuth from '../hooks/useAuth.ts'
+import { useNavigate } from 'react-router-dom'
 
 const AuthScreen: React.FC = () => {
-    const { googleLogin, githubLogin, logout } = useAuth()
+    const { user, googleLogin, githubLogin, logout } = useAuth()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (user) {
+            // navigate('/')
+            console.log(user)
+        }
+    }, [navigate, user])
 
     return (
         <div>

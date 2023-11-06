@@ -1,102 +1,84 @@
 import {
-    GoogleAuthProvider,
-    GithubAuthProvider,
-    getAuth,
-    signInWithPopup,
-    User,
     Auth,
-    OAuthCredential,
-    signOut,
-    UserCredential,
     fetchSignInMethodsForEmail,
+    getAuth,
+    GithubAuthProvider,
+    GoogleAuthProvider,
     linkWithCredential,
+    OAuthCredential,
+    signInWithPopup,
+    signOut,
+    AuthError,
 } from 'firebase/auth'
 
-export const firebaseSignInWithGoogle = (callback: (user: User | null) => void) => {
+type FirebaseSignInError = AuthError & {
+    customData?: {
+        email: string
+    }
+}
+
+export const firebaseSignInWithGoogle = async () => {
     const auth = getAuth()
     const provider = new GoogleAuthProvider()
-    signInWithPopup(auth, provider)
-        .then((result: UserCredential) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result)
-            const token = credential?.accessToken
-            console.log(token)
-            // The signed-in user info.
-            const user = result.user
-            callback(user)
-        })
-        .catch((error) => {
-            console.log(error)
-            callback(null)
-        })
+    try {
+        const result = await signInWithPopup(auth, provider)
+        const credential = GoogleAuthProvider.credentialFromResult(result)
+        const token = credential?.accessToken
+        console.log(token)
+        return result.user
+    } catch (error) {
+        console.log(error)
+        return null
+    }
 }
 
-export const firebaseSignInWithGithub = (callback: (user: User | null) => void) => {
+export const firebaseSignInWithGithub = async () => {
     const auth = getAuth()
     const provider = new GithubAuthProvider()
-    signInWithPopup(auth, provider)
-        .then((result: UserCredential) => {
-            // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-            const credential = GithubAuthProvider.credentialFromResult(result)
-            const token = credential?.accessToken
-            console.log(token)
-            // The signed-in user info.
-            const user = result.user
-            callback(user)
-            // ...
-        })
-        .catch((error) => {
-            const errorCode = error.code
-            const credential = GithubAuthProvider.credentialFromError(error)!
-            if (errorCode === 'auth/account-exists-with-different-credential') {
-                const email = error.customData.email
-                linkGithubToGoogle(email, auth, credential, callback)
-            } else {
-                console.log(error)
-                callback(null)
-            }
-        })
-}
 
-const linkGithubToGoogle = (
-    email: string,
-    auth: Auth,
-    credential: OAuthCredential,
-    callback: (user: User | null) => void
-) => {
-    //link github acc to google acc
-    fetchSignInMethodsForEmail(auth, email).then((methods) => {
-        if (methods[0] === 'google.com') {
-            firebaseSignInWithGoogle((user: User | null) => {
-                if (user) {
-                    linkWithCredential(user, credential)
-                        .then((userCred: UserCredential) => {
-                            // GitHub account successfully linked to the existing Firebase user.
-                            const user = userCred.user
-                            callback(user)
-                        })
-                        .catch((error) => {
-                            // Some error occurred.
-                            console.log(error)
-                            callback(null)
-                        })
-                } else {
-                    callback(null)
-                }
-            })
+    try {
+        const result = await signInWithPopup(auth, provider)
+        const credential = GithubAuthProvider.credentialFromResult(result)
+        const token = credential?.accessToken
+        console.log(token)
+        return result.user
+    } catch (error) {
+        const errorCode = (error as FirebaseSignInError).code
+        const credential = GithubAuthProvider.credentialFromError(error as FirebaseSignInError)!
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+            const email = (error as FirebaseSignInError).customData?.email
+            return await linkGithubToGoogle(email, auth, credential)
+        } else {
+            console.log(error)
+            return null
         }
-    })
+    }
 }
 
-export const firebaseSignOut = () => {
+const linkGithubToGoogle = async (email: string, auth: Auth, credential: OAuthCredential) => {
+    try {
+        const methods = await fetchSignInMethodsForEmail(auth, email)
+        if (methods[0] === 'google.com') {
+            const user = await firebaseSignInWithGoogle()
+            if (user) {
+                const userCred = await linkWithCredential(user, credential)
+                return userCred.user
+            }
+            return null
+        }
+        return null
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
+export const firebaseSignOut = async () => {
     const auth = getAuth()
-    signOut(auth)
-        .then(() => {
-            // Sign-out successful.
-            console.log('Sign-out successful.')
-        })
-        .catch((error) => {
-            // An error happened.
-            console.log('Sign-out error', error)
-        })
+    try {
+        await signOut(auth)
+        console.log('Sign-out successful.')
+    } catch (error) {
+        console.log('Sign-out error', error)
+    }
 }

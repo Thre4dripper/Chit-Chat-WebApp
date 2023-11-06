@@ -9,28 +9,25 @@ import {
 const useAuth = () => {
     const [user, setUser] = useState<User | null>(null)
 
-    const googleLogin = () => {
-        firebaseSignInWithGoogle((userData: User | null) => {
-            setUser(userData)
-        })
+    const googleLogin = async () => {
+        const userData = await firebaseSignInWithGoogle()
+        setUser(userData)
     }
 
-    const githubLogin = () => {
-        firebaseSignInWithGithub((userData: User | null) => {
-            setUser(userData)
-        })
+    const githubLogin = async () => {
+        const userData = await firebaseSignInWithGithub()
+        setUser(userData)
     }
 
-    const logout = () => {
+    const logout = async () => {
         //logout logic
-        firebaseSignOut()
+        await firebaseSignOut()
         setUser(null)
     }
 
     useEffect(() => {
         const unsubscribe = getAuth().onAuthStateChanged((currentUser: User | null) => {
             setUser(currentUser)
-            console.log(currentUser)
         })
         return () => unsubscribe()
     }, [])
