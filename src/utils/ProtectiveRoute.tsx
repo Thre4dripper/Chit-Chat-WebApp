@@ -1,6 +1,7 @@
 import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect } from 'react'
+import LottieLoading from '../components/LottieLoading.tsx'
 
 interface ProtectiveRouteProps {
     component: React.FC
@@ -20,7 +21,9 @@ const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ component: Component 
         }
     }, [loading, navigate, user])
 
-    if (loading) return <div>Loading...</div>
+    if (loading) {
+        return <LottieLoading />
+    }
     return <Component />
 }
 

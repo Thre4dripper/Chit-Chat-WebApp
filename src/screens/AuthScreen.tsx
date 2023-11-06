@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Button } from '@mui/material'
 import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
+import LottieLoading from '../components/LottieLoading.tsx'
 
 const AuthScreen: React.FC = () => {
     const { user, loading, googleLogin, githubLogin, logout } = useAuth()
@@ -14,7 +15,9 @@ const AuthScreen: React.FC = () => {
         }
     }, [loading, navigate, user])
 
-    if (loading) return <div>Loading...</div>
+    if (loading) {
+        return <LottieLoading />
+    }
     return (
         <div>
             <Button variant={'contained'} onClick={googleLogin}>
