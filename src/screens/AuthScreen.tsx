@@ -4,16 +4,17 @@ import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 
 const AuthScreen: React.FC = () => {
-    const { user, googleLogin, githubLogin, logout } = useAuth()
+    const { user, loading, googleLogin, githubLogin, logout } = useAuth()
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (user) {
-            // navigate('/')
+        if (!loading && user) {
+            navigate('/')
             console.log(user)
         }
-    }, [navigate, user])
+    }, [loading, navigate, user])
 
+    if (loading) return <div>Loading...</div>
     return (
         <div>
             <Button variant={'contained'} onClick={googleLogin}>

@@ -7,15 +7,20 @@ interface ProtectiveRouteProps {
 }
 
 const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ component: Component }) => {
-    const { user } = useAuth()
+    const { user, loading } = useAuth()
     const navigate = useNavigate()
 
     useEffect(() => {
+        if (loading) {
+            // do nothing when loading
+            return
+        }
         if (!user) {
             navigate('/auth')
         }
-    }, [navigate, user])
+    }, [loading, navigate, user])
 
+    if (loading) return <div>Loading...</div>
     return <Component />
 }
 

@@ -8,6 +8,7 @@ import {
 
 const useAuth = () => {
     const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true)
 
     const googleLogin = async () => {
         const userData = await firebaseSignInWithGoogle()
@@ -28,11 +29,12 @@ const useAuth = () => {
     useEffect(() => {
         const unsubscribe = getAuth().onAuthStateChanged((currentUser: User | null) => {
             setUser(currentUser)
+            setLoading(false)
         })
         return () => unsubscribe()
     }, [])
 
-    return { user, googleLogin, githubLogin, logout }
+    return { user, loading, googleLogin, githubLogin, logout }
 }
 
 export default useAuth

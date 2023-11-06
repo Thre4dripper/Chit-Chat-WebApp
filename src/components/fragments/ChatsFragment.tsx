@@ -5,8 +5,10 @@ import React from 'react'
 import ItemChat from '../listItems/ItemChat.tsx'
 import ItemFavChat from '../listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import useAuth from '../../hooks/useAuth.ts'
 
 const ChatsFragment: React.FC = () => {
+    const { logout } = useAuth()
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -31,7 +33,7 @@ const ChatsFragment: React.FC = () => {
                 </div>
                 <div className={'flex flex-col justify-center'}>
                     <IconButton>
-                        <LogoutIcon className={'text-white'} />
+                        <LogoutIcon className={'text-white'} onClick={logout} />
                     </IconButton>
                 </div>
             </div>
