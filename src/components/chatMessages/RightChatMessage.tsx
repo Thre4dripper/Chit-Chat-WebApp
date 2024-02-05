@@ -1,8 +1,8 @@
 import React from 'react'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
-import LeftText from './common/LeftText.tsx'
-import LeftImage from './common/LeftImage.tsx'
-import LeftSticker from './common/LeftSticker.tsx'
+import MsgText from './common/MsgText.tsx'
+import MsgImage from './common/MsgImage.tsx'
+import MsgSticker from './common/MsgSticker.tsx'
 import { LottieOptions } from 'lottie-react'
 import CircularImage from '../CircularImage.tsx'
 
@@ -23,16 +23,43 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
     sticker,
     time,
 }) => {
+    //TODO fix message colors
+    //TODO fix flex box
     return (
         <div className={'flex flex-row px-4 py-2'}>
             <div className={'flex w-full'}>
                 {/* Persistent right space */}
                 <div className={'flex-1 md:min-w-[5rem] lg:min-w-[10rem]'} />
                 <div>
-                    {type === ChatMessageType.TEXT && <LeftText message={message ?? ''} />}
-                    {type === ChatMessageType.IMAGE && <LeftImage image={image ?? ''} />}
+                    {type === ChatMessageType.TEXT && (
+                        <div
+                            className={
+                                'flex-none bg-red-400 shadow-slate-950/20 shadow-md ' +
+                                'max-w-[36rem] w-full ' +
+                                'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl'
+                            }>
+                            <MsgText message={message ?? ''} className={'text-white/80'} />
+                        </div>
+                    )}
+                    {type === ChatMessageType.IMAGE && (
+                        <div
+                            className={
+                                'flex-none bg-red-400 shadow-slate-950/20 shadow-md ' +
+                                'min-w-[16rem] max-w-[36rem] w-full ' +
+                                'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl overflow-hidden'
+                            }>
+                            <MsgImage image={image ?? ''} />
+                        </div>
+                    )}
                     {type === ChatMessageType.STICKER && (
-                        <LeftSticker stickerData={sticker ?? ''} />
+                        <div
+                            className={
+                                'flex-none ' +
+                                'min-w-[16rem] max-w-[36rem] w-full ' +
+                                'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl flex justify-end'
+                            }>
+                            <MsgSticker stickerData={sticker ?? ''} />
+                        </div>
                     )}
                     <div className={'flex justify-end'}>
                         <div className={'flex flex-row-reverse'}>
