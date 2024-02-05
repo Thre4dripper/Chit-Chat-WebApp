@@ -1,30 +1,30 @@
 import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect } from 'react'
-import LottieLoading from '../components/LottieLoading.tsx'
+import LottieLoading from './LottieLoading.tsx'
 
 interface ProtectiveRouteProps {
-    component: React.FC
+    children: React.ReactNode
 }
 
-const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ component: Component }) => {
-    const { user, loading } = useAuth()
+const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
+    const { user, isLoading } = useAuth()
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (loading) {
+        if (isLoading) {
             // do nothing when loading
             return
         }
         if (!user) {
             navigate('/auth')
         }
-    }, [loading, navigate, user])
+    }, [isLoading, navigate, user])
 
-    if (loading) {
+    if (isLoading) {
         return <LottieLoading />
     }
-    return <Component />
+    return <>{children}</>
 }
 
 export default ProtectiveRoute
