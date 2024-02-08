@@ -7,12 +7,12 @@ import useLocalStorage from '../hooks/useLocalStorage.ts'
 import { GlobalConstants } from '../constants/GlobalConstants.ts'
 
 const AuthScreen: React.FC = () => {
-    const { user, loading, googleLogin, githubLogin, logout } = useAuth()
+    const { user, isLoading, googleLogin, githubLogin, logout } = useAuth()
     const [, setUsername] = useLocalStorage(GlobalConstants.USERNAME, '')
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (loading) {
+        if (isLoading) {
             // do nothing when loading
             return
         }
@@ -21,9 +21,9 @@ const AuthScreen: React.FC = () => {
             navigate('/')
             console.log(user)
         }
-    }, [loading, navigate, setUsername, user])
+    }, [isLoading, navigate, setUsername, user])
 
-    if (loading) {
+    if (isLoading) {
         return <LottieLoading />
     }
     return (
