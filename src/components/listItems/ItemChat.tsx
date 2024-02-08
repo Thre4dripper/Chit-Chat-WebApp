@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Divider, Typography } from '@mui/material'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 
@@ -54,10 +54,8 @@ const ItemChat: React.FC<ItemChatProps> = ({
                 </div>
             </div>
             {/*Separator*/}
-            <div className={'flex flex-row justify-end'}>
-                <div className={'w-4/5'}>
-                    <div className={'h-[1px] bg-slate-700'} />
-                </div>
+            <div className={'flex justify-end'}>
+                <Divider className={'bg-white/20 w-4/5'} />
             </div>
         </div>
     )

@@ -78,14 +78,9 @@ const ChatsFragment: React.FC = () => {
                                 ))}
                             </div>
                             <div className={'flex-auto flex justify-center'}>
-                                <div className={'flex flex-col justify-center'}>
-                                    <IconButton>
-                                        <ArrowForwardIosIcon
-                                            className={'text-white'}
-                                            sx={{ width: 30, height: 30 }}
-                                        />
-                                    </IconButton>
-                                </div>
+                                <IconButton>
+                                    <ArrowForwardIosIcon className={'text-white/50'} />
+                                </IconButton>
                             </div>
                         </div>
                     </div>
@@ -93,12 +88,10 @@ const ChatsFragment: React.FC = () => {
 
                 {/*Chats list*/}
                 <div>
-                    <div className={'flex flex-col'}>
-                        <div className={'flex flex-row m-4'}>
-                            <Typography className={'select-none'} color={'white'} variant={'h6'}>
-                                Chats
-                            </Typography>
-                        </div>
+                    <div className={'flex flex-col m-4'}>
+                        <Typography className={'select-none'} color={'white'} variant={'h6'}>
+                            Chats
+                        </Typography>
                     </div>
                     <div className={'flex flex-col'}>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((item) => (
