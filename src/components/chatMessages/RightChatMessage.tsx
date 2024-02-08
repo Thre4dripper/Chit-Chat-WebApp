@@ -23,61 +23,53 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
     sticker,
     time,
 }) => {
-    //TODO fix message colors
-    //TODO fix flex box
+    const rightMessageColor = '#FF8181'
     return (
-        <div className={'flex flex-row px-4 py-2'}>
-            <div className={'flex w-full'}>
-                {/* Persistent right space */}
-                <div className={'flex-1 md:min-w-[5rem] lg:min-w-[10rem]'} />
-                <div>
-                    {type === ChatMessageType.TEXT && (
-                        <div
-                            className={
-                                'flex-none bg-red-400 shadow-slate-950/20 shadow-md ' +
-                                'max-w-[36rem] w-full ' +
-                                'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl'
-                            }>
-                            <MsgText message={message ?? ''} className={'text-white/80'} />
-                        </div>
-                    )}
-                    {type === ChatMessageType.IMAGE && (
-                        <div
-                            className={
-                                'flex-none bg-red-400 shadow-slate-950/20 shadow-md ' +
-                                'min-w-[16rem] max-w-[36rem] w-full ' +
-                                'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl overflow-hidden'
-                            }>
-                            <MsgImage image={image ?? ''} />
-                        </div>
-                    )}
-                    {type === ChatMessageType.STICKER && (
-                        <div
-                            className={
-                                'flex-none ' +
-                                'min-w-[16rem] max-w-[36rem] w-full ' +
-                                'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl flex justify-end'
-                            }>
-                            <MsgSticker stickerData={sticker ?? ''} />
-                        </div>
-                    )}
-                    <div className={'flex justify-end'}>
-                        <div className={'flex flex-row-reverse'}>
-                            {seen.map((item) => {
-                                return (
-                                    <div className={'-ml-6'}>
-                                        <CircularImage
-                                            image={item}
-                                            size={20}
-                                            alt={'Sender Image'}
-                                        />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        <div className={'flex flex-col justify-center'}>
-                            <span className={'text-slate-400 font-bold text-xs'}>{time}</span>
-                        </div>
+        <div className={'w-full flex flex-row px-4 py-2 justify-end'}>
+            <div>
+                {type === ChatMessageType.TEXT && (
+                    <div
+                        style={{ backgroundColor: rightMessageColor }}
+                        className={
+                            'shadow-slate-950/20 shadow-md ' +
+                            'max-w-[36rem] w-full ' +
+                            'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl'
+                        }>
+                        <MsgText message={message ?? ''} className={'text-white/80'} />
+                    </div>
+                )}
+                {type === ChatMessageType.IMAGE && (
+                    <div
+                        style={{ backgroundColor: rightMessageColor }}
+                        className={
+                            'shadow-slate-950/20 shadow-md ' +
+                            'min-w-[16rem] max-w-[36rem] w-full ' +
+                            'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl overflow-hidden'
+                        }>
+                        <MsgImage image={image ?? ''} />
+                    </div>
+                )}
+                {type === ChatMessageType.STICKER && (
+                    <div
+                        className={
+                            'max-w-[36rem] w-full ' +
+                            'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl flex justify-end'
+                        }>
+                        <MsgSticker stickerData={sticker ?? ''} />
+                    </div>
+                )}
+                <div className={'flex justify-end'}>
+                    <div className={'flex flex-row-reverse'}>
+                        {seen.map((item) => {
+                            return (
+                                <div className={'-ml-6'}>
+                                    <CircularImage image={item} size={20} alt={'Sender Image'} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className={'flex flex-col justify-center'}>
+                        <span className={'text-slate-400 font-bold text-xs'}>{time}</span>
                     </div>
                 </div>
             </div>
