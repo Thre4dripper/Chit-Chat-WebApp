@@ -11,7 +11,7 @@ const MsgSticker: React.FC<LeftStickerProps> = ({ stickerData }) => {
         <div className={'rounded-2xl w-fit overflow-hidden'}>
             <ButtonBase>
                 <Lottie
-                    className={'max-h-[200px] max-w-[200px] '}
+                    className={'max-h-[200px] max-w-[200px]'}
                     animationData={stickerData}
                     loop={true}
                     autoPlay={true}
