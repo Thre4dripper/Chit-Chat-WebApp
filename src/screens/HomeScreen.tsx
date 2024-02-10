@@ -1,6 +1,6 @@
 import React from 'react'
-import ChatsFragment from '../components/fragments/ChatsFragment.tsx'
-import ChattingFragment from '../components/fragments/ChattingFragment.tsx'
+import ChatsFragment from '../fragments/home/ChatsFragment.tsx'
+import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import useLocalStorage from '../hooks/useLocalStorage.ts'
 import { GlobalConstants } from '../constants/GlobalConstants.ts'
 
