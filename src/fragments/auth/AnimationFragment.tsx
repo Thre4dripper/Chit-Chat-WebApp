@@ -34,7 +34,7 @@ const AnimationFragment: React.FC = () => {
     }, [speed])
 
     const angle = 45 // rotation angle in degrees
-    const rad = angle * (Math.PI / 180) // convert angle to radians
+    const rad = angle * (Math.PI / 180) // convert an angle to radians
 
     // image div
     const imageDivX = Math.cos(degrees * (Math.PI / 180)) * radius
@@ -75,7 +75,7 @@ const AnimationFragment: React.FC = () => {
                 style={{
                     left: '50%',
                     top: '50%',
-                    transform: `translate(-50%, -50%) translate(${rotatedImageDivX}%, ${rotatedImageDivY}%)`, // Adjust scale factor as needed
+                    transform: `translate(-50%, -50%) translate(${rotatedImageDivX}%, ${rotatedImageDivY}%)`, // Adjust a scale factor as needed
                 }}>
                 <img
                     src={image}
@@ -92,7 +92,7 @@ const AnimationFragment: React.FC = () => {
                 style={{
                     left: '50%',
                     top: '50%',
-                    transform: `translate(-50%, -50%) translate(${rotatedLogoDivX}%, ${rotatedLogoDivY}%)`, // Adjust scale factor as needed
+                    transform: `translate(-50%, -50%) translate(${rotatedLogoDivX}%, ${rotatedLogoDivY}%)`, // Adjust a scale factor as needed
                 }}>
                 <img
                     src={logo}
@@ -112,7 +112,7 @@ const AnimationFragment: React.FC = () => {
                 style={{
                     left: '50%',
                     top: '50%',
-                    transform: `translate(-50%, -50%) translate(${rotatedLottieDivX}%, ${rotatedLottieDivY}%)`, // Adjust scale factor as needed
+                    transform: `translate(-50%, -50%) translate(${rotatedLottieDivX}%, ${rotatedLottieDivY}%)`, // Adjust a scale factor as needed
                 }}>
                 <Lottie
                     className={'w-60 h-60'}

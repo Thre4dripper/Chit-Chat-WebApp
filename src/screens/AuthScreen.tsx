@@ -2,8 +2,6 @@ import React, { useEffect } from 'react'
 import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 import LottieLoading from '../components/LottieLoading.tsx'
-import useLocalStorage from '../hooks/useLocalStorage.ts'
-import { GlobalConstants } from '../constants/GlobalConstants.ts'
 import CssBaseline from '@mui/material/CssBaseline'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
@@ -12,7 +10,6 @@ import AnimationFragment from '../fragments/auth/AnimationFragment.tsx'
 
 const AuthScreen: React.FC = () => {
     const { user, isLoading, googleLogin, githubLogin } = useAuth()
-    const [, setUsername] = useLocalStorage(GlobalConstants.USERNAME, '')
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -21,11 +18,9 @@ const AuthScreen: React.FC = () => {
             return
         }
         if (user) {
-            setUsername(user.displayName || '')
             navigate('/')
-            console.log(user)
         }
-    }, [isLoading, navigate, setUsername, user])
+    }, [isLoading, navigate, user])
 
     if (isLoading) {
         return <LottieLoading />
