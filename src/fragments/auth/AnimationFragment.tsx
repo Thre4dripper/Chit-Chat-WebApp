@@ -13,10 +13,28 @@ const AnimationFragment: React.FC = () => {
     const parentWidth = parentRef.current?.clientWidth || 0
     const parentHeight = parentRef.current?.clientHeight || 0
     const radius = Math.min(parentWidth, parentHeight) / 10
-    const speed = 0.03 // Adjust speed as needed
+    const speed = 0.02
+
+    const [mouseHovered, setMouseHovered] = useState(false)
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const { clientX, clientY } = e
+        const { left, top, width, height } = parentRef.current?.getBoundingClientRect() || {
+            left: 0,
+            top: 0,
+            width: 0,
+            height: 0,
+        }
+        const centerX = left + width / 2
+        const centerY = top + height / 2
+        const dx = clientX - centerX
+        const dy = clientY - centerY
+        const angle = Math.atan2(dy, dx)
+        setElementDegrees((angle * 180) / Math.PI)
+    }
 
     useEffect(() => {
-        const animate = (timestamp: number) => {
+        const animate = (timestamp: number, mouseHovered: boolean) => {
             if (!lastTimestamp.current) {
                 lastTimestamp.current = timestamp
             }
@@ -24,16 +42,16 @@ const AnimationFragment: React.FC = () => {
             const elapsed = timestamp - lastTimestamp.current
             lastTimestamp.current = timestamp
 
-            setElementDegrees((prevDegrees) => (prevDegrees + speed * elapsed) % 360)
-            setGlassDivDegrees((prevDegrees) => (prevDegrees + (speed / 2) * elapsed) % 360)
-
-            requestAnimationFrame(animate)
+            if (!mouseHovered) {
+                setElementDegrees((prevDegrees) => prevDegrees + speed * elapsed)
+            }
+            setGlassDivDegrees((prevDegrees) => (prevDegrees + (speed / 1.5) * elapsed) % 360)
+            requestAnimationFrame((timestamp) => animate(timestamp, mouseHovered))
         }
-
-        const animationId = requestAnimationFrame(animate)
+        const animationId = requestAnimationFrame((timestamp) => animate(timestamp, mouseHovered))
 
         return () => cancelAnimationFrame(animationId)
-    }, [speed])
+    }, [mouseHovered, speed])
 
     const angle = 45 // rotation angle in elementDegrees
     const rad = angle * (Math.PI / 180) // convert an angle to radians
@@ -56,17 +74,20 @@ const AnimationFragment: React.FC = () => {
     const rotatedLottieDivX = lottieDivX * Math.cos(rad) - lottieDivY * Math.sin(rad)
     const rotatedLottieDivY = lottieDivX * Math.sin(rad) + lottieDivY * Math.cos(rad)
 
-    const glass1DivX = Math.cos(glassDivDegrees * (Math.PI / 180)) * radius * 1.5
-    const glass1DivY = Math.sin(glassDivDegrees * (Math.PI / 180)) * radius * 1.5 - 30
+    const glass1DivX = Math.cos(glassDivDegrees * (Math.PI / 180)) * radius * 1.5 - 50
+    const glass1DivY = Math.sin(glassDivDegrees * (Math.PI / 180)) * radius * 0.5 - 30
 
-    const glass2DivX = Math.cos((glassDivDegrees + 120) * (Math.PI / 180)) * radius
-    const glass2DivY = Math.sin((glassDivDegrees + 120) * (Math.PI / 180)) * radius - 30
+    const glass2DivX = Math.cos((glassDivDegrees + 120) * (Math.PI / 180)) * radius * 1.5 - 50
+    const glass2DivY = Math.sin((glassDivDegrees + 120) * (Math.PI / 180)) * radius * 0.5 - 30
 
-    const glass3DivX = Math.cos((glassDivDegrees + 240) * (Math.PI / 180)) * radius * 2
-    const glass3DivY = Math.sin((glassDivDegrees + 240) * (Math.PI / 180)) * radius * 2 - 30
+    const glass3DivX = Math.cos((glassDivDegrees + 240) * (Math.PI / 180)) * radius * 1.5 - 50
+    const glass3DivY = Math.sin((glassDivDegrees + 240) * (Math.PI / 180)) * radius * 0.5 - 30
 
     return (
         <div
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => setMouseHovered(true)}
+            onMouseLeave={() => setMouseHovered(false)}
             className={'h-full w-full relative overflow-hidden flex justify-center items-center'}
             ref={parentRef}>
             <div
@@ -91,7 +112,7 @@ const AnimationFragment: React.FC = () => {
             />
             <div
                 className={
-                    'absolute bg-rose-500/20 shadow-xl shadow-rose-500 w-40 h-40 rounded-full'
+                    'absolute bg-rose-500/20 shadow-xl shadow-rose-500 w-96 h-96 rounded-full'
                 }
                 style={{
                     left: '50%',
@@ -141,7 +162,7 @@ const AnimationFragment: React.FC = () => {
             </div>
             {/* logo div */}
             <div
-                className={'absolute'}
+                className={'absolute shadow-xl shadow-purple-500'}
                 style={{
                     left: '50%',
                     top: '50%',
