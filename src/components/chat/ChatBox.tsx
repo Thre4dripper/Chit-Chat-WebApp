@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import LeftChatMessage from './chatMessages/LeftChatMessage.tsx'
-import { ChatMessageType } from '../enums/ChatMessageType.ts'
-import stickerData from '../assets/stickers/sticker_ghost_1.json'
-import RightChatMessage from './chatMessages/RightChatMessage.tsx'
+import LeftChatMessage from '../chatMessages/LeftChatMessage.tsx'
+import { ChatMessageType } from '../../enums/ChatMessageType.ts'
+import stickerData from '../../assets/stickers/sticker_ghost_1.json'
+import RightChatMessage from '../chatMessages/RightChatMessage.tsx'
 
 const ChatBox: React.FC = () => {
     // for scrolling to bottom

@@ -1,4 +1,4 @@
-import CircularImage from './CircularImage.tsx'
+import CircularImage from '../CircularImage.tsx'
 import { IconButton } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import React from 'react'
