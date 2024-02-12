@@ -3,7 +3,7 @@ import image from '../../assets/auth/signin_image.png'
 import logo from '../../assets/logo.png'
 import graphic from '../../assets/auth/signin-graphic.json'
 import Lottie from 'lottie-react'
-import CanvasAnimations from './CanvasAnimations.tsx'
+import Canvas from './Canvas.tsx'
 
 const AnimationFragment: React.FC = () => {
     const [elementDegrees, setElementDegrees] = useState(0)
@@ -159,7 +159,7 @@ const AnimationFragment: React.FC = () => {
         <div
             className={'h-full w-full relative overflow-hidden flex justify-center items-center'}
             ref={parentRef}>
-            <CanvasAnimations className={'absolute w-full h-full'} />
+            <Canvas className={'absolute w-full h-full'} />
             {/*ellipse*/}
             <div
                 className={

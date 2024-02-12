@@ -4,7 +4,7 @@ interface CanvasAnimationsProps {
     className: string
 }
 
-const CanvasAnimations: React.FC<CanvasAnimationsProps> = ({ className }) => {
+const Canvas: React.FC<CanvasAnimationsProps> = ({ className }) => {
     const canvasRef = React.useRef<HTMLCanvasElement>(null)
     const [glassDegrees, setGlassDegrees] = React.useState(0)
 
@@ -40,9 +40,9 @@ const CanvasAnimations: React.FC<CanvasAnimationsProps> = ({ className }) => {
         const ctx = canvas?.getContext('2d')
         if (ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-            drawCircle(ctx, glass1 + 100, 100, 100, 'rgb(230,191,255)')
+            drawCircle(ctx, glass1 + 80, 100, 80, 'rgb(230,191,255)')
             drawCircle(ctx, 100, glass2, 70, 'rgb(255,190,190)')
-            drawCircle(ctx, glass3 + 100, 100, 80, 'rgb(188,216,255)')
+            drawCircle(ctx, glass3 + 80, 100, 80, 'rgb(188,216,255)')
         }
 
         setGlassDegrees((prev) => prev + 0.001)
@@ -60,4 +60,4 @@ const CanvasAnimations: React.FC<CanvasAnimationsProps> = ({ className }) => {
     )
 }
 
-export default CanvasAnimations
+export default Canvas
