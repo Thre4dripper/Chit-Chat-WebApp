@@ -10,7 +10,7 @@ const AnimationFragment: React.FC = () => {
     const [elementSpeed, setElementSpeed] = useState(0.02)
     const elementSpeedRef = useRef(elementSpeed)
     const [glassDivDegrees, setGlassDivDegrees] = useState(0)
-    const glassSpeed = 0.02
+    const glassSpeed = 0.05
 
     const lastTimestamp = useRef<number>(0)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -50,8 +50,6 @@ const AnimationFragment: React.FC = () => {
         time.current = Date.now()
     }
 
-    let interval: NodeJS.Timeout
-
     const handleMouseUp = () => {
         setMouseClicked(false)
 
@@ -61,10 +59,20 @@ const AnimationFragment: React.FC = () => {
         const speed = dx / elapsed
         setRotationSpeed(speed)
 
-        clearInterval(interval)
-        interval = setInterval(() => {
-            setRotationSpeed((prevSpeed) => prevSpeed * 0.98)
-        }, 50)
+        slowDown().then()
+    }
+
+    const slowDown = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setRotationSpeed((prevSpeed) => {
+            const newSpeed = prevSpeed - (prevSpeed / 10) * 0.1
+            if (Math.abs(newSpeed) < 0.001) {
+                return 0
+            } else {
+                slowDown()
+                return newSpeed
+            }
+        })
     }
 
     const handleMouseEnter = () => {
@@ -101,10 +109,12 @@ const AnimationFragment: React.FC = () => {
             const elapsed = timestamp - lastTimestamp.current
             lastTimestamp.current = timestamp
 
-            setElementDegrees(
-                (prevDegrees) =>
-                    prevDegrees + (elementSpeedRef.current + rotationSpeedRef.current) * elapsed
-            )
+            if (rotationSpeedRef.current !== 0) {
+                setElementDegrees((prevDegrees) => prevDegrees + rotationSpeedRef.current * elapsed)
+            } else {
+                setElementDegrees((prevDegrees) => prevDegrees + elementSpeedRef.current * elapsed)
+            }
+
             setGlassDivDegrees((prevDegrees) => (prevDegrees + (glassSpeed / 1.5) * elapsed) % 360)
             requestAnimationFrame(animate)
         }
