@@ -1,8 +1,8 @@
 import React from 'react'
 import ChatsFragment from '../fragments/home/ChatsFragment.tsx'
-import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import useLocalStorage from '../hooks/useLocalStorage.ts'
 import { GlobalConstants } from '../constants/GlobalConstants.ts'
+import EmptyChatFragment from '../fragments/home/EmptyChatFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const [username] = useLocalStorage(GlobalConstants.USERNAME, '')
@@ -13,7 +13,8 @@ const HomeScreen: React.FC = () => {
                 <ChatsFragment />
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
-                <ChattingFragment />
+                {/*<ChattingFragment />*/}
+                <EmptyChatFragment />
             </div>
         </div>
     )

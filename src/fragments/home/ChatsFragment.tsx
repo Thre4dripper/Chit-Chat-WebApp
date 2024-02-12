@@ -9,6 +9,9 @@ import useAuth from '../../hooks/useAuth.ts'
 
 const ChatsFragment: React.FC = () => {
     const { logout } = useAuth()
+
+    const chats: number[] = []
+    const favChats: number[] = []
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -60,52 +63,65 @@ const ChatsFragment: React.FC = () => {
                     'overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-800/10 scrollbar-thumb-rounded-full'
                 }>
                 {/*Fav chats list*/}
-                <div>
-                    <div className={'flex flex-col'}>
-                        <div className={'flex flex-row m-4'}>
-                            <Typography className={'select-none'} color={'white'} variant={'h6'}>
-                                Favourites
-                            </Typography>
-                        </div>
-                        <div className='flex overflow-hidden'>
-                            <div className={'flex flex-row gap-4'}>
-                                {[1, 2, 3].map((item) => (
-                                    <ItemFavChat
-                                        key={item}
-                                        image={'https://i.pravatar.cc/300'}
-                                        name={`Item ${item}`}
-                                    />
-                                ))}
+                {favChats.length > 0 && (
+                    <div>
+                        <div className={'flex flex-col'}>
+                            <div className={'flex flex-row m-4'}>
+                                <Typography
+                                    className={'select-none'}
+                                    color={'white'}
+                                    variant={'h6'}>
+                                    Favourites
+                                </Typography>
                             </div>
-                            <div className={'flex-auto flex justify-center'}>
-                                <IconButton>
-                                    <ArrowForwardIosIcon className={'text-white/50'} />
-                                </IconButton>
+                            <div className='flex overflow-hidden'>
+                                <div className={'flex flex-row gap-4'}>
+                                    {favChats.map((item) => (
+                                        <ItemFavChat
+                                            key={item}
+                                            image={'https://i.pravatar.cc/300'}
+                                            name={`Item ${item}`}
+                                        />
+                                    ))}
+                                </div>
+                                <div className={'flex-auto flex justify-center'}>
+                                    <IconButton>
+                                        <ArrowForwardIosIcon className={'text-white/50'} />
+                                    </IconButton>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )}
 
                 {/*Chats list*/}
-                <div>
+                {chats.length > 0 ? (
+                    <div>
+                        <div className={'flex flex-col m-4'}>
+                            <Typography className={'select-none'} color={'white'} variant={'h6'}>
+                                Chats
+                            </Typography>
+                        </div>
+                        <div className={'flex flex-col'}>
+                            {chats.map((item) => (
+                                <ItemChat
+                                    key={item}
+                                    image={'https://i.pravatar.cc/300'}
+                                    primaryText={`Item ${item}`}
+                                    secondaryText={`Item ${item}`}
+                                    time={'10:00'}
+                                    notification={1}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                ) : (
                     <div className={'flex flex-col m-4'}>
                         <Typography className={'select-none'} color={'white'} variant={'h6'}>
-                            Chats
+                            No chats
                         </Typography>
                     </div>
-                    <div className={'flex flex-col'}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((item) => (
-                            <ItemChat
-                                key={item}
-                                image={'https://i.pravatar.cc/300'}
-                                primaryText={`Item ${item}`}
-                                secondaryText={`Item ${item}`}
-                                time={'10:00'}
-                                notification={1}
-                            />
-                        ))}
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     )
