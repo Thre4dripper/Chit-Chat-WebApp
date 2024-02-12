@@ -6,37 +6,90 @@ import Lottie from 'lottie-react'
 
 const AnimationFragment: React.FC = () => {
     const [elementDegrees, setElementDegrees] = useState(0)
+    const [previousDegrees, setPreviousDegrees] = useState(0)
+    const [elementSpeed, setElementSpeed] = useState(0.02)
+    const elementSpeedRef = useRef(elementSpeed)
     const [glassDivDegrees, setGlassDivDegrees] = useState(0)
+    const glassSpeed = 0.02
+
     const lastTimestamp = useRef<number>(0)
     const parentRef = useRef<HTMLDivElement>(null)
 
     const parentWidth = parentRef.current?.clientWidth || 0
     const parentHeight = parentRef.current?.clientHeight || 0
+    const { left, top, width, height } = parentRef.current?.getBoundingClientRect() || {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+    }
     const radius = Math.min(parentWidth, parentHeight) / 10
-    const speed = 0.02
 
-    const [mouseHovered, setMouseHovered] = useState(false)
+    const { centerX, centerY } = {
+        centerX: left + width / 2,
+        centerY: top + height / 2,
+    }
 
-    const mouseHoveredRef = useRef(mouseHovered)
+    const [clickedX, setClickedX] = useState(0)
+    const [clickedY, setClickedY] = useState(0)
+
+    const [mouseClicked, setMouseClicked] = useState(false)
+
+    const [rotationSpeed, setRotationSpeed] = useState(0)
+    const rotationSpeedRef = useRef(rotationSpeed)
+
+    const time = useRef(0)
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        setMouseClicked(true)
+        setPreviousDegrees(elementDegrees)
+        setClickedX(e.clientX)
+        setClickedY(e.clientY)
+
+        setRotationSpeed(0)
+
+        time.current = Date.now()
+    }
+
+    let interval: NodeJS.Timeout
+
+    const handleMouseUp = () => {
+        setMouseClicked(false)
+
+        const elapsed = Date.now() - time.current
+
+        const dx = elementDegrees - previousDegrees
+        const speed = dx / elapsed
+        setRotationSpeed(speed)
+
+        clearInterval(interval)
+        interval = setInterval(() => {
+            setRotationSpeed((prevSpeed) => prevSpeed * 0.98)
+        }, 50)
+    }
+
+    const handleMouseEnter = () => {
+        setElementSpeed(0)
+    }
+    const handleMouseLeave = () => {
+        setElementSpeed(0.02)
+        setMouseClicked(false)
+    }
 
     useEffect(() => {
-        mouseHoveredRef.current = mouseHovered
-    }, [mouseHovered])
+        elementSpeedRef.current = elementSpeed
+        rotationSpeedRef.current = rotationSpeed
+    }, [elementSpeed, rotationSpeed])
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!mouseClicked) return
         const { clientX, clientY } = e
-        const { left, top, width, height } = parentRef.current?.getBoundingClientRect() || {
-            left: 0,
-            top: 0,
-            width: 0,
-            height: 0,
-        }
-        const centerX = left + width / 2
-        const centerY = top + height / 2
+
         const dx = clientX - centerX
         const dy = clientY - centerY
-        const angle = Math.atan2(dy, dx)
-        setElementDegrees((angle * 180) / Math.PI)
+        const angle = Math.atan2(dy, dx) - Math.atan2(clickedY - centerY, clickedX - centerX)
+        const traversedDegrees = (angle * 180) / Math.PI
+
+        setElementDegrees(previousDegrees + traversedDegrees)
     }
 
     useEffect(() => {
@@ -48,16 +101,17 @@ const AnimationFragment: React.FC = () => {
             const elapsed = timestamp - lastTimestamp.current
             lastTimestamp.current = timestamp
 
-            if (!mouseHoveredRef.current) {
-                setElementDegrees((prevDegrees) => prevDegrees + speed * elapsed)
-            }
-            setGlassDivDegrees((prevDegrees) => (prevDegrees + (speed / 1.5) * elapsed) % 360)
+            setElementDegrees(
+                (prevDegrees) =>
+                    prevDegrees + (elementSpeedRef.current + rotationSpeedRef.current) * elapsed
+            )
+            setGlassDivDegrees((prevDegrees) => (prevDegrees + (glassSpeed / 1.5) * elapsed) % 360)
             requestAnimationFrame(animate)
         }
         const animationId = requestAnimationFrame(animate)
 
         return () => cancelAnimationFrame(animationId)
-    }, [speed])
+    }, [mouseClicked, glassSpeed, elementSpeed])
 
     const angle = 45 // rotation angle in elementDegrees
     const rad = angle * (Math.PI / 180) // convert an angle to radians
@@ -91,9 +145,6 @@ const AnimationFragment: React.FC = () => {
 
     return (
         <div
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setMouseHovered(true)}
-            onMouseLeave={() => setMouseHovered(false)}
             className={'h-full w-full relative overflow-hidden flex justify-center items-center'}
             ref={parentRef}>
             <div
@@ -207,6 +258,16 @@ const AnimationFragment: React.FC = () => {
                     autoPlay={true}
                 />
             </div>
+            <div
+                className={
+                    'absolute w-full h-full bg-transparent cursor-grab active:cursor-grabbing'
+                }
+                onMouseMove={handleMouseMove}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            />
         </div>
     )
 }
