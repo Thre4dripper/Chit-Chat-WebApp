@@ -17,6 +17,12 @@ const AnimationFragment: React.FC = () => {
 
     const [mouseHovered, setMouseHovered] = useState(false)
 
+    const mouseHoveredRef = useRef(mouseHovered)
+
+    useEffect(() => {
+        mouseHoveredRef.current = mouseHovered
+    }, [mouseHovered])
+
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const { clientX, clientY } = e
         const { left, top, width, height } = parentRef.current?.getBoundingClientRect() || {
@@ -34,7 +40,7 @@ const AnimationFragment: React.FC = () => {
     }
 
     useEffect(() => {
-        const animate = (timestamp: number, mouseHovered: boolean) => {
+        const animate = (timestamp: number) => {
             if (!lastTimestamp.current) {
                 lastTimestamp.current = timestamp
             }
@@ -42,16 +48,16 @@ const AnimationFragment: React.FC = () => {
             const elapsed = timestamp - lastTimestamp.current
             lastTimestamp.current = timestamp
 
-            if (!mouseHovered) {
+            if (!mouseHoveredRef.current) {
                 setElementDegrees((prevDegrees) => prevDegrees + speed * elapsed)
             }
             setGlassDivDegrees((prevDegrees) => (prevDegrees + (speed / 1.5) * elapsed) % 360)
-            requestAnimationFrame((timestamp) => animate(timestamp, mouseHovered))
+            requestAnimationFrame(animate)
         }
-        const animationId = requestAnimationFrame((timestamp) => animate(timestamp, mouseHovered))
+        const animationId = requestAnimationFrame(animate)
 
         return () => cancelAnimationFrame(animationId)
-    }, [mouseHovered, speed])
+    }, [speed])
 
     const angle = 45 // rotation angle in elementDegrees
     const rad = angle * (Math.PI / 180) // convert an angle to radians
@@ -162,7 +168,7 @@ const AnimationFragment: React.FC = () => {
             </div>
             {/* logo div */}
             <div
-                className={'absolute shadow-xl shadow-purple-500'}
+                className={'absolute'}
                 style={{
                     left: '50%',
                     top: '50%',
@@ -171,6 +177,7 @@ const AnimationFragment: React.FC = () => {
                 <img
                     src={logo}
                     alt='logo'
+                    className={'shadow-2xl shadow-purple-800/40 rounded-full'}
                     style={{
                         width: '8rem',
                         height: '8rem',
