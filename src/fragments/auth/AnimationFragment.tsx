@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import image from '../../assets/auth/signin_image.png'
 import logo from '../../assets/logo.png'
 import graphic from '../../assets/auth/signin-graphic.json'
@@ -8,11 +8,9 @@ import Canvas from './Canvas.tsx'
 const AnimationFragment: React.FC = () => {
     const [elementDegrees, setElementDegrees] = useState(0)
     const [previousDegrees, setPreviousDegrees] = useState(0)
-    const [elementSpeed, setElementSpeed] = useState(0.02)
+    const [elementSpeed, setElementSpeed] = useState(0.002)
     const elementSpeedRef = useRef(elementSpeed)
-    const glassSpeed = useMemo(() => 0.05, [])
 
-    const lastTimestamp = useRef<number>(0)
     const parentRef = useRef<HTMLDivElement>(null)
 
     const parentWidth = parentRef.current?.clientWidth || 0
@@ -52,7 +50,7 @@ const AnimationFragment: React.FC = () => {
         })
     }, [])
 
-    const time = useRef(0)
+    const mouseFlickerTime = useRef(0)
 
     const handleMouseDown = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
@@ -66,14 +64,14 @@ const AnimationFragment: React.FC = () => {
 
             setRotationSpeed(0)
 
-            time.current = Date.now()
+            mouseFlickerTime.current = Date.now()
         },
         [elementDegrees]
     )
 
     const handleMouseUp = useCallback(() => {
         setMouseState((prev) => ({ ...prev, clicked: false }))
-        const elapsed = Date.now() - time.current
+        const elapsed = Date.now() - mouseFlickerTime.current
 
         const dx = elementDegrees - previousDegrees
         const speed = dx / elapsed
@@ -113,18 +111,11 @@ const AnimationFragment: React.FC = () => {
     }, [elementSpeed, rotationSpeed])
 
     useEffect(() => {
-        const animate = (timestamp: number) => {
-            if (!lastTimestamp.current) {
-                lastTimestamp.current = timestamp
-            }
-
-            const elapsed = timestamp - lastTimestamp.current
-            lastTimestamp.current = timestamp
-
+        const animate = () => {
             if (rotationSpeedRef.current !== 0) {
-                setElementDegrees((prevDegrees) => prevDegrees + rotationSpeedRef.current * elapsed)
+                setElementDegrees((prevDegrees) => prevDegrees + rotationSpeedRef.current)
             } else {
-                setElementDegrees((prevDegrees) => prevDegrees + elementSpeedRef.current * elapsed)
+                setElementDegrees((prevDegrees) => prevDegrees + elementSpeedRef.current)
             }
 
             requestAnimationFrame(animate)
@@ -132,7 +123,7 @@ const AnimationFragment: React.FC = () => {
         const animationId = requestAnimationFrame(animate)
 
         return () => cancelAnimationFrame(animationId)
-    }, [mouseState, glassSpeed, elementSpeed])
+    }, [mouseState, elementSpeed])
 
     const angle = 45 // rotation angle in elementDegrees
     const rad = angle * (Math.PI / 180) // convert an angle to radians
