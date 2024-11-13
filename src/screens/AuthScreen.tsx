@@ -12,9 +12,7 @@ import { useSnackbar } from 'notistack'
 const AuthScreen: React.FC = () => {
     const { user, isLoading, googleLogin, githubLogin } = useAuth()
     const navigate = useNavigate()
-    const { enqueueSnackbar} = useSnackbar()
-    
-    
+    const { enqueueSnackbar } = useSnackbar()
 
     useEffect(() => {
         if (isLoading) {
