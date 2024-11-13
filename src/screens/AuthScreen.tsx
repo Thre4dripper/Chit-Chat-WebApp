@@ -11,7 +11,7 @@ import { SnackbarContext } from '../contexts/SnackbarAlert.tsx'
 const AuthScreen: React.FC = () => {
     const { user, isLoading, googleLogin, githubLogin } = useAuth()
     const navigate = useNavigate()
-    const {openSnackbar}=useContext(SnackbarContext);
+    const { openSnackbar } = useContext(SnackbarContext)
 
     useEffect(() => {
         if (isLoading) {
@@ -19,7 +19,7 @@ const AuthScreen: React.FC = () => {
             return
         }
         if (user) {
-            openSnackbar("Login Successfully","success") 
+            openSnackbar('Login Successfully', 'success')
             navigate('/')
         }
     }, [isLoading, navigate, user])
