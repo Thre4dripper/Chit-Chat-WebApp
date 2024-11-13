@@ -30,10 +30,10 @@ const AuthScreen: React.FC = () => {
     return (
         <Grid container component='main' sx={{ height: '100vh' }}>
             <CssBaseline />
-            <Grid item xs={false} sm={false} md={8}>
+            <Grid item xs={false} sm={false} md={9}>
                 <AnimationFragment />
             </Grid>
-            <Grid item xs={12} sm={12} md={4} component={Paper}>
+            <Grid item xs={12} sm={12} md={3} component={Paper}>
                 <ButtonsFragment signInWithGoogle={googleLogin} signInWithGithub={githubLogin} />
             </Grid>
         </Grid>

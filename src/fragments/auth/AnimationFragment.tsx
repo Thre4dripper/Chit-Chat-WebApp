@@ -1,18 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import image from '../../assets/auth/signin_image.png'
 import logo from '../../assets/logo.png'
 import graphic from '../../assets/auth/signin-graphic.json'
 import Lottie from 'lottie-react'
+import Canvas from './Canvas.tsx'
 
 const AnimationFragment: React.FC = () => {
     const [elementDegrees, setElementDegrees] = useState(0)
     const [previousDegrees, setPreviousDegrees] = useState(0)
-    const [elementSpeed, setElementSpeed] = useState(0.02)
+    const [elementSpeed, setElementSpeed] = useState(0.002)
     const elementSpeedRef = useRef(elementSpeed)
-    const [glassDivDegrees, setGlassDivDegrees] = useState(0)
-    const glassSpeed = 0.05
 
-    const lastTimestamp = useRef<number>(0)
     const parentRef = useRef<HTMLDivElement>(null)
 
     const parentWidth = parentRef.current?.clientWidth || 0
@@ -30,39 +28,16 @@ const AnimationFragment: React.FC = () => {
         centerY: top + height / 2,
     }
 
-    const [clickedX, setClickedX] = useState(0)
-    const [clickedY, setClickedY] = useState(0)
-
-    const [mouseClicked, setMouseClicked] = useState(false)
+    const [mouseState, setMouseState] = useState({
+        clicked: false,
+        clickedX: 0,
+        clickedY: 0,
+    })
 
     const [rotationSpeed, setRotationSpeed] = useState(0)
     const rotationSpeedRef = useRef(rotationSpeed)
 
-    const time = useRef(0)
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-        setMouseClicked(true)
-        setPreviousDegrees(elementDegrees)
-        setClickedX(e.clientX)
-        setClickedY(e.clientY)
-
-        setRotationSpeed(0)
-
-        time.current = Date.now()
-    }
-
-    const handleMouseUp = () => {
-        setMouseClicked(false)
-
-        const elapsed = Date.now() - time.current
-
-        const dx = elementDegrees - previousDegrees
-        const speed = dx / elapsed
-        setRotationSpeed(speed)
-
-        slowDown().then()
-    }
-
-    const slowDown = async () => {
+    const slowDown = useCallback(async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setRotationSpeed((prevSpeed) => {
             const newSpeed = prevSpeed - (prevSpeed / 10) * 0.1
@@ -73,55 +48,82 @@ const AnimationFragment: React.FC = () => {
                 return newSpeed
             }
         })
-    }
+    }, [])
 
-    const handleMouseEnter = () => {
+    const mouseFlickerTime = useRef(0)
+
+    const handleMouseDown = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            setMouseState((prev) => ({
+                ...prev,
+                clicked: true,
+                clickedX: e.clientX,
+                clickedY: e.clientY,
+            }))
+            setPreviousDegrees(elementDegrees)
+
+            setRotationSpeed(0)
+
+            mouseFlickerTime.current = Date.now()
+        },
+        [elementDegrees]
+    )
+
+    const handleMouseUp = useCallback(() => {
+        setMouseState((prev) => ({ ...prev, clicked: false }))
+        const elapsed = Date.now() - mouseFlickerTime.current
+
+        const dx = elementDegrees - previousDegrees
+        const speed = dx / elapsed
+        setRotationSpeed(speed)
+
+        slowDown().then()
+    }, [elementDegrees, previousDegrees, slowDown])
+
+    const handleMouseEnter = useCallback(() => {
         setElementSpeed(0)
-    }
-    const handleMouseLeave = () => {
+    }, [])
+    const handleMouseLeave = useCallback(() => {
         setElementSpeed(0.02)
-        setMouseClicked(false)
-    }
+        setMouseState((prev) => ({ ...prev, clicked: false }))
+    }, [])
+
+    const handleMouseMove = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            if (!mouseState.clicked) return
+            const { clientX, clientY } = e
+
+            const dx = clientX - centerX
+            const dy = clientY - centerY
+            const angle =
+                Math.atan2(dy, dx) -
+                Math.atan2(mouseState.clickedY - centerY, mouseState.clickedX - centerX)
+            const traversedDegrees = (angle * 180) / Math.PI
+
+            setElementDegrees(previousDegrees + traversedDegrees)
+        },
+        [mouseState, centerX, centerY, previousDegrees]
+    )
 
     useEffect(() => {
         elementSpeedRef.current = elementSpeed
         rotationSpeedRef.current = rotationSpeed
     }, [elementSpeed, rotationSpeed])
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!mouseClicked) return
-        const { clientX, clientY } = e
-
-        const dx = clientX - centerX
-        const dy = clientY - centerY
-        const angle = Math.atan2(dy, dx) - Math.atan2(clickedY - centerY, clickedX - centerX)
-        const traversedDegrees = (angle * 180) / Math.PI
-
-        setElementDegrees(previousDegrees + traversedDegrees)
-    }
-
     useEffect(() => {
-        const animate = (timestamp: number) => {
-            if (!lastTimestamp.current) {
-                lastTimestamp.current = timestamp
-            }
-
-            const elapsed = timestamp - lastTimestamp.current
-            lastTimestamp.current = timestamp
-
+        const animate = () => {
             if (rotationSpeedRef.current !== 0) {
-                setElementDegrees((prevDegrees) => prevDegrees + rotationSpeedRef.current * elapsed)
+                setElementDegrees((prevDegrees) => prevDegrees + rotationSpeedRef.current)
             } else {
-                setElementDegrees((prevDegrees) => prevDegrees + elementSpeedRef.current * elapsed)
+                setElementDegrees((prevDegrees) => prevDegrees + elementSpeedRef.current)
             }
 
-            setGlassDivDegrees((prevDegrees) => (prevDegrees + (glassSpeed / 1.5) * elapsed) % 360)
             requestAnimationFrame(animate)
         }
         const animationId = requestAnimationFrame(animate)
 
         return () => cancelAnimationFrame(animationId)
-    }, [mouseClicked, glassSpeed, elementSpeed])
+    }, [mouseState, elementSpeed])
 
     const angle = 45 // rotation angle in elementDegrees
     const rad = angle * (Math.PI / 180) // convert an angle to radians
@@ -144,58 +146,11 @@ const AnimationFragment: React.FC = () => {
     const rotatedLottieDivX = lottieDivX * Math.cos(rad) - lottieDivY * Math.sin(rad)
     const rotatedLottieDivY = lottieDivX * Math.sin(rad) + lottieDivY * Math.cos(rad)
 
-    const glass1DivX = Math.cos(glassDivDegrees * (Math.PI / 180)) * radius * 1.5 - 50
-    const glass1DivY = Math.sin(glassDivDegrees * (Math.PI / 180)) * radius * 0.5 - 30
-
-    const glass2DivX = Math.cos((glassDivDegrees + 120) * (Math.PI / 180)) * radius * 1.5 - 50
-    const glass2DivY = Math.sin((glassDivDegrees + 120) * (Math.PI / 180)) * radius * 0.5 - 30
-
-    const glass3DivX = Math.cos((glassDivDegrees + 240) * (Math.PI / 180)) * radius * 1.5 - 50
-    const glass3DivY = Math.sin((glassDivDegrees + 240) * (Math.PI / 180)) * radius * 0.5 - 30
-
     return (
         <div
             className={'h-full w-full relative overflow-hidden flex justify-center items-center'}
             ref={parentRef}>
-            <div
-                className={
-                    'absolute bg-purple-500/50 shadow-xl shadow-purple-500 w-60 h-60 rounded-full'
-                }
-                style={{
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) translate(${glass1DivX}%, ${glass1DivY}%)`, // Adjust a scale factor as needed
-                }}
-            />
-            <div
-                className={
-                    'absolute bg-blue-500/30 shadow-xl shadow-blue-500 w-80 h-80 rounded-full'
-                }
-                style={{
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) translate(${glass2DivX}%, ${glass2DivY}%)`, // Adjust a scale factor as needed
-                }}
-            />
-            <div
-                className={
-                    'absolute bg-rose-500/20 shadow-xl shadow-rose-500 w-96 h-96 rounded-full'
-                }
-                style={{
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) translate(${glass3DivX}%, ${glass3DivY}%)`, // Adjust a scale factor as needed
-                }}
-            />
-            {/*Glass*/}
-            <div
-                className={'bg-gradient-to-r from-transparent from-95% to-white'}
-                style={{
-                    backdropFilter: 'blur(50px)',
-                    width: '100%',
-                    height: '100%',
-                }}
-            />
+            <Canvas className={'absolute w-full h-full'} />
             {/*ellipse*/}
             <div
                 className={
@@ -238,7 +193,7 @@ const AnimationFragment: React.FC = () => {
                 <img
                     src={logo}
                     alt='logo'
-                    className={'shadow-2xl shadow-purple-800/40 rounded-full'}
+                    className={'shadow-2xl shadow-violet-900/40 rounded-full'}
                     style={{
                         width: '8rem',
                         height: '8rem',
