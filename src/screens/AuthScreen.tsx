@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import useAuth from '../hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 import LottieLoading from '../components/LottieLoading.tsx'
@@ -7,11 +7,14 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
 import AnimationFragment from '../fragments/auth/AnimationFragment.tsx'
-import { SnackbarContext } from '../contexts/SnackbarAlert.tsx'
+import { useSnackbar } from 'notistack'
+
 const AuthScreen: React.FC = () => {
     const { user, isLoading, googleLogin, githubLogin } = useAuth()
     const navigate = useNavigate()
-    const { openSnackbar } = useContext(SnackbarContext)
+    const { enqueueSnackbar} = useSnackbar()
+    
+    
 
     useEffect(() => {
         if (isLoading) {
@@ -19,7 +22,15 @@ const AuthScreen: React.FC = () => {
             return
         }
         if (user) {
-            openSnackbar('Login Successfully', 'success')
+            enqueueSnackbar('Successfully Logged In', {
+                variant: 'success',
+                autoHideDuration: 3000,
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                },
+                preventDuplicate: true,
+            })
             navigate('/')
         }
     }, [isLoading, navigate, user])

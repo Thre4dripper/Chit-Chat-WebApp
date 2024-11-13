@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import './firebase/FirebaseInit.ts'
-import SnackbarAlertProvider from './contexts/SnackbarAlert.tsx'
+import { SnackbarProvider } from 'notistack'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <SnackbarAlertProvider>
+        <SnackbarProvider>
             <App />
-        </SnackbarAlertProvider>
+        </SnackbarProvider>
     </React.StrictMode>
 )
