@@ -30,11 +30,25 @@ jobs:
                   node-version: '20'
                   registry-url: 'https://registry.npmjs.org'
 
+            - name: Cache dependencies
+              uses: actions/cache@v4
+              with:
+                  path: '**/node_modules'
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
             - name: Install dependencies
               run: yarn --frozen-lockfile
 
             - name: Install SonarQube Community
-              run: docker run --name sonarqube-custom --rm -p 9000:9000 sonarqube:10.6-community
+              run: docker run --name sonarqube-custom -d --rm -p 9000:9000 sonarqube:10.6-community
+
+            - name: Wait for SonarQube to start
+              run: |
+                  echo "Waiting for SonarQube to start"
+                  while [[ $(curl -s -u admin:admin http://localhost:9000/api/system/status | jq -r '.status') != "UP" ]]; do
+                      sleep 5
+                  done
+                  echo "SonarQube is ready"
 
             - name: Get Sonar Token
               id: sonar_token
@@ -44,8 +58,8 @@ jobs:
 
             - name: Run Sonar Scanner
               run: |
-                  export SONAR_TOKEN= ${{ steps.sonar_token.outputs.sonar_token }}
-                  export SONAR_HOST_URL="http://host.docker.internal"
+                  export SONAR_TOKEN=${{ steps.sonar_token.outputs.sonar_token }}
+                  export SONAR_HOST_URL="http://host.docker.internal:9000"
                   export SONAR_PROJECT_KEY="chit-chat-key"
 
                   docker run --rm -e SONAR_TOKEN=$SONAR_TOKEN -e SONAR_HOST_URL=$SONAR_HOST_URL -e SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY -v $(pwd):/usr/src sonarsource/sonar-scanner-cli
