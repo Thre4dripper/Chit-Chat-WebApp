@@ -62,7 +62,7 @@ jobs:
                   export SONAR_HOST_URL="http://host.docker.internal:9000"
                   export SONAR_PROJECT_KEY="chit-chat-key"
 
-                  docker run --rm -e SONAR_TOKEN=$SONAR_TOKEN -e SONAR_HOST_URL=$SONAR_HOST_URL -e SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY -v $(pwd):/usr/src sonarsource/sonar-scanner-cli
+                  docker run --rm -e SONAR_TOKEN=$SONAR_TOKEN -e SONAR_HOST_URL=$SONAR_HOST_URL -e SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY -v $(pwd):/usr/src --add-host=host.docker.internal:host-gateway sonarsource/sonar-scanner-cli
 
             - name: Check Quality Gate
               id: quality_gate
@@ -77,7 +77,6 @@ jobs:
                   echo "issues=$issues" >> $GITHUB_OUTPUT
 
             - name: Post Issues as PR Comments
-              if: ${{ steps.quality_gate.outputs.quality_gate_status == 'ERROR' }}
               run: |
                   issues=${{ steps.get_issues.outputs.issues }}
                   pr_comment="### SonarCloud Issues%0A%0A$issues"
