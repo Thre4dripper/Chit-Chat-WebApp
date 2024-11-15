@@ -17,7 +17,8 @@ const UserProfileFragment:React.FC<{openProfile:React.Dispatch<SetStateAction<bo
                     <Avatar sx={{width:"200px",height:'200px'}}></Avatar>
                     <Typography> set Profile Photo </Typography>
                 </Paper>
-
+                    
+                    {/*  push code and pull  before working !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Going to Sleep */}
              
                <Paper sx={{display:'flex',flexDirection:"column",gap:'1rem'}}>
                  <Box sx={{display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}>
