@@ -1,7 +1,7 @@
 import { Avatar, Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
-import React, { SetStateAction ,useContext} from 'react'
+import React, { SetStateAction, useContext } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -11,10 +11,10 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
     openProfile,
 }) => {
     const { logout } = useAuth()
-    const {userInfo}=useContext(UserAuth);
+    const { userInfo } = useContext(UserAuth)
 
-    const chats: number[] = []  
-    const favChats: number[] = [] // this Will Changed Soon based on User Data current 
+    const chats: number[] = []
+    const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -37,7 +37,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                            <Avatar src={userInfo?.profileImage} alt="No"/>
+                            <Avatar src={userInfo?.profileImage} alt='No' />
                         </Badge>
                     </IconButton>
                 </div>

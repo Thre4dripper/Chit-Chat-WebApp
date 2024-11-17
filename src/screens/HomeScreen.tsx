@@ -14,14 +14,12 @@ const HomeScreen: React.FC = () => {
         <div className={'flex flex-row bg-slate-900/90 '}>
             <div className={'w-[25rem]'}>
                 {profileopen ? (
-                    
                     <UserProfileFragment openProfile={setProfileOpen} />
                 ) : (
                     <ChatsFragment openProfile={setProfileOpen} />
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
-                 
                 <ChattingFragment />
                 {/* <EmptyChatFragment /> */}
             </div>

@@ -9,41 +9,38 @@ import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
 import AnimationFragment from '../fragments/auth/AnimationFragment.tsx'
 import { useSnackbar } from 'notistack'
 import { registerInitialUser } from '../firebase/auth/FireStoreRegister.ts'
-import {UserAuth} from '../contexts/UserData.tsx';
+import { UserAuth } from '../contexts/UserData.tsx'
 
 const AuthScreen: React.FC = () => {
     const { user, isLoading, googleLogin, githubLogin } = useAuth()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
-    const {setUserInfo}= useContext(UserAuth);
+    const { setUserInfo } = useContext(UserAuth)
 
-    const RegisterUser=async ()=>{
+    const RegisterUser = async () => {
         if (isLoading) {
             // do nothing when loading
             return
         }
         if (user) {
-            
-            try{
-           
-            const response=await registerInitialUser(user);
-            
+            try {
+                const response = await registerInitialUser(user)
 
-            if(response){
-                setUserInfo(response);
+                if (response) {
+                    setUserInfo(response)
 
-                enqueueSnackbar('Successfully Logged In', {
-                    variant: 'success',
-                    autoHideDuration: 3000,
-                    anchorOrigin: {
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                    },
-                    preventDuplicate: true,
-                })
-            navigate('/')
-             } 
-            }catch(err){
+                    enqueueSnackbar('Successfully Logged In', {
+                        variant: 'success',
+                        autoHideDuration: 3000,
+                        anchorOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        },
+                        preventDuplicate: true,
+                    })
+                    navigate('/')
+                }
+            } catch (err) {
                 enqueueSnackbar('Something Went Wrong', {
                     variant: 'error',
                     autoHideDuration: 3000,
@@ -53,13 +50,11 @@ const AuthScreen: React.FC = () => {
                     },
                     preventDuplicate: true,
                 })
-             
             }
-            
         }
     }
     useEffect(() => {
-       RegisterUser();
+        RegisterUser()
     }, [isLoading, navigate, user])
 
     if (isLoading) {
