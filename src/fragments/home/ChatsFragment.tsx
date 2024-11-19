@@ -10,8 +10,8 @@ import useAuth from '../../hooks/useAuth.ts'
 const ChatsFragment: React.FC = () => {
     const { logout } = useAuth()
 
-    const chats: number[] = []
-    const favChats: number[] = []
+    const chats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -30,7 +30,7 @@ const ChatsFragment: React.FC = () => {
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                            <Avatar />
+                            <Avatar src={'https://i.pravatar.cc/300'} />
                         </Badge>
                     </IconButton>
                 </div>
