@@ -16,7 +16,7 @@ export const registerInitialUser = async (user: User) => {
         }
 
         // Create new user Just using this Not class Is it okey ??
-        const userData:UserData= {
+        const userData: UserData = {
             uid: user.uid,
             bio: '',
             name: user.displayName || '',

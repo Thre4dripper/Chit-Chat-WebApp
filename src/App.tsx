@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AuthScreen from './screens/AuthScreen.tsx'
 import ProtectiveRoute from './components/ProtectiveRoute.tsx'
 
-
 const router = createBrowserRouter([
     {
         path: '/',

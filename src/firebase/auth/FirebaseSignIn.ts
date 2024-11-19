@@ -75,10 +75,10 @@ const linkGithubToGoogle = async (email: string, auth: Auth, credential: OAuthCr
 }
 
 export const firebaseSignOut = async () => {
-    const auth = getAuth();
+    const auth = getAuth()
     try {
         await signOut(auth)
-        console.log("Logout success")
+        console.log('Logout success')
     } catch (error) {
         console.log('Sign-out error', error)
     }

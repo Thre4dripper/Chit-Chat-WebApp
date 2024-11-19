@@ -10,8 +10,7 @@ import { useAuthUser } from '../../contexts/UserData.tsx'
 const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
-    
-    const {userData,logout} = useAuthUser();
+    const { userData, logout } = useAuthUser()
 
     const chats: number[] = []
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
