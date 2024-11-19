@@ -3,7 +3,7 @@ import HomeScreen from './screens/HomeScreen.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AuthScreen from './screens/AuthScreen.tsx'
 import ProtectiveRoute from './components/ProtectiveRoute.tsx'
-// import UserVerificationScreen from "./screens/UserVerificationScreen.tsx";
+
 
 const router = createBrowserRouter([
     {
@@ -14,14 +14,6 @@ const router = createBrowserRouter([
             </ProtectiveRoute>
         ),
     },
-    //   {
-    //     path: "/verification",
-    //     element: (
-    //       <ProtectiveRoute>
-    //         <UserVerificationScreen />
-    //       </ProtectiveRoute>
-    //     ),
-    //   },
     {
         path: '/auth',
         element: <AuthScreen />,

@@ -1,7 +1,7 @@
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import firebaseApp from '../FirebaseInit'
-import { UserType } from '../../contexts/UserData'
+import { UserData } from '../../contexts/UserData'
 const firestore = getFirestore(firebaseApp)
 
 export const registerInitialUser = async (user: User) => {
@@ -11,12 +11,12 @@ export const registerInitialUser = async (user: User) => {
         const userSnapshot = await getDoc(userDocRef)
 
         if (userSnapshot.exists()) {
-            console.log('User already exists', userSnapshot.data() as UserType)
-            return userSnapshot.data() as UserType // User already registered
+            console.log('User already exists', userSnapshot.data() as UserData)
+            return userSnapshot.data() as UserData // User already registered
         }
 
         // Create new user Just using this Not class Is it okey ??
-        const userData = {
+        const userData:UserData= {
             uid: user.uid,
             bio: '',
             name: user.displayName || '',
@@ -31,7 +31,7 @@ export const registerInitialUser = async (user: User) => {
         // Register user with uid as document id
         await setDoc(userDocRef, userData)
 
-        return userData as UserType
+        return userData as UserData
     } catch (error) {
         console.error('Error registering user:', error)
         return null

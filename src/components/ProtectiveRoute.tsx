@@ -1,47 +1,50 @@
-import useAuth from '../hooks/useAuth.ts'
-import { useNavigate } from 'react-router-dom'
-import React, { useContext, useEffect } from 'react'
-import LottieLoading from './LottieLoading.tsx'
-import useLocalStorage from '../hooks/useLocalStorage.ts'
-import { GlobalConstants } from '../constants/GlobalConstants.ts'
-import { UserAuth } from '../contexts/UserData.tsx'
-import { registerInitialUser } from '../firebase/auth/FireStoreRegister.ts'
+import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import LottieLoading from "./LottieLoading.tsx";
+import { useAuthUser } from "../contexts/UserData.tsx";
+import {getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface ProtectiveRouteProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
-    const { user, isLoading } = useAuth()
-    const [, setUsername] = useLocalStorage(GlobalConstants.USERNAME, '')
+  const navigate = useNavigate();
+  const {
+    userData,
+    fetchUserData,
+    logout,
+    isLoading,
+    setIsLoading,
+  } = useAuthUser();
 
-    const navigate = useNavigate()
-    const { userInfo, setUserInfo } = useContext(UserAuth)
-
-    const CallingUserInfo = async () => {
-        if (user) setUserInfo(await registerInitialUser(user))
+  useEffect(() => {
+    // if user Exist not call
+    if (userData) {
+      return;
     }
+    setIsLoading(true);
 
-    useEffect(() => {
-        if (isLoading) {
-            // do nothing   when loading
-            return
-        }
-        if (user) {
-            setUsername(user.displayName || '')
-        }
-        if (!userInfo) {
-            CallingUserInfo()
-        }
-        if (!user) {
-            navigate('/auth')
-        }
-    }, [isLoading, navigate, setUsername, user])
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await fetchUserData(user);
+        console.log("Current User:", user); // This will be the authenticated user
+      } else {
+        logout();
+        setIsLoading(false);
+        navigate("/auth");
+        console.log("No user is signed in");
+      }
+    });
+    setIsLoading(false);
+    return () => unsubscribe();
+  }, [getAuth,userData]);
 
-    if (isLoading) {
-        return <LottieLoading />
-    }
-    return <>{children}</>
-}
+  if (isLoading || !userData) {
+    return <LottieLoading />;
+  }
+  return <>{children}</>;
+};
 
-export default ProtectiveRoute
+export default ProtectiveRoute;
