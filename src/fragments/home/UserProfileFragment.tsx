@@ -1,19 +1,20 @@
 import React, { SetStateAction } from 'react'
-import { Avatar, TextField, Paper, Typography, Box } from '@mui/material'
+import { TextField, Paper, Typography, Box } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
 import ReportIcon from '@mui/icons-material/Report'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
-import { useAuthUser } from '../../contexts/UserData'
 import LottieLoading from '../../components/LottieLoading'
+import { useAuthUser } from '../../contexts/UseAuthUser.tsx'
+import UserAvatar from './useAvatar.tsx'
 
 const UserProfileFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
 }> = ({ openProfile }) => {
     const { userData } = useAuthUser()
 
-    const printUSer = () => {
+    const printUser = () => {
         //   change it into New Image and Updated Based on This
     }
 
@@ -38,12 +39,14 @@ const UserProfileFragment: React.FC<{
                     backgroundColor: 'transparent',
                     padding: '30px 20px',
                 }}>
-                <Avatar
+                <UserAvatar
                     src={userData.profileImage}
                     alt='User Profile Image'
-                    sx={{ width: '200px', height: '200px' }}></Avatar>
+                    sx={{ width: '200px', height: '200px' }}>
 
-                <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUSer}>
+                </UserAvatar>
+
+                <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUser}>
                     {' '}
                     Set Profile Photo{' '}
                 </Typography>
@@ -71,18 +74,9 @@ const UserProfileFragment: React.FC<{
                         id='username'
                         label='Username'
                         value={userData.username}
-                        variant='standard'
-                        slotProps={{
-                            input: {
-                                readOnly: true,
-                                style: {
-                                    border: 'none',
-                                    outline: 'none',
-                                },
-                                onFocus: (e) => e.target.blur(),
-                                disableUnderline: true,
-                            },
-                        }}
+                        disabled={true}
+                        defaultValue={userData.username}
+
                     />
 
                     <ModeEditOutlineIcon sx={{ color: 'grey' }} />
@@ -100,20 +94,8 @@ const UserProfileFragment: React.FC<{
                         id='name'
                         label='Name'
                         value={userData.name}
-                        variant='standard'
-                        slotProps={{
-                            input: {
-                                readOnly: true,
-                                style: {
-                                    cursor: 'pointer',
-                                    border: 'none',
-                                    outline: 'none',
-                                },
-                                onFocus: (e) => e.target.blur(),
-                                disableUnderline: true,
-                            },
-                        }}
-                        aria-readonly
+                        variant={'filled'}
+                        disabled={true}
                     />
                     <ModeEditOutlineIcon />
                 </Box>
@@ -129,18 +111,7 @@ const UserProfileFragment: React.FC<{
                         id='boi'
                         label='Bio'
                         value={userData.bio}
-                        variant='standard'
-                        slotProps={{
-                            input: {
-                                readOnly: true,
-                                style: {
-                                    border: 'none',
-                                    outline: 'none',
-                                },
-                                onFocus: (e) => e.target.blur(),
-                                disableUnderline: true,
-                            },
-                        }}
+                        disabled={true}
                     />
 
                     <ModeEditOutlineIcon />

@@ -1,11 +1,13 @@
-import { Avatar, Badge, IconButton, Typography } from '@mui/material'
+import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
 import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import { useAuthUser } from '../../contexts/UserData.tsx'
+import UserAvatar from './useAvatar.tsx'
+
+import { useAuthUser } from '../../contexts/UseAuthUser.tsx'
 
 const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
@@ -36,7 +38,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                            <Avatar src={userData?.profileImage} alt='No' />
+                            <UserAvatar src={userData?.profileImage} alt="No Image" sx={{ width: 56, height: 56 }}/>
                         </Badge>
                     </IconButton>
                 </div>

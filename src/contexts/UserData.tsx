@@ -1,11 +1,12 @@
-import React, { SetStateAction, createContext, useState, useContext } from 'react'
+import React, { createContext, SetStateAction, useEffect, useState } from 'react'
 import {
     firebaseSignInWithGithub,
     firebaseSignInWithGoogle,
     firebaseSignOut,
 } from '../firebase/auth/FirebaseSignIn'
-import { User } from 'firebase/auth'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { registerInitialUser } from '../firebase/auth/FireStoreRegister'
+// import { useNavigate } from 'react-router-dom'
 
 // Define types for user and context
 export interface UserData {
@@ -24,38 +25,59 @@ interface UserContextType {
     userData: UserData | null
     setUserData: React.Dispatch<SetStateAction<UserData | null>>
     isLoading: boolean
-    setIsLoading: React.Dispatch<SetStateAction<boolean>>
+    isIdle: boolean
+    isError: boolean
+    isSuccess: boolean
     googleLogin: () => void
     githubLogin: () => void
-    fetchUserData: (user: User) => Promise<void>
     logout: () => Promise<void>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext<UserContextType>({
     userData: null,
     setUserData: () => {},
     isLoading: false,
-    setIsLoading: () => {},
+    isError: false,
+    isIdle: false,
+    isSuccess: false,
     googleLogin: () => {},
     githubLogin: () => {},
-    fetchUserData: async () => {},
     logout: async () => {},
 })
 
 export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<UserData | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [isIdle, setIsIdle] = useState(true)
+    const [isError, setIsError] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
+    // const navigate = useNavigate()
 
-    const fetchUserData = async (user: User) => {
+    useEffect(() => {
+        setIsIdle(false)
+        setIsError(false)
+        setIsSuccess(false)
         setIsLoading(true)
-        try {
-            const userData = await registerInitialUser(user)
-            setUserData(userData)
-        } catch (err) {
-            console.log('Somthing went wrong in Firestore')
-        }
-        setIsLoading(false)
-    }
+
+        const auth = getAuth()
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+               const ActualUser= await registerInitialUser(user)
+                setUserData(ActualUser)
+                setIsSuccess(true)
+                setIsLoading(false)
+                console.log('Current User:', user) // This will be the authenticated user
+            } else {
+                setIsLoading(false)
+                setIsError(true)
+                // navigate('/auth')
+                console.log('No user is signed in')
+            }
+        })
+
+        return () => unsubscribe()
+    }, [])
 
     const googleLogin = async () => {
         setIsLoading(true)
@@ -92,11 +114,12 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 userData,
                 setUserData,
                 isLoading,
-                setIsLoading,
+                isError,
+                isSuccess,
+                isIdle,
                 googleLogin,
                 githubLogin,
                 logout,
-                fetchUserData,
             }}>
             {children}
         </UserContext.Provider>
@@ -104,13 +127,3 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 }
 
 export default UserDataProvider
-
-export const useAuthUser = () => {
-    const context = useContext(UserContext)
-
-    if (!context) {
-        throw new Error('useAuthUser must be used within a UserDataProvider')
-    }
-
-    return context
-}

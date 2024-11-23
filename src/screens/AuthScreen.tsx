@@ -7,14 +7,15 @@ import Paper from '@mui/material/Paper'
 import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
 import AnimationFragment from '../fragments/auth/AnimationFragment.tsx'
 import { useSnackbar } from 'notistack'
-import { useAuthUser } from '../contexts/UserData.tsx'
+
+import { useAuthUser } from '../contexts/UseAuthUser.tsx'
 
 const AuthScreen: React.FC = () => {
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
     const { userData, googleLogin, githubLogin, isLoading } = useAuthUser()
 
-    const RegisterUser = async () => {
+    useEffect(() => {
         if (isLoading) {
             return
         }
@@ -30,11 +31,7 @@ const AuthScreen: React.FC = () => {
                 preventDuplicate: true,
             })
         }
-    }
-
-    useEffect(() => {
-        RegisterUser()
-    }, [userData])
+    }, [isLoading, userData])
 
     if (isLoading) {
         return <LottieLoading />

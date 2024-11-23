@@ -9,11 +9,11 @@ import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
 const HomeScreen: React.FC = () => {
     const [username] = useLocalStorage(GlobalConstants.USERNAME, '')
     console.log(username)
-    const [profileopen, setProfileOpen] = React.useState<boolean>(false)
+    const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     return (
         <div className={'flex flex-row bg-slate-900/90 '}>
             <div className={'w-[25rem]'}>
-                {profileopen ? (
+                {profileOpen ? (
                     <UserProfileFragment openProfile={setProfileOpen} />
                 ) : (
                     <ChatsFragment openProfile={setProfileOpen} />
@@ -21,7 +21,6 @@ const HomeScreen: React.FC = () => {
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 <ChattingFragment />
-                {/* <EmptyChatFragment /> */}
             </div>
         </div>
     )
