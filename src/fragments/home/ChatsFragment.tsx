@@ -38,7 +38,11 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                            <UserAvatar src={userData?.profileImage} alt="No Image" sx={{ width: 56, height: 56 }}/>
+                            <UserAvatar
+                                src={userData?.profileImage}
+                                alt='No Image'
+                                sx={{ width: 56, height: 56 }}
+                            />
                         </Badge>
                     </IconButton>
                 </div>

@@ -63,7 +63,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         const auth = getAuth()
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-               const ActualUser= await registerInitialUser(user)
+                const ActualUser = await registerInitialUser(user)
                 setUserData(ActualUser)
                 setIsSuccess(true)
                 setIsLoading(false)

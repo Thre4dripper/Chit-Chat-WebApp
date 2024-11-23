@@ -42,9 +42,7 @@ const UserProfileFragment: React.FC<{
                 <UserAvatar
                     src={userData.profileImage}
                     alt='User Profile Image'
-                    sx={{ width: '200px', height: '200px' }}>
-
-                </UserAvatar>
+                    sx={{ width: '200px', height: '200px' }}></UserAvatar>
 
                 <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUser}>
                     {' '}
@@ -76,7 +74,6 @@ const UserProfileFragment: React.FC<{
                         value={userData.username}
                         disabled={true}
                         defaultValue={userData.username}
-
                     />
 
                     <ModeEditOutlineIcon sx={{ color: 'grey' }} />
@@ -107,12 +104,7 @@ const UserProfileFragment: React.FC<{
                         gap: '1rem',
                     }}>
                     <MenuBookIcon />
-                    <TextField
-                        id='boi'
-                        label='Bio'
-                        value={userData.bio}
-                        disabled={true}
-                    />
+                    <TextField id='boi' label='Bio' value={userData.bio} disabled={true} />
 
                     <ModeEditOutlineIcon />
                 </Box>

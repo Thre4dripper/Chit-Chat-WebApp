@@ -1,4 +1,3 @@
-
 import React from 'react'
 import LottieLoading from './LottieLoading.tsx'
 import { useAuthUser } from '../contexts/UseAuthUser.tsx'
@@ -9,14 +8,13 @@ interface ProtectiveRouteProps {
 }
 
 const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
-    const nav=useNavigate()
-    const { isLoading ,isError,isSuccess } = useAuthUser()
+    const nav = useNavigate()
+    const { isLoading, isError, isSuccess } = useAuthUser()
 
-
-    if(isError){
+    if (isError) {
         nav('/auth')
     }
-    if (isLoading  || !isSuccess) {
+    if (isLoading || !isSuccess) {
         return <LottieLoading />
     }
     return <>{children}</>
