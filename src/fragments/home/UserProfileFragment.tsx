@@ -7,9 +7,11 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import { useAuthUser } from '../../contexts/UserContext.tsx'
-import Person from '@mui/icons-material/Person';
+import Person from '@mui/icons-material/Person'
 
-const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({ openProfile }) => {
+const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
+    openProfile,
+}) => {
     const { userData } = useAuthUser()
     const printUser = () => {
         //   change it into New Image and Updated Based on This
@@ -36,13 +38,16 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                     backgroundColor: 'transparent',
                     padding: '30px 20px',
                 }}>
-
                 <Avatar
                     src={userData.profileImage}
-                    alt="Profile"
-                    sx={{ width: 200, height: 200}}
-                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => { e.currentTarget.onerror = () => { }; e.currentTarget.src = '' }}
-                > <Person sx={{width:'90%',height:'90%'}} />
+                    alt='Profile'
+                    sx={{ width: 200, height: 200 }}
+                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                        e.currentTarget.onerror = () => {}
+                        e.currentTarget.src = ''
+                    }}>
+                    {' '}
+                    <Person sx={{ width: '90%', height: '90%' }} />
                 </Avatar>
 
                 <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUser}>
@@ -87,12 +92,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         cursor: 'pointer',
                     }}>
                     <ReportIcon />
-                    <TextField
-                        id='name'
-                        label='Name'
-                        value={userData?.name}
-                        disabled={true}
-                    />
+                    <TextField id='name' label='Name' value={userData?.name} disabled={true} />
                     <ModeEditOutlineIcon />
                 </Box>
                 <Box
@@ -109,7 +109,6 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                 </Box>
             </Paper>
         </div>
-
     )
 }
 

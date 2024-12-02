@@ -41,10 +41,14 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
                             <Avatar
                                 src={userData?.profileImage}
-                                alt="Profile"
+                                alt='Profile'
                                 sx={{ width: 48, height: 48 }}
-                                onError={(e: React.SyntheticEvent<HTMLImageElement>) => { e.currentTarget.onerror = () => { }; e.currentTarget.src = '' }}
-                            > <Person sx={{ width: '90%', height: '90%' }} />
+                                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                    e.currentTarget.onerror = () => {}
+                                    e.currentTarget.src = ''
+                                }}>
+                                {' '}
+                                <Person sx={{ width: '90%', height: '90%' }} />
                             </Avatar>
                         </Badge>
                     </IconButton>
@@ -67,8 +71,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         }}
                         type='text'
                         placeholder='Search'
-                    // value={searchTerm}
-                    // onChange={handleSearch}
+                        // value={searchTerm}
+                        // onChange={handleSearch}
                     />
                 </div>
             </div>

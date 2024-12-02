@@ -31,7 +31,7 @@ const AuthScreen: React.FC = () => {
                 preventDuplicate: true,
             })
         }
-    }, [isLoading, userData,enqueueSnackbar,navigate])
+    }, [isLoading, userData, enqueueSnackbar, navigate])
 
     if (isLoading) {
         return <LottieLoading />
