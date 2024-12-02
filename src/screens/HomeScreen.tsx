@@ -4,7 +4,7 @@ import useLocalStorage from '../hooks/useLocalStorage.ts'
 import { GlobalConstants } from '../constants/GlobalConstants.ts'
 // import EmptyChatFragment from '../fragments/home/EmptyChatFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
-import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
+import UserProfileFragment from '../fragments/home/UsersProfile/UserProfileFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const [username] = useLocalStorage(GlobalConstants.USERNAME, '')

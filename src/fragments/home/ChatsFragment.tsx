@@ -1,11 +1,11 @@
 import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
-import React, { SetStateAction } from 'react'
+import React, { SetStateAction, useState } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import UserAvatar from './useAvatar.tsx'
+import Avatar from '@mui/material/Avatar'
 
 import { useAuthUser } from '../../contexts/UseAuthUser.tsx'
 
@@ -13,6 +13,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
     openProfile,
 }) => {
     const { userData, logout } = useAuthUser()
+    const [imageError,setImageError]=useState(false)
 
     const chats: number[] = []
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
@@ -38,11 +39,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                            <UserAvatar
-                                src={userData?.profileImage}
-                                alt='No Image'
-                                sx={{ width: 56, height: 56 }}
-                            />
+                                {imageError?(<Avatar>{userData?.name.charAt(0)}</Avatar>):(<img src={userData?.profileImage} style={{ width: 48, height: 48,borderRadius:"50%"}} onError={()=>setImageError(true)}></img>)
+                                }
                         </Badge>
                     </IconButton>
                 </div>
