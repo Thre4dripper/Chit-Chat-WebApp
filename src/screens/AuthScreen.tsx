@@ -8,7 +8,7 @@ import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
 import AnimationFragment from '../fragments/auth/AnimationFragment.tsx'
 import { useSnackbar } from 'notistack'
 
-import { useAuthUser } from '../contexts/UseAuthUser.tsx'
+import { useAuthUser } from '../contexts/UserContext.tsx'
 
 const AuthScreen: React.FC = () => {
     const navigate = useNavigate()
@@ -31,7 +31,7 @@ const AuthScreen: React.FC = () => {
                 preventDuplicate: true,
             })
         }
-    }, [isLoading, userData])
+    }, [isLoading, userData,enqueueSnackbar,navigate])
 
     if (isLoading) {
         return <LottieLoading />

@@ -1,6 +1,6 @@
 import React from 'react'
 import LottieLoading from './LottieLoading.tsx'
-import { useAuthUser } from '../contexts/UseAuthUser.tsx'
+import { useAuthUser } from '../contexts/UserContext.tsx'
 import { useNavigate } from 'react-router-dom'
 
 interface ProtectiveRouteProps {

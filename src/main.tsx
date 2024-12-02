@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import './firebase/FirebaseInit.ts'
 import { SnackbarProvider } from 'notistack'
-import UserDataProvider from './contexts/UserData.tsx'
+import UserDataProvider from './contexts/UserContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

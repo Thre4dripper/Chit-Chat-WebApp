@@ -1,4 +1,4 @@
-import React, { createContext, SetStateAction, useEffect, useState } from 'react'
+import React, {useContext,createContext, SetStateAction, useEffect, useState } from 'react'
 import {
     firebaseSignInWithGithub,
     firebaseSignInWithGoogle,
@@ -127,3 +127,13 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 }
 
 export default UserDataProvider
+
+export const useAuthUser=() =>{
+    const context = useContext(UserContext)
+
+    if (!context) {
+        throw new Error('useAuthUser must be used within a UserDataProvider')
+    }
+
+    return context
+}

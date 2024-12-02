@@ -1,19 +1,19 @@
 import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
-import React, { SetStateAction, useState } from 'react'
+import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
+import { Person } from '@mui/icons-material'
 
-import { useAuthUser } from '../../contexts/UseAuthUser.tsx'
+import { useAuthUser } from '../../contexts/UserContext.tsx'
 
 const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
     const { userData, logout } = useAuthUser()
-    const [imageError,setImageError]=useState(false)
 
     const chats: number[] = []
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
@@ -39,8 +39,13 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                                {imageError?(<Avatar>{userData?.name.charAt(0)}</Avatar>):(<img src={userData?.profileImage} style={{ width: 48, height: 48,borderRadius:"50%"}} onError={()=>setImageError(true)}></img>)
-                                }
+                            <Avatar
+                                src={userData?.profileImage}
+                                alt="Profile"
+                                sx={{ width: 48, height: 48 }}
+                                onError={(e: React.SyntheticEvent<HTMLImageElement>) => { e.currentTarget.onerror = () => { }; e.currentTarget.src = '' }}
+                            > <Person sx={{ width: '90%', height: '90%' }} />
+                            </Avatar>
                         </Badge>
                     </IconButton>
                 </div>
@@ -62,8 +67,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         }}
                         type='text'
                         placeholder='Search'
-                        // value={searchTerm}
-                        // onChange={handleSearch}
+                    // value={searchTerm}
+                    // onChange={handleSearch}
                     />
                 </div>
             </div>
