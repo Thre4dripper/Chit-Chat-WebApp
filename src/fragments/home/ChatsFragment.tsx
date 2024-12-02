@@ -13,7 +13,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
     openProfile,
 }) => {
     const { userData, logout } = useAuthUser()
-    const [imageError,setImageError]=useState(false)
+    const [imageError, setImageError] = useState(false)
 
     const chats: number[] = []
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
@@ -39,8 +39,14 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                                {imageError?(<Avatar>{userData?.name.charAt(0)}</Avatar>):(<img src={userData?.profileImage} style={{ width: 48, height: 48,borderRadius:"50%"}} onError={()=>setImageError(true)}></img>)
-                                }
+                            {imageError ? (
+                                <Avatar>{userData?.name.charAt(0)}</Avatar>
+                            ) : (
+                                <img
+                                    src={userData?.profileImage}
+                                    style={{ width: 48, height: 48, borderRadius: '50%' }}
+                                    onError={() => setImageError(true)}></img>
+                            )}
                         </Badge>
                     </IconButton>
                 </div>
