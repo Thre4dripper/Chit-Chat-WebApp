@@ -6,7 +6,6 @@ import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
-import { Person } from '@mui/icons-material'
 
 import { useAuthUser } from '../../contexts/UserContext.tsx'
 
@@ -41,11 +40,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
                             <Avatar
                                 src={userData?.profileImage}
-                                alt="Profile"
-                                sx={{ width: 48, height: 48 }}
-                                onError={(e: React.SyntheticEvent<HTMLImageElement>) => { e.currentTarget.onerror = () => { }; e.currentTarget.src = '' }}
-                            > <Person sx={{ width: '90%', height: '90%' }} />
-                            </Avatar>
+                                sx={{ width: 48, height: 48, fontSize: 40 }}
+                            />
                         </Badge>
                     </IconButton>
                 </div>

@@ -7,7 +7,6 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import { useAuthUser } from '../../contexts/UserContext.tsx'
-import Person from '@mui/icons-material/Person';
 
 const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({ openProfile }) => {
     const { userData } = useAuthUser()
@@ -39,11 +38,8 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
 
                 <Avatar
                     src={userData.profileImage}
-                    alt="Profile"
-                    sx={{ width: 200, height: 200}}
-                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => { e.currentTarget.onerror = () => { }; e.currentTarget.src = '' }}
-                > <Person sx={{width:'90%',height:'90%'}} />
-                </Avatar>
+                    sx={{ width: 200, height: 200, fontSize: 100 }}
+                />
 
                 <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUser}>
                     Set Profile Photo

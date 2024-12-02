@@ -8,6 +8,7 @@ import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const [username] = useLocalStorage(GlobalConstants.USERNAME, '')
+    console.log(username)
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     return (
         <div className={'flex flex-row bg-slate-900/90 '}>
