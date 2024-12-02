@@ -8,7 +8,9 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import { useAuthUser } from '../../contexts/UserContext.tsx'
 
-const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({ openProfile }) => {
+const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
+    openProfile,
+}) => {
     const { userData } = useAuthUser()
     const printUser = () => {
         //   change it into New Image and Updated Based on This
@@ -35,7 +37,6 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                     backgroundColor: 'transparent',
                     padding: '30px 20px',
                 }}>
-
                 <Avatar
                     src={userData.profileImage}
                     sx={{ width: 200, height: 200, fontSize: 100 }}
@@ -83,12 +84,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         cursor: 'pointer',
                     }}>
                     <ReportIcon />
-                    <TextField
-                        id='name'
-                        label='Name'
-                        value={userData?.name}
-                        disabled={true}
-                    />
+                    <TextField id='name' label='Name' value={userData?.name} disabled={true} />
                     <ModeEditOutlineIcon />
                 </Box>
                 <Box
@@ -105,7 +101,6 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                 </Box>
             </Paper>
         </div>
-
     )
 }
 

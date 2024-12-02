@@ -63,8 +63,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         }}
                         type='text'
                         placeholder='Search'
-                    // value={searchTerm}
-                    // onChange={handleSearch}
+                        // value={searchTerm}
+                        // onChange={handleSearch}
                     />
                 </div>
             </div>
