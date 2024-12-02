@@ -39,6 +39,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                 }}>
                 <Avatar
                     src={userData.profileImage}
+                    alt={userData.name}
                     sx={{ width: 200, height: 200, fontSize: 100 }}
                 />
 

@@ -41,6 +41,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             <Avatar
                                 src={userData?.profileImage}
                                 sx={{ width: 48, height: 48, fontSize: 40 }}
+                                alt={userData?.name}
                             />
                         </Badge>
                     </IconButton>
