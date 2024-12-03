@@ -1,17 +1,21 @@
-import { Avatar, Badge, IconButton, Typography } from '@mui/material'
+import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
-import React from 'react'
+import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import useAuth from '../../hooks/useAuth.ts'
+import Avatar from '@mui/material/Avatar'
 
-const ChatsFragment: React.FC = () => {
-    const { logout } = useAuth()
+import { useAuthUser } from '../../contexts/UserContext.tsx'
+
+const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
+    openProfile,
+}) => {
+    const { userData, logout } = useAuthUser()
 
     const chats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -21,7 +25,11 @@ const ChatsFragment: React.FC = () => {
                     </Typography>
                 </div>
                 <div className={'flex-1'} />
-                <div className={'flex flex-col justify-center'}>
+                <div
+                    className={'flex flex-col justify-center rounded-full'}
+                    onClick={() => {
+                        openProfile(true)
+                    }}>
                     <IconButton>
                         <Badge
                             overlap='circular'
@@ -30,7 +38,11 @@ const ChatsFragment: React.FC = () => {
                                 horizontal: 'right',
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
-                            <Avatar src={'https://i.pravatar.cc/300'} />
+                            <Avatar
+                                src={userData?.profileImage}
+                                sx={{ width: 48, height: 48, fontSize: 40 }}
+                                alt={userData?.name}
+                            />
                         </Badge>
                     </IconButton>
                 </div>

@@ -1,34 +1,20 @@
-import useAuth from '../hooks/useAuth.ts'
-import { useNavigate } from 'react-router-dom'
-import React, { useEffect } from 'react'
+import React from 'react'
 import LottieLoading from './LottieLoading.tsx'
-import useLocalStorage from '../hooks/useLocalStorage.ts'
-import { GlobalConstants } from '../constants/GlobalConstants.ts'
+import { useAuthUser } from '../contexts/UserContext.tsx'
+import { useNavigate } from 'react-router-dom'
 
 interface ProtectiveRouteProps {
     children: React.ReactNode
 }
 
 const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
-    const { user, isLoading } = useAuth()
-    const [, setUsername] = useLocalStorage(GlobalConstants.USERNAME, '')
+    const nav = useNavigate()
+    const { isLoading, isError, isSuccess } = useAuthUser()
 
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (isLoading) {
-            // do nothing when loading
-            return
-        }
-        if (user) {
-            setUsername(user.displayName || '')
-        }
-        if (!user) {
-            navigate('/auth')
-        }
-    }, [isLoading, navigate, setUsername, user])
-
-    if (isLoading) {
+    if (isError) {
+        nav('/auth')
+    }
+    if (isLoading || !isSuccess) {
         return <LottieLoading />
     }
     return <>{children}</>
