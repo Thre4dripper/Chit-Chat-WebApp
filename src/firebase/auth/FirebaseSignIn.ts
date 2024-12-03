@@ -22,6 +22,7 @@ export const firebaseSignInWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
     try {
         const result = await signInWithPopup(auth, provider)
+        console.log(result)
         const credential = GoogleAuthProvider.credentialFromResult(result)
         const token = credential?.accessToken
         console.log(token)
@@ -77,7 +78,7 @@ export const firebaseSignOut = async () => {
     const auth = getAuth()
     try {
         await signOut(auth)
-        console.log('Sign-out successful.')
+        console.log('Logout success')
     } catch (error) {
         console.log('Sign-out error', error)
     }
