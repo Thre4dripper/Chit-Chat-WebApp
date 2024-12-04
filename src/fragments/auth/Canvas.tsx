@@ -100,15 +100,15 @@ const Canvas: React.FC = () => {
             drawCircle(ctx, glass3 + 300, 300, 300, 'rgb(188,216,255)')
             drawImage(
                 ctx,
-                rotatedImageX + 500,
-                rotatedImageY + 300,
+                rotatedImageX + window.innerWidth / 3.2,
+                rotatedImageY + window.innerHeight / 2.5,
                 image,
                 50 * Math.sin(elementDegreesRef.current * (Math.PI / 180)) + 200
             )
             drawImage(
                 ctx,
-                rotatedLogoX + 500,
-                rotatedLogoY + 300,
+                rotatedLogoX + window.innerWidth / 3.1,
+                rotatedLogoY + window.innerHeight / 2.5,
                 logo,
                 50 * Math.sin((elementDegreesRef.current + 180) * (Math.PI / 180)) + 200
             )
