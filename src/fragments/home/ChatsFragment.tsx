@@ -40,7 +40,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
                             <Avatar
                                 src={userData?.profileImage}
-                                sx={{ width: 48, height: 48, fontSize: 40 }}
+                                sx={{ width: 48, height: 48, fontSize: 28 }}
                                 alt={userData?.name}
                             />
                         </Badge>
