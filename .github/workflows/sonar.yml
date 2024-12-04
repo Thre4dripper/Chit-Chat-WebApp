@@ -1,0 +1,126 @@
+name: Sonar Cloud
+
+#on:
+#    pull_request:
+#        branches:
+#            - main
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    sonarcloud:
+        name: SonarCloud
+        runs-on: ubuntu-latest
+        outputs:
+            sonar_token: ${{ steps.sonar_token.outputs.sonar_token }}
+            quality_gate_status: ${{ steps.quality_gate.outputs.quality_gate_status }}
+            issues: ${{ steps.get_issues.outputs.issues }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  token: '${{ secrets.GITHUB_TOKEN }}'
+                  ref: ${{ github.head_ref }} # Use the PR branch
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  registry-url: 'https://registry.npmjs.org'
+
+            - name: Cache dependencies
+              uses: actions/cache@v4
+              with:
+                  path: '**/node_modules'
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Install dependencies
+              run: yarn --frozen-lockfile
+
+            - name: Install SonarQube Community
+              run: docker run --name sonarqube-custom -d --rm -p 9000:9000 sonarqube:10.6-community
+
+            - name: Wait for SonarQube to start
+              run: |
+                  echo "Waiting for SonarQube to start"
+                  while [[ $(curl -s -u admin:admin http://localhost:9000/api/system/status | jq -r '.status') != "UP" ]]; do
+                      sleep 5
+                  done
+                  echo "SonarQube is ready"
+
+            - name: Get Sonar Token
+              id: sonar_token
+              run: |
+                  result=$(curl -u admin:admin -X POST "http://localhost:9000/api/user_tokens/generate" -d "name=automation-token")
+                  echo "sonar_token=$(echo $result | jq -r '.token')" >> $GITHUB_OUTPUT
+
+            - name: Run Sonar Scanner
+              run: |
+                  export SONAR_TOKEN=${{ steps.sonar_token.outputs.sonar_token }}
+                  export SONAR_HOST_URL="http://host.docker.internal:9000"
+                  export SONAR_PROJECT_KEY="chit-chat-key"
+
+                  docker run --rm -e SONAR_TOKEN=$SONAR_TOKEN -e SONAR_HOST_URL=$SONAR_HOST_URL -e SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY -v $(pwd):/usr/src --add-host=host.docker.internal:host-gateway sonarsource/sonar-scanner-cli
+
+            - name: Check Quality Gate
+              id: quality_gate
+              run: |
+                  status=$(curl -u admin:admin -s -X GET "http://localhost:9000/api/qualitygates/project_status?projectKey=chit-chat-key" | jq -r '.projectStatus.status')
+                  echo "quality_gate_status=$status" >> $GITHUB_OUTPUT
+
+            - name: Get Issues
+              id: get_issues
+              run: |
+                  issues=$(curl -u admin:admin -X GET "http://localhost:9000/api/issues/search?componentKeys=chit-chat-key")
+                  echo "issues=$issues" >> $GITHUB_OUTPUT
+
+            - name: Post or Update Sonar Issues as PR Comment
+              run: |
+                  issues=${{ steps.get_issues.outputs.issues }}
+                  pr_comment="### SonarCloud Issues Report%0A%0A"
+
+                  # Loop through issues and format them for PR comment
+                  for issue in $(echo "$issues" | jq -r '.issues[] | @base64'); do
+                    _jq() {
+                      echo "${issue}" | base64 --decode | jq -r "${1}"
+                    }
+
+                    # Extract data from the issue object
+                    issue_key=$(_jq '.key')
+                    issue_severity=$(_jq '.severity')
+                    issue_message=$(_jq '.message')
+                    issue_component=$(_jq '.component')
+                    issue_line=$(_jq '.line')
+                    issue_code_start=$(_jq '.textRange.startLine')
+                    issue_code_end=$(_jq '.textRange.endLine')
+
+                    # Fetch code snippet related to the issue
+                    code_snippet=$(curl -u admin:admin -X GET "http://localhost:9000/api/sources/raw?key=$issue_component&from=$issue_code_start&to=$issue_code_end")
+
+                    # Format each issue in markdown for the PR comment
+                    pr_comment+=$'%0A| **Issue Key** | **Severity** | **Message** | **Component** | **Line** |%0A'
+                    pr_comment+="| --- | --- | --- | --- | --- |%0A"
+                    pr_comment+="| $issue_key | $issue_severity | $issue_message | $issue_component | Line $issue_line |%0A"
+                    pr_comment+="**Code Snippet**:%0A\`\`\`tsx%0A$code_snippet%0A\`\`\`%0A%0A"
+                  done
+
+                  # Get existing PR comments and check if a SonarCloud comment exists
+                  existing_comment_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                    "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+                    | jq -r '.[] | select(.body | startswith("### SonarCloud Issues Report")) | .id')
+
+                  if [ -n "$existing_comment_id" ]; then
+                    # Update the existing SonarCloud comment
+                    echo "Updating existing SonarCloud comment (ID: $existing_comment_id)"
+                    curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                      -d "{\"body\": \"$pr_comment\"}" \
+                      "https://api.github.com/repos/${{ github.repository }}/issues/comments/$existing_comment_id"
+                  else
+                    # Post a new comment if no SonarCloud comment exists
+                    echo "Creating new SonarCloud comment"
+                    curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                      -d "{\"body\": \"$pr_comment\"}" \
+                      "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+                  fi

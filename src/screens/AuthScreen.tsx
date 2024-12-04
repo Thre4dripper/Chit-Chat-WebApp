@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LottieLoading from '../components/LottieLoading.tsx'
-import CssBaseline from '@mui/material/CssBaseline'
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid2'
 import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
-import AnimationFragment from '../fragments/auth/AnimationFragment.tsx'
 import { useSnackbar } from 'notistack'
 
 import { useAuthUser } from '../contexts/UserContext.tsx'
+import Canvas from '../fragments/auth/Canvas.tsx'
 
 const AuthScreen: React.FC = () => {
     const navigate = useNavigate()
@@ -37,12 +35,11 @@ const AuthScreen: React.FC = () => {
         return <LottieLoading />
     }
     return (
-        <Grid container component='main' sx={{ height: '100vh' }}>
-            <CssBaseline />
-            <Grid item xs={false} sm={false} md={9}>
-                <AnimationFragment />
+        <Grid container sx={{ position: 'relative', width: '100vw', height: '100vh' }}>
+            <Grid sx={{ width: '100%', height: '100%' }} className={'hidden lg:flex'}>
+                <Canvas />
             </Grid>
-            <Grid item xs={12} sm={12} md={3} component={Paper}>
+            <Grid className={'absolute h-full right-0'}>
                 <ButtonsFragment signInWithGoogle={googleLogin} signInWithGithub={githubLogin} />
             </Grid>
         </Grid>

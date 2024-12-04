@@ -1,5 +1,5 @@
 import React, { SetStateAction } from 'react'
-import { Box, Paper, TextField, Typography, Avatar } from '@mui/material'
+import { Box, Paper, TextField, Typography, Avatar, IconButton } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
 import ReportIcon from '@mui/icons-material/Report'
@@ -22,13 +22,16 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
 
     return (
         <div className={`h-full w-full  bg-transparent relative flex flex-col`}>
-            <button
-                className='text-white m-2 absolute'
-                onClick={() => {
-                    openProfile(false)
-                }}>
-                <ArrowBackIosIcon />
-            </button>
+            <div className={'text-white my-2 mx-4'}>
+                <IconButton>
+                    <ArrowBackIosIcon
+                        className={'text-white'}
+                        onClick={() => {
+                            openProfile(false)
+                        }}
+                    />
+                </IconButton>
+            </div>
             <Paper
                 sx={{
                     display: 'flex',

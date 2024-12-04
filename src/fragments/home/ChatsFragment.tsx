@@ -14,8 +14,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
 }) => {
     const { userData, logout } = useAuthUser()
 
-    const chats: number[] = []
-    const favChats: number[] = [] // this Will Changed Soon based on User Data current
+    const chats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -40,7 +40,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
                             <Avatar
                                 src={userData?.profileImage}
-                                sx={{ width: 48, height: 48, fontSize: 40 }}
+                                sx={{ width: 48, height: 48, fontSize: 28 }}
                                 alt={userData?.name}
                             />
                         </Badge>
