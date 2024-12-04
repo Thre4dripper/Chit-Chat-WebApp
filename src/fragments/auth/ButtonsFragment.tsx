@@ -36,7 +36,7 @@ const ButtonsFragment: React.FC<ButtonsFragmentProps> = ({
                         {GlobalConstants.APP_NAME}
                     </Typography>
                 </div>
-                <div className={'hidden md:flex'}>
+                <div className={'hidden lg:flex'}>
                     <Box
                         sx={{
                             display: 'flex',
@@ -52,7 +52,7 @@ const ButtonsFragment: React.FC<ButtonsFragmentProps> = ({
                         </Typography>
                     </Box>
                 </div>
-                <div className={'flex md:hidden'}>
+                <div className={'flex lg:hidden'}>
                     <img src={image} alt='auth_ui_logo' className={'w-60 h-60'} />
                 </div>
                 <Box

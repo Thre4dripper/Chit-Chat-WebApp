@@ -36,18 +36,10 @@ const AuthScreen: React.FC = () => {
     }
     return (
         <Grid container sx={{ position: 'relative', width: '100vw', height: '100vh' }}>
-            <Grid
-                sx={{ position: 'absolute', width: '100%', height: '100%' }}
-                className={'hidden lg:flex'}>
+            <Grid sx={{ width: '100%', height: '100%' }} className={'hidden lg:flex'}>
                 <Canvas />
             </Grid>
-            <Grid
-                sx={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                }}
-                className={'flex justify-center lg:justify-end'}>
+            <Grid className={'absolute h-full right-0'}>
                 <ButtonsFragment signInWithGoogle={googleLogin} signInWithGithub={githubLogin} />
             </Grid>
         </Grid>
