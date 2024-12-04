@@ -22,8 +22,8 @@ const ButtonsFragment: React.FC<ButtonsFragmentProps> = ({
     return (
         <Box
             sx={{
-                py: 4,
-                px: 4,
+                py: 8,
+                px: 8,
                 height: '100%',
             }}>
             <div className={'w-fit h-full flex flex-col gap-4 items-center'}>
