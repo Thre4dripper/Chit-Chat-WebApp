@@ -22,8 +22,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     openProfile,
 }) => {
     const { userData } = useAuthUser()
-    
-   
+
     const {
         register,
         handleSubmit,
