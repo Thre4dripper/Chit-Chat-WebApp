@@ -14,7 +14,7 @@ import { updateName } from '../../firebase/profile/UpdateProfile.ts'
 const userFormSchema = z.object({
     username: z.string().min(3, "Username must be at least 3 characters"),
     name: z.string().min(1, "Name is required"),
-    bio: z.string().max(200, "Bio must be under 200 characters"),
+    bio: z.string().max(100, "Bio must be within 4 to 100 characters"),
 });
 type FormValues = z.infer<typeof userFormSchema>
 
@@ -38,11 +38,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
             bio: userData?.bio,
         },
     });
-    // const data={
-    //     username:userData?.username,
-    //     name:userData?.name,
-    //     bio:userData?.name
-    // }
+    
     const onSubmit = (data: FormValues) => {
         console.log('Form Submitted:', data);
     };
@@ -112,7 +108,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         helperText={errors.username?.message}
                         size="small"
                         variant="outlined"
-                        disabled={true}
+                        // disabled={true}
                         sx={{ flexGrow: 1 }}
                     />
                     <IconButton sx={{ color: 'grey' }}>
@@ -137,7 +133,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         helperText={errors.name?.message}
                         size="small"
                         variant="outlined"
-                        disabled={true}
+                        // disabled={true}
                         sx={{ flexGrow: 1 }}
                     />
                     <IconButton sx={{ color: 'grey' }} onClick={() => updateName(userData.uid, "New Name ya hai")}>
@@ -160,7 +156,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         helperText={errors.bio?.message}
                         size="small"
                         variant="outlined"
-                        disabled={true}
+                        // disabled={true}
                         sx={{ flexGrow: 1 }}
                     />
                     <IconButton sx={{ color: 'grey' }} >
