@@ -22,10 +22,8 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     openProfile,
 }) => {
     const { userData } = useAuthUser()
-    //  ignore we remove this later on
-    if (!userData) {
-        return <LottieLoading />
-    }
+    
+   
     const {
         register,
         handleSubmit,
@@ -33,9 +31,9 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     } = useForm({
         resolver: zodResolver(userFormSchema), // Zod validation
         defaultValues: {
-            username: userData?.username,
-            name: userData?.name,
-            bio: userData?.bio,
+            username: userData?.username || '',
+            name: userData?.name || '',
+            bio: userData?.bio || '',
         },
     })
 
@@ -44,6 +42,9 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     }
     const printUser = () => {
         //   change it into New Image and Updated Based on This
+    }
+    if (!userData) {
+        return <LottieLoading />
     }
 
     return (
