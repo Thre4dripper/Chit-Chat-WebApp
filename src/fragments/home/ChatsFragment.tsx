@@ -47,8 +47,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton>
-                        <LogoutIcon className={'text-white'} onClick={logout} />
+                    <IconButton onClick={logout}>
+                        <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>
             </div>

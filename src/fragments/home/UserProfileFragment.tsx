@@ -7,28 +7,60 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import { useAuthUser } from '../../contexts/UserContext.tsx'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { updateName } from '../../firebase/profile/UpdateProfile.ts'
+const userFormSchema = z.object({
+    username: z.string().min(3, "Username must be at least 3 characters"),
+    name: z.string().min(1, "Name is required"),
+    bio: z.string().max(200, "Bio must be under 200 characters"),
+});
+type FormValues = z.infer<typeof userFormSchema>
 
 const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
     const { userData } = useAuthUser()
+    //  ignore we remove this later on
+    if (!userData) {
+        return <LottieLoading />
+    }
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(userFormSchema), // Zod validation
+        defaultValues: {
+            username: userData?.username,
+            name: userData?.name,
+            bio: userData?.bio,
+        },
+    });
+    // const data={
+    //     username:userData?.username,
+    //     name:userData?.name,
+    //     bio:userData?.name
+    // }
+    const onSubmit = (data: FormValues) => {
+        console.log('Form Submitted:', data);
+    };
     const printUser = () => {
         //   change it into New Image and Updated Based on This
     }
 
-    if (!userData) {
-        return <LottieLoading />
-    }
+
 
     return (
         <div className={`h-full w-full  bg-transparent relative flex flex-col`}>
             <div className={'text-white my-2 mx-4'}>
-                <IconButton>
+                <IconButton onClick={() => {
+                    openProfile(false)
+                }}>
                     <ArrowBackIosIcon
                         className={'text-white'}
-                        onClick={() => {
-                            openProfile(false)
-                        }}
+
                     />
                 </IconButton>
             </div>
@@ -51,59 +83,93 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                 </Typography>
             </Paper>
 
+
             <Paper
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '1rem',
                     flexGrow: 1,
                     borderRadius: '20px 20px 0 0',
-                    paddingTop: '20px',
-                }}>
+                    padding: '20px 40px',
+                }}
+            >
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '1rem',
-                    }}>
-                    <Person2Icon />
-
-                    <TextField
-                        id='username'
-                        label='Username'
-                        value={userData?.username}
-                        disabled={true}
-                        defaultValue={userData?.username}
-                    />
-
-                    <ModeEditOutlineIcon sx={{ color: 'grey' }} />
-                </Box>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
                         gap: '1rem',
                         cursor: 'pointer',
-                    }}>
+                    }}
+                >
+                    <Person2Icon />
+                    <TextField
+                        label="username"
+                        {...register('username')}
+                        error={!!errors.username}
+                        helperText={errors.username?.message}
+                        size="small"
+                        variant="outlined"
+                        disabled={true}
+                        sx={{ flexGrow: 1 }}
+                    />
+                    <IconButton sx={{ color: 'grey' }}>
+                        <ModeEditOutlineIcon />
+                    </IconButton>
+                </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        cursor: 'pointer',
+                    }}
+                >
                     <ReportIcon />
-                    <TextField id='name' label='Name' value={userData?.name} disabled={true} />
-                    <ModeEditOutlineIcon />
+
+                    <TextField
+                        label="Name"
+                        {...register('name')}
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                        size="small"
+                        variant="outlined"
+                        disabled={true}
+                        sx={{ flexGrow: 1 }}
+                    />
+                    <IconButton sx={{ color: 'grey' }} onClick={() => updateName(userData.uid, "New Name ya hai")}>
+                        <ModeEditOutlineIcon />
+                    </IconButton>
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
                         gap: '1rem',
-                    }}>
+                        cursor: 'pointer',
+                    }}
+                >
                     <MenuBookIcon />
-                    <TextField id='boi' label='Bio' value={userData?.bio} disabled={true} />
-
-                    <ModeEditOutlineIcon />
+                    <TextField
+                        label="Bio"
+                        {...register('bio')}
+                        error={!!errors.bio}
+                        helperText={errors.bio?.message}
+                        size="small"
+                        variant="outlined"
+                        disabled={true}
+                        sx={{ flexGrow: 1 }}
+                    />
+                    <IconButton sx={{ color: 'grey' }} >
+                        <ModeEditOutlineIcon />
+                    </IconButton>
                 </Box>
+
             </Paper>
+
         </div>
     )
 }
