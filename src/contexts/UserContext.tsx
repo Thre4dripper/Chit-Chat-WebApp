@@ -1,11 +1,8 @@
 import React, { useContext, createContext, SetStateAction, useEffect, useState } from 'react'
-import {
-    firebaseSignInWithGithub,
-    firebaseSignInWithGoogle,
-    firebaseSignOut,
-} from '../firebase/auth/FirebaseSignIn'
+import FirebaseSignIn from '../firebase/auth/FirebaseSignIn'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { registerInitialUser } from '../firebase/auth/FireStoreRegister'
+import { getFirestore } from 'firebase/firestore'
+import FireStoreRegister from '../firebase/auth/FireStoreRegister.ts'
 // import { useNavigate } from 'react-router-dom'
 
 // Define types for user and context
@@ -62,8 +59,9 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         const auth = getAuth()
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            const fireStore = getFirestore()
             if (user) {
-                const ActualUser = await registerInitialUser(user)
+                const ActualUser = await FireStoreRegister.registerInitialUser(fireStore, user)
                 setUserData(ActualUser)
                 setIsSuccess(true)
                 setIsLoading(false)
@@ -81,29 +79,31 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     const googleLogin = async () => {
         setIsLoading(true)
-        const userData = await firebaseSignInWithGoogle()
+        const userData = await FirebaseSignIn.firebaseSignInWithGoogle()
         if (!userData) {
             return
         }
-        const response = await registerInitialUser(userData)
+        const fireStore = getFirestore()
+        const response = await FireStoreRegister.registerInitialUser(fireStore, userData)
         setUserData(response)
         setIsLoading(false)
     }
 
     const githubLogin = async () => {
         setIsLoading(true)
-        const userData = await firebaseSignInWithGithub()
+        const userData = await FirebaseSignIn.firebaseSignInWithGithub()
         if (!userData) {
             return
         }
-        const response = await registerInitialUser(userData)
+        const fireStore = getFirestore()
+        const response = await FireStoreRegister.registerInitialUser(fireStore, userData)
         setUserData(response)
         setIsLoading(false)
     }
 
     const logout = async () => {
         setIsLoading(true)
-        await firebaseSignOut()
+        await FirebaseSignIn.firebaseSignOut()
         setUserData(null)
         setIsLoading(false)
     }
