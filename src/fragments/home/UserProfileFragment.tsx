@@ -8,13 +8,13 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import { useAuthUser } from '../../contexts/UserContext.tsx'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm ,SubmitHandler} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { updateName } from '../../firebase/profile/UpdateProfile.ts'
+// import { updateName } from '../../firebase/profile/UpdateProfile.ts'
 const userFormSchema = z.object({
-    username: z.string().min(3, 'Username must be at least 3 characters'),
-    name: z.string().min(1, 'Name is required'),
-    bio: z.string().max(100, 'Bio must be within 4 to 100 characters'),
+    username: z.string().min(4, 'Not a Valid Username'),
+    name: z.string().min(4, 'Not a Valid Name'),
+    bio: z.string().max(100, 'Bio is too long'),
 })
 type FormValues = z.infer<typeof userFormSchema>
 
@@ -27,17 +27,20 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm({
-        resolver: zodResolver(userFormSchema), // Zod validation
-        defaultValues: {
-            username: userData?.username || '',
-            name: userData?.name || '',
-            bio: userData?.bio || '',
-        },
-    })
+    } = useForm<FormValues>({
+        resolver: zodResolver(userFormSchema),
+        mode: 'onChange',
+        defaultValues:{
+            username:userData?.username??'',
+            name:userData?.name??'',
+            bio:userData?.bio??''
+        }
+        })
 
-    const onSubmit = (data: FormValues) => {
-        console.log('Form Submitted:', data)
+    console.log(errors.username)
+
+    const onSubmit:SubmitHandler<FormValues> = () => {
+         console.log('Submitted')
     }
     const printUser = () => {
         //   change it into New Image and Updated Based on This
@@ -76,7 +79,8 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
             </Paper>
 
             <Paper
-                component='form'
+                component="form"
+                noValidate
                 onSubmit={handleSubmit(onSubmit)}
                 sx={{
                     display: 'flex',
@@ -85,22 +89,24 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                     flexGrow: 1,
                     borderRadius: '20px 20px 0 0',
                     padding: '20px 40px',
-                }}>
+                }}
+            >
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: '1rem',
                         cursor: 'pointer',
-                    }}>
+                    }}
+                >
                     <Person2Icon />
                     <TextField
-                        label='username'
+                        label="username"
                         {...register('username')}
                         error={!!errors.username}
                         helperText={errors.username?.message}
-                        size='small'
-                        variant='outlined'
+                        size="small"
+                        variant="outlined"
                         // disabled={true}
                         sx={{ flexGrow: 1 }}
                     />
@@ -115,22 +121,21 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         alignItems: 'center',
                         gap: '1rem',
                         cursor: 'pointer',
-                    }}>
+                    }}
+                >
                     <ReportIcon />
 
                     <TextField
-                        label='Name'
+                        label="Name"
                         {...register('name')}
                         error={!!errors.name}
                         helperText={errors.name?.message}
-                        size='small'
-                        variant='outlined'
+                        size="small"
+                        variant="outlined"
                         // disabled={true}
                         sx={{ flexGrow: 1 }}
                     />
-                    <IconButton
-                        sx={{ color: 'grey' }}
-                        onClick={() => updateName(userData.uid, 'New Name ya hai')}>
+                    <IconButton sx={{ color: 'grey' }}>
                         <ModeEditOutlineIcon />
                     </IconButton>
                 </Box>
@@ -140,22 +145,26 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                         alignItems: 'center',
                         gap: '1rem',
                         cursor: 'pointer',
-                    }}>
+                    }}
+                >
                     <MenuBookIcon />
                     <TextField
-                        label='Bio'
+                        label="Bio"
                         {...register('bio')}
                         error={!!errors.bio}
                         helperText={errors.bio?.message}
-                        size='small'
-                        variant='outlined'
+                        size="small"
+                        variant="outlined"
                         // disabled={true}
                         sx={{ flexGrow: 1 }}
                     />
-                    <IconButton sx={{ color: 'grey' }}>
+                    <IconButton sx={{ color: 'grey' }} >
                         <ModeEditOutlineIcon />
                     </IconButton>
                 </Box>
+
+              
+
             </Paper>
         </div>
     )
