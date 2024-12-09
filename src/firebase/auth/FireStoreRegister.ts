@@ -1,7 +1,7 @@
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc, getFirestore } from 'firebase/firestore'
 import { User } from 'firebase/auth'
-import firebaseApp from '../FirebaseInit'
 import { UserData } from '../../contexts/UserContext'
+import firebaseApp from '../FirebaseInit'
 const firestore = getFirestore(firebaseApp)
 
 export const registerInitialUser = async (user: User) => {
@@ -11,7 +11,7 @@ export const registerInitialUser = async (user: User) => {
         const userSnapshot = await getDoc(userDocRef)
 
         if (userSnapshot.exists()) {
-            console.log('User already exists', userSnapshot.data() as UserData)
+            // console.log('User already exists', userSnapshot.data() as UserData)
             return userSnapshot.data() as UserData // User already registered
         }
 

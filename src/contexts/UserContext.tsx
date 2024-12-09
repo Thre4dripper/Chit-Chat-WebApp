@@ -67,7 +67,7 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 setUserData(ActualUser)
                 setIsSuccess(true)
                 setIsLoading(false)
-                console.log('Current User:', user) // This will be the authenticated user
+                // console.log('Current User:', user) // This will be the authenticated user
             } else {
                 setIsLoading(false)
                 setIsError(true)
