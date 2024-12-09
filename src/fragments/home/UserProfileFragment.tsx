@@ -99,7 +99,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                     }}>
                     <Person2Icon />
                     <TextField
-                        label='username'
+                        label='Username'
                         {...register('username')}
                         error={!!errors.username}
                         helperText={errors.username?.message}
