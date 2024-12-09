@@ -1,4 +1,4 @@
-import { doc, setDoc, getDoc, getFirestore } from 'firebase/firestore'
+import { doc, setDoc, getDoc,getFirestore } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import { UserData } from '../../contexts/UserContext'
 import firebaseApp from '../FirebaseInit'
@@ -32,7 +32,7 @@ export const registerInitialUser = async (user: User) => {
         // Register user with uid as document id
         await setDoc(userDocRef, userData)
 
-        return userData
+        return userData as UserData
     } catch (error) {
         console.error('Error registering user:', error)
         return null
