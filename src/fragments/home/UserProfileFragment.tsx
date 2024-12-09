@@ -12,8 +12,8 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 // import { updateName } from '../../firebase/profile/UpdateProfile.ts'
 const userFormSchema = z.object({
-    username: z.string().min(4, 'Not a Valid Username'),
-    name: z.string().min(4, 'Not a Valid Name'),
+    username: z.string().min(1, 'Username is required').min(4, 'Username too short'),
+    name: z.string().min(1,'Name is required').min(4, 'Name too short'),
     bio: z.string().max(100, 'Bio is too long'),
 })
 type FormValues = z.infer<typeof userFormSchema>

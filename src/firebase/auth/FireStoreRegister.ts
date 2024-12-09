@@ -1,8 +1,8 @@
-import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc,getFirestore } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import { UserData } from '../../contexts/UserContext'
-import { firestore } from '../FirebaseInit'
-
+import firebaseApp from '../FirebaseInit'
+const firestore = getFirestore(firebaseApp)
 export const registerInitialUser = async (user: User) => {
     try {
         // Check if user is already registered
