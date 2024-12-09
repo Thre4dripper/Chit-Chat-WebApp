@@ -28,8 +28,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                 <div className={'flex flex-col justify-center rounded-full'}>
                     <IconButton
                         onClick={() => {
-                        openProfile(true)
-                    }}>
+                            openProfile(true)
+                        }}>
                         <Badge
                             overlap='circular'
                             anchorOrigin={{
@@ -63,7 +63,6 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         }}
                         type='text'
                         placeholder='Search'
-                       
                     />
                 </div>
             </div>
