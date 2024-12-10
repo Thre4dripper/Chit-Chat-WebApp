@@ -62,7 +62,7 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
                     <div className={'flex flex-row-reverse'}>
                         {seen.map((item) => {
                             return (
-                                <div className={'-ml-6'}>
+                                <div key={item} className={'-ml-6'}>
                                     <CircularImage image={item} size={20} alt={'Sender Image'} />
                                 </div>
                             )

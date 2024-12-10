@@ -25,12 +25,11 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                     </Typography>
                 </div>
                 <div className={'flex-1'} />
-                <div
-                    className={'flex flex-col justify-center rounded-full'}
-                    onClick={() => {
-                        openProfile(true)
-                    }}>
-                    <IconButton>
+                <div className={'flex flex-col justify-center rounded-full'}>
+                    <IconButton
+                        onClick={() => {
+                            openProfile(true)
+                        }}>
                         <Badge
                             overlap='circular'
                             anchorOrigin={{
@@ -47,8 +46,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton>
-                        <LogoutIcon className={'text-white'} onClick={logout} />
+                    <IconButton onClick={logout}>
+                        <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>
             </div>
@@ -64,8 +63,6 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         }}
                         type='text'
                         placeholder='Search'
-                        // value={searchTerm}
-                        // onChange={handleSearch}
                     />
                 </div>
             </div>

@@ -9,7 +9,7 @@ class FireStoreRegister {
             const userSnapshot = await getDoc(userDocRef)
 
             if (userSnapshot.exists()) {
-                console.log('User already exists', userSnapshot.data() as UserData)
+                //console.log('User already exists', userSnapshot.data() as UserData)
                 return userSnapshot.data() as UserData
             }
 
