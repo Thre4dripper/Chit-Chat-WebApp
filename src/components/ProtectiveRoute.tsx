@@ -8,12 +8,13 @@ interface ProtectiveRouteProps {
 }
 
 const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
-    const nav = useNavigate()
-    const { isLoading, isError, isSuccess } = useAuthUser()
+    const navigate = useNavigate()
+    const { isLoading, isSuccess, userData } = useAuthUser()
 
-    if (isError) {
-        nav('/auth')
+    if (!isLoading && !isSuccess && !userData) {
+        navigate('/auth')
     }
+
     if (isLoading || !isSuccess) {
         return <LottieLoading />
     }

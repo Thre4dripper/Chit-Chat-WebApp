@@ -1,36 +1,36 @@
-import { Firestore, doc, setDoc, getDoc } from 'firebase/firestore'
+import { Firestore, doc, setDoc } from 'firebase/firestore'
 import { User } from 'firebase/auth'
-import { UserData } from '../../contexts/UserContext'
+import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
+import Utils from '../../utils/Utils.ts'
+import UserModel from '../../models/UserModel.ts'
+import { UserStatus } from '../../enums/UserStatus.ts'
 
 class FireStoreRegister {
-    static async registerInitialUser(firestore: Firestore, user: User) {
+    static async registerInitialUser(firestore: Firestore, user: User): Promise<boolean> {
         try {
-            const userDocRef = doc(firestore, 'Users', user.uid)
-            const userSnapshot = await getDoc(userDocRef)
-
-            if (userSnapshot.exists()) {
-                //console.log('User already exists', userSnapshot.data() as UserData)
-                return userSnapshot.data() as UserData
+            const isUserRegistered = await Utils.checkCompleteRegistration(firestore, user)
+            if (isUserRegistered) {
+                return true
             }
 
-            const userData: UserData = {
-                uid: user.uid,
-                bio: '',
-                name: user.displayName || '',
-                profileImage: user.photoURL || '',
-                status: 'Online',
-                favourites: [],
-                fcmToken: '',
-                groups: [],
-                username: '',
-            }
+            const userDocRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, user.uid)
+            const data = new UserModel(
+                user.uid,
+                '',
+                user.displayName!,
+                user.photoURL!,
+                '',
+                UserStatus[UserStatus.Online],
+                [],
+                '',
+                []
+            ).toObject()
 
-            await setDoc(userDocRef, userData)
-
-            return userData as UserData
+            await setDoc(userDocRef, data)
+            return true
         } catch (error) {
             console.error('Error registering user:', error)
-            return null
+            return false
         }
     }
 }

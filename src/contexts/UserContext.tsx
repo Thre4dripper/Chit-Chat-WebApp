@@ -3,26 +3,12 @@ import FirebaseSignIn from '../firebase/auth/FirebaseSignIn'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import FireStoreRegister from '../firebase/auth/FireStoreRegister.ts'
-// import { useNavigate } from 'react-router-dom'
-
-// Define types for user and context
-export interface UserData {
-    uid: string
-    bio: string
-    name: string
-    profileImage: string
-    status: string
-    favourites: string[]
-    fcmToken: string
-    groups: string[]
-    username: string
-}
+import UserModel from '../models/UserModel.ts'
 
 interface UserContextType {
-    userData: UserData | null
-    setUserData: React.Dispatch<SetStateAction<UserData | null>>
+    userData: UserModel | null
+    setUserData: React.Dispatch<SetStateAction<UserModel | null>>
     isLoading: boolean
-    isIdle: boolean
     isError: boolean
     isSuccess: boolean
     googleLogin: () => void
@@ -30,13 +16,11 @@ interface UserContextType {
     logout: () => Promise<void>
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext<UserContextType>({
     userData: null,
     setUserData: () => {},
     isLoading: false,
     isError: false,
-    isIdle: false,
     isSuccess: false,
     googleLogin: () => {},
     githubLogin: () => {},
@@ -44,34 +28,38 @@ export const UserContext = createContext<UserContextType>({
 })
 
 export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [userData, setUserData] = useState<UserData | null>(null)
+    const [userData, setUserData] = useState<UserModel | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [isIdle, setIsIdle] = useState(true)
     const [isError, setIsError] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
     // const navigate = useNavigate()
 
     useEffect(() => {
-        setIsIdle(false)
         setIsError(false)
         setIsSuccess(false)
         setIsLoading(true)
 
         const auth = getAuth()
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            const fireStore = getFirestore()
-            if (user) {
-                const ActualUser = await FireStoreRegister.registerInitialUser(fireStore, user)
-                setUserData(ActualUser)
-                setIsSuccess(true)
+            if (!user) {
                 setIsLoading(false)
-                // console.log('Current User:', user) // This will be the authenticated user
-            } else {
-                setIsLoading(false)
-                setIsError(true)
-                // navigate('/auth')
+                setIsSuccess(false)
+                setUserData(null)
                 console.log('No user is signed in')
+                return
             }
+
+            const fireStore = getFirestore()
+            const isRegistered = await FireStoreRegister.registerInitialUser(fireStore, user)
+            if (!isRegistered) {
+                setIsError(true)
+                setIsLoading(false)
+                console.log('Error registering user')
+                return
+            }
+
+            setIsSuccess(true)
+            setIsLoading(false)
         })
 
         return () => unsubscribe()
@@ -83,10 +71,8 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (!userData) {
             return
         }
-        const fireStore = getFirestore()
-        const response = await FireStoreRegister.registerInitialUser(fireStore, userData)
-        setUserData(response)
         setIsLoading(false)
+        setIsSuccess(true)
     }
 
     const githubLogin = async () => {
@@ -95,9 +81,6 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (!userData) {
             return
         }
-        const fireStore = getFirestore()
-        const response = await FireStoreRegister.registerInitialUser(fireStore, userData)
-        setUserData(response)
         setIsLoading(false)
     }
 
@@ -116,7 +99,6 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 isLoading,
                 isError,
                 isSuccess,
-                isIdle,
                 googleLogin,
                 githubLogin,
                 logout,
