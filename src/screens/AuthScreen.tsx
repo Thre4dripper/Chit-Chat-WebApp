@@ -3,15 +3,13 @@ import Grid from '@mui/material/Grid2'
 import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
 import Canvas from '../fragments/auth/Canvas.tsx'
 import useAuthStore from '../store/auth.store.ts'
-import { GlobalConstants } from '../constants/GlobalConstants.ts'
 import { useNavigate } from 'react-router-dom'
-import useLocalStorage from '../hooks/useLocalStorage.ts'
+import useLocalStore from '../store/local.store.ts'
 
 const AuthScreen: React.FC = () => {
     const navigate = useNavigate()
     const { googleLogin, githubLogin } = useAuthStore()
-
-    const [username] = useLocalStorage(GlobalConstants.USERNAME, null)
+    const username = useLocalStore((state) => state.username)
 
     useEffect(() => {
         if (username) {
