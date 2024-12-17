@@ -1,19 +1,16 @@
-import React from 'react'
-import LottieLoading from './LottieLoading.tsx'
-import { useAuthUser } from '../contexts/UserContext.tsx'
+import { PropsWithChildren, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useAuthStore from '../store/auth.store.ts'
+import LottieLoading from './LottieLoading.tsx'
 
-interface ProtectiveRouteProps {
-    children: React.ReactNode
-}
-
-const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
+const ProtectiveRoute = ({ children }: PropsWithChildren) => {
     const navigate = useNavigate()
-    const { isLoading, isSuccess, userData } = useAuthUser()
 
-    if (!isLoading && !isSuccess && !userData) {
-        navigate('/auth')
-    }
+    const { isLoading, isSuccess, onSignInResult } = useAuthStore()
+
+    useEffect(() => {
+        onSignInResult()
+    }, [navigate, onSignInResult])
 
     if (isLoading || !isSuccess) {
         return <LottieLoading />

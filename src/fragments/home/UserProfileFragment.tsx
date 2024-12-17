@@ -6,10 +6,10 @@ import ReportIcon from '@mui/icons-material/Report'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 import LottieLoading from '../../components/LottieLoading.tsx'
-import { useAuthUser } from '../../contexts/UserContext.tsx'
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useAuthStore from '../../store/auth.store.ts'
 // import { updateName } from '../../firebase/profile/UpdateProfile.ts'
 const userFormSchema = z.object({
     username: z.string().min(1, 'Username is required').min(4, 'Username too short'),
@@ -21,7 +21,7 @@ type FormValues = z.infer<typeof userFormSchema>
 const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
-    const { userData } = useAuthUser()
+    const { user } = useAuthStore()
 
     const {
         register,
@@ -31,9 +31,9 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
         resolver: zodResolver(userFormSchema),
         mode: 'onChange',
         defaultValues: {
-            username: userData?.username ?? '',
-            name: userData?.name ?? '',
-            bio: userData?.bio ?? '',
+            username: user?.username ?? '',
+            name: user?.name ?? '',
+            bio: user?.bio ?? '',
         },
     })
 
@@ -45,7 +45,7 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     const printUser = () => {
         //   change it into New Image and Updated Based on This
     }
-    if (!userData) {
+    if (!user) {
         return <LottieLoading />
     }
 
@@ -68,8 +68,8 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                     padding: '30px 20px',
                 }}>
                 <Avatar
-                    src={userData.profileImage}
-                    alt={userData.name}
+                    src={user.profileImage}
+                    alt={user.name}
                     sx={{ width: 200, height: 200, fontSize: 100 }}
                 />
 
