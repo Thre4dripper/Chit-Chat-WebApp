@@ -1,4 +1,4 @@
-import BaseModel from './BaseModel.ts'
+import BaseModel from './base.model.ts'
 
 class UserModel extends BaseModel {
     uid: string

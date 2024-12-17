@@ -2,7 +2,7 @@ import { Firestore, doc, setDoc } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 import Utils from '../../utils/Utils.ts'
-import UserModel from '../../models/UserModel.ts'
+import UserModel from '../../models/user.model.ts'
 import { UserStatus } from '../../enums/UserStatus.ts'
 
 class FireStoreRegister {
