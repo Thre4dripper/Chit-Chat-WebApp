@@ -5,8 +5,10 @@ import FirebaseSignIn from '../firebase/auth/FirebaseSignIn.ts'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import FireStoreRegister from '../firebase/auth/FireStoreRegister.ts'
 import { immer } from 'zustand/middleware/immer'
+import UserModel from '../models/user.model.ts'
 
 type AuthState = {
+    user: UserModel | null
     isLoading: boolean | null
     isError: boolean | null
     isSuccess: boolean | null
@@ -22,6 +24,7 @@ type AuthActions = {
 const useAuthStore = create<AuthState & AuthActions>()(
     devtools(
         immer((set) => ({
+            user: null,
             isLoading: null,
             isError: null,
             isSuccess: null,
@@ -39,6 +42,7 @@ const useAuthStore = create<AuthState & AuthActions>()(
                 const auth = getAuth()
                 set({ isLoading: true })
                 onAuthStateChanged(auth, async (user) => {
+                    console.log('Auth:', auth.currentUser)
                     if (!user) {
                         set({ isSuccess: false })
                         callback(false)
