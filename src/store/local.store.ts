@@ -8,8 +8,8 @@ type localState = {
 }
 
 type localActions = {
-    setUsername: (username: string) => void
-    setFcmToken: (fcmToken: string) => void
+    setUsername: (username: string | null) => void
+    setFcmToken: (fcmToken: string | null) => void
 }
 
 const useLocalStore = create<localState & localActions>()(

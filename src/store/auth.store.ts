@@ -5,56 +5,54 @@ import FirebaseSignIn from '../firebase/auth/FirebaseSignIn.ts'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import FireStoreRegister from '../firebase/auth/FireStoreRegister.ts'
 import { immer } from 'zustand/middleware/immer'
-import UserModel from '../models/user.model.ts'
 
 type AuthState = {
-    user: UserModel | null
     isLoading: boolean | null
-    isError: boolean | null
-    isSuccess: boolean | null
+    isAuthSuccess: boolean | null
 }
 
 type AuthActions = {
-    googleLogin: () => Promise<void>
-    githubLogin: () => Promise<void>
+    googleLogin: () => Promise<boolean>
+    githubLogin: () => Promise<boolean>
     onSignInResult: (callback: (isSuccess: boolean) => void) => void
-    logout: () => Promise<void>
+    logout: () => Promise<boolean>
 }
 
 const useAuthStore = create<AuthState & AuthActions>()(
     devtools(
         immer((set) => ({
-            user: null,
             isLoading: null,
-            isError: null,
-            isSuccess: null,
+            isAuthSuccess: null,
             googleLogin: async () => {
                 set({ isLoading: true })
-                await FirebaseSignIn.firebaseSignInWithGoogle()
                 try {
                     await FirebaseSignIn.firebaseSignInWithGoogle()
                 } catch (error) {
                     console.error(error)
+                    return false
                 }
                 set({ isLoading: false })
+                return true
             },
             githubLogin: async () => {
                 set({ isLoading: true })
-                await FirebaseSignIn.firebaseSignInWithGithub()
                 try {
                     await FirebaseSignIn.firebaseSignInWithGithub()
                 } catch (error) {
-                    set({ isError: true })
                     console.error(error)
+                    return false
                 }
                 set({ isLoading: false })
+                return true
             },
             onSignInResult: (callback) => {
                 const auth = getAuth()
                 set({ isLoading: true })
+                set({ isAuthSuccess: null })
                 onAuthStateChanged(auth, async (user) => {
                     if (!user) {
-                        set({ isSuccess: false })
+                        set({ isLoading: false })
+                        set({ isAuthSuccess: false })
                         callback(false)
                         return
                     }
@@ -65,22 +63,29 @@ const useAuthStore = create<AuthState & AuthActions>()(
                         user
                     )
                     if (!isRegistered) {
-                        set({ isError: true })
+                        set({ isLoading: false })
+                        set({ isAuthSuccess: false })
                         console.log('Error registering user')
                         callback(false)
                         return
                     }
 
-                    set({ isSuccess: true })
                     set({ isLoading: false })
+                    set({ isAuthSuccess: true })
                     console.log('Current User:', user)
                     callback(true)
                 })
             },
             logout: async () => {
                 set({ isLoading: true })
-                await FirebaseSignIn.firebaseSignOut()
-                set({ isLoading: false })
+                try {
+                    await FirebaseSignIn.firebaseSignOut()
+                    set({ isLoading: false })
+                } catch (error) {
+                    console.error(error)
+                    return false
+                }
+                return true
             },
         }))
     )
