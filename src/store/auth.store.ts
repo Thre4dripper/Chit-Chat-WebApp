@@ -31,18 +31,28 @@ const useAuthStore = create<AuthState & AuthActions>()(
             googleLogin: async () => {
                 set({ isLoading: true })
                 await FirebaseSignIn.firebaseSignInWithGoogle()
+                try {
+                    await FirebaseSignIn.firebaseSignInWithGoogle()
+                } catch (error) {
+                    console.error(error)
+                }
                 set({ isLoading: false })
             },
             githubLogin: async () => {
                 set({ isLoading: true })
                 await FirebaseSignIn.firebaseSignInWithGithub()
+                try {
+                    await FirebaseSignIn.firebaseSignInWithGithub()
+                } catch (error) {
+                    set({ isError: true })
+                    console.error(error)
+                }
                 set({ isLoading: false })
             },
             onSignInResult: (callback) => {
                 const auth = getAuth()
                 set({ isLoading: true })
                 onAuthStateChanged(auth, async (user) => {
-                    console.log('Auth:', auth.currentUser)
                     if (!user) {
                         set({ isSuccess: false })
                         callback(false)
