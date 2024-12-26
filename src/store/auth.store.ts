@@ -1,10 +1,8 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import { getFirestore } from 'firebase/firestore'
-import FirebaseSignIn from '../firebase/auth/FirebaseSignIn.ts'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import FireStoreRegister from '../firebase/auth/FireStoreRegister.ts'
 import { immer } from 'zustand/middleware/immer'
+import AuthRepository from '../repositories/auth.repository.ts'
 
 type AuthState = {
     isLoading: boolean | null
@@ -26,7 +24,7 @@ const useAuthStore = create<AuthState & AuthActions>()(
             googleLogin: async () => {
                 set({ isLoading: true })
                 try {
-                    await FirebaseSignIn.firebaseSignInWithGoogle()
+                    await AuthRepository.googleLogin()
                 } catch (error) {
                     console.error(error)
                     return false
@@ -37,7 +35,7 @@ const useAuthStore = create<AuthState & AuthActions>()(
             githubLogin: async () => {
                 set({ isLoading: true })
                 try {
-                    await FirebaseSignIn.firebaseSignInWithGithub()
+                    await AuthRepository.githubLogin()
                 } catch (error) {
                     console.error(error)
                     return false
@@ -57,11 +55,7 @@ const useAuthStore = create<AuthState & AuthActions>()(
                         return
                     }
 
-                    const fireStore = getFirestore()
-                    const isRegistered = await FireStoreRegister.registerInitialUser(
-                        fireStore,
-                        user
-                    )
+                    const isRegistered = await AuthRepository.onSignInResult(user)
                     if (!isRegistered) {
                         set({ isLoading: false })
                         set({ isAuthSuccess: false })
@@ -79,7 +73,7 @@ const useAuthStore = create<AuthState & AuthActions>()(
             logout: async () => {
                 set({ isLoading: true })
                 try {
-                    await FirebaseSignIn.firebaseSignOut()
+                    await AuthRepository.logout()
                     set({ isLoading: false })
                 } catch (error) {
                     console.error(error)
