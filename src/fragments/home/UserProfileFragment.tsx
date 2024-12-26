@@ -9,7 +9,7 @@ import LottieLoading from '../../components/LottieLoading.tsx'
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import useAuthStore from '../../store/auth.store.ts'
+import useUserStore from '../../store/user.store.ts'
 // import { updateName } from '../../firebase/profile/UpdateProfile.ts'
 const userFormSchema = z.object({
     username: z.string().min(1, 'Username is required').min(4, 'Username too short'),
@@ -21,7 +21,7 @@ type FormValues = z.infer<typeof userFormSchema>
 const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
-    const { user } = useAuthStore()
+    const { user } = useUserStore()
 
     const {
         register,

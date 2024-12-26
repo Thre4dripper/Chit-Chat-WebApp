@@ -7,11 +7,15 @@ import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
 import useAuthStore from '../../store/auth.store.ts'
+import useUserStore from '../../store/user.store.ts'
+import useLocalStore from '../../store/local.store.ts'
 
 const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
     const { user, logout } = useAuthStore()
+    const { logout } = useAuthStore()
+    const { user } = useUserStore()
 
     const chats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // this Will Changed Soon based on User Data current
