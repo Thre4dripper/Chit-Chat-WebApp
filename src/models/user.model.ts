@@ -6,7 +6,7 @@ class UserModel extends BaseModel {
     name: string
     profileImage: string
     bio: string
-    status: string
+    status: UserStatus
     favourites: string[]
     fcmToken: string
     groups: string[]
