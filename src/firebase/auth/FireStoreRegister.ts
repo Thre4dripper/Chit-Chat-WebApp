@@ -23,7 +23,7 @@ class FireStoreRegister {
                 user.displayName!,
                 user.photoURL!,
                 '',
-                UserStatus[UserStatus.Online],
+                UserStatus.Online,
                 [],
                 '',
                 []
