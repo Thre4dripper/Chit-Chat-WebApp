@@ -5,10 +5,13 @@ import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
 import useUserStore from '../store/user.store.ts'
 import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
+import CompleteProfileFragment from '../fragments/home/CompleteProfileFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
+    const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
+
     const checkUserRegistration = useUserStore((state) => state.checkUserRegistration)
     const isLoading = useUserStore((state) => state.isLoading)
 
@@ -16,6 +19,7 @@ const HomeScreen: React.FC = () => {
         checkUserRegistration((isInitial) => {
             if (isInitial) {
                 setProfileOpen(true)
+                setShowCompleteProfile(true)
                 console.log('User is registered')
             } else {
                 navigate('/auth')
@@ -37,7 +41,7 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
-                <ChattingFragment />
+                {showCompleteProfile ? <CompleteProfileFragment /> : <ChattingFragment />}
             </div>
         </div>
     )
