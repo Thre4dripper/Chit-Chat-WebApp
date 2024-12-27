@@ -38,7 +38,7 @@ class AuthRepository {
         const fireStore = getFirestore()
         try {
             //convert to promise for error handling and distinction between android and web code
-            return new Promise<boolean>((resolve, reject) => {
+            return await new Promise<boolean>((resolve, reject) => {
                 FireStoreRegister.registerInitialUser(fireStore, user, (isSuccess) => {
                     if (isSuccess) {
                         resolve(true)
