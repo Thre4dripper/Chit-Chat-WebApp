@@ -3,11 +3,11 @@ import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import UserModel from '../models/user.model.ts'
 import HomeRepository from '../repositories/home.repository.ts'
+import useLocalStore from './local.store.ts'
 
 type UserState = {
     user: UserModel | null
     isLoading: boolean | null
-    isError: boolean | null
     isSuccess: boolean | null
 }
 
@@ -16,9 +16,16 @@ type UserActions = {
     getUserDetails: () => Promise<void>
 }
 
-// TODO - Implement initUserDetails function
 const initUserDetails = () => {
     // fetch user details from firebase
+    // TODO fetch fcm token here like android
+    const setUsername = useLocalStore.getState().setUsername
+
+    HomeRepository.getUsername((username) => {
+        // save username to local store even if it is null
+        setUsername(username)
+
+    })
 }
 
 const useUserStore = create<UserState & UserActions>()(
@@ -26,7 +33,6 @@ const useUserStore = create<UserState & UserActions>()(
         immer((set) => ({
             user: null,
             isLoading: null,
-            isError: null,
             isSuccess: null,
             getUserDetails: async () => {
                 set({ isLoading: true })
@@ -34,13 +40,18 @@ const useUserStore = create<UserState & UserActions>()(
                     // fetch user details from firebase
                     // set user details
                 } catch (error) {
-                    set({ isError: true })
                     console.error(error)
                 }
                 set({ isLoading: false })
             },
             checkUserRegistration: (onSuccess) => {
-                HomeRepository.checkInitialRegistration(onSuccess)
+                set({ isLoading: true })
+                set({ isSuccess: null })
+                HomeRepository.checkInitialRegistration((isInitial) => {
+                    set({ isLoading: false })
+                    set({ isSuccess: true })
+                    onSuccess(isInitial)
+                })
 
                 HomeRepository.checkCompleteRegistration(() => {
                     //init user details everytime even if the user is not completely registered
