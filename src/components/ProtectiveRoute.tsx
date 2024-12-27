@@ -21,8 +21,6 @@ const ProtectiveRoute = ({ children }: PropsWithChildren) => {
                     variant: 'success',
                     anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
                 })
-                //TODO remove this from here, the username set should be done in the home page after complete registration
-                setUsername('username')
             }
         })
     }, [navigate, onSignInResult, setUsername])
