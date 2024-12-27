@@ -66,7 +66,6 @@ const useAuthStore = create<AuthState & AuthActions>()(
 
                     set({ isLoading: false })
                     set({ isAuthSuccess: true })
-                    console.log('Current User:', user)
                     callback(true)
                 })
             },

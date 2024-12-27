@@ -8,15 +8,15 @@ class HomeRepository {
         const auth = getAuth()
         const user = auth.currentUser
 
-        Utils.checkInitialRegistration(firestore, user, callback)
+        Utils.checkInitialRegistration(firestore, user, onSuccess)
     }
 
-    static checkCompleteRegistration(callback: (onSuccess: boolean) => void) {
+    static checkCompleteRegistration(onSuccess: (isCompleted: boolean) => void) {
         const firestore = getFirestore()
         const auth = getAuth()
         const user = auth.currentUser
 
-        Utils.checkCompleteRegistration(firestore, user, callback)
+        Utils.checkCompleteRegistration(firestore, user, onSuccess)
     }
 }
 

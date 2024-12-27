@@ -45,8 +45,9 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     const printUser = () => {
         //   change it into New Image and Updated Based on This
     }
+
     if (!user) {
-        return <LottieLoading />
+        return <LottieLoading fullParent />
     }
 
     return (

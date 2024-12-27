@@ -28,7 +28,7 @@ const ProtectiveRoute = ({ children }: PropsWithChildren) => {
     }, [navigate, onSignInResult, setUsername])
 
     if (isLoading || !isAuthSuccess) {
-        return <LottieLoading />
+        return <LottieLoading fullScreen />
     }
     return <>{children}</>
 }
