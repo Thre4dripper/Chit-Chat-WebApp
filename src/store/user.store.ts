@@ -4,6 +4,7 @@ import { immer } from 'zustand/middleware/immer'
 import UserModel from '../models/user.model.ts'
 import HomeRepository from '../repositories/home.repository.ts'
 import useLocalStore from './local.store.ts'
+import UserRepository from '../repositories/user.repository.ts'
 
 type UserState = {
     user: UserModel | null
@@ -17,7 +18,6 @@ type UserActions = {
 }
 
 const initUserDetails = () => {
-    // fetch user details from firebase
     // TODO fetch fcm token here like android
     const setUsername = useLocalStore.getState().setUsername
 
@@ -25,6 +25,15 @@ const initUserDetails = () => {
         // save username to local store even if it is null
         setUsername(username)
 
+        // when username is null, then user details will be fetched from uid doc
+        UserRepository.getUserDetails(() => {})
+
+        //username is null when the user is not completely registered
+        if (username === null) {
+            return
+        }
+
+        // TODO write update status and token code
     })
 }
 
