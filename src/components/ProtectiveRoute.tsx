@@ -1,21 +1,32 @@
-import React from 'react'
-import LottieLoading from './LottieLoading.tsx'
-import { useAuthUser } from '../contexts/UserContext.tsx'
+import { PropsWithChildren, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useAuthStore from '../store/auth.store.ts'
+import LottieLoading from './LottieLoading.tsx'
+import useLocalStore from '../store/local.store.ts'
+import { enqueueSnackbar } from 'notistack'
 
-interface ProtectiveRouteProps {
-    children: React.ReactNode
-}
+const ProtectiveRoute = ({ children }: PropsWithChildren) => {
+    const navigate = useNavigate()
 
-const ProtectiveRoute: React.FC<ProtectiveRouteProps> = ({ children }) => {
-    const nav = useNavigate()
-    const { isLoading, isError, isSuccess } = useAuthUser()
+    const { isLoading, isAuthSuccess, onSignInResult } = useAuthStore()
+    const setUsername = useLocalStore((state) => state.setUsername)
 
-    if (isError) {
-        nav('/auth')
-    }
-    if (isLoading || !isSuccess) {
-        return <LottieLoading />
+    useEffect(() => {
+        onSignInResult((isSuccess) => {
+            if (!isSuccess) {
+                navigate('/auth')
+                setUsername(null)
+            } else {
+                enqueueSnackbar('Welcome', {
+                    variant: 'success',
+                    anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+                })
+            }
+        })
+    }, [navigate, onSignInResult, setUsername])
+
+    if (isLoading || !isAuthSuccess) {
+        return <LottieLoading fullScreen />
     }
     return <>{children}</>
 }

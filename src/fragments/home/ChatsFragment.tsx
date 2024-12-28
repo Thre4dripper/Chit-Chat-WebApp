@@ -6,13 +6,21 @@ import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
-
-import { useAuthUser } from '../../contexts/UserContext.tsx'
+import useAuthStore from '../../store/auth.store.ts'
+import useUserStore from '../../store/user.store.ts'
+import useLocalStore from '../../store/local.store.ts'
 
 const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
-    const { userData, logout } = useAuthUser()
+    const { logout } = useAuthStore()
+    const { user } = useUserStore()
+    const setUsername = useLocalStore((state) => state.setUsername)
+
+    const logoutUser = async () => {
+        await logout()
+        setUsername(null)
+    }
 
     const chats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // this Will Changed Soon based on User Data current
@@ -38,15 +46,15 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             }}
                             badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
                             <Avatar
-                                src={userData?.profileImage}
+                                src={user?.profileImage}
                                 sx={{ width: 48, height: 48, fontSize: 28 }}
-                                alt={userData?.name}
+                                alt={user?.name}
                             />
                         </Badge>
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={logout}>
+                    <IconButton onClick={logoutUser}>
                         <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>

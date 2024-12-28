@@ -1,15 +1,15 @@
-import React, { SetStateAction } from 'react'
+import React, { SetStateAction, useEffect } from 'react'
 import { Box, Paper, TextField, Typography, Avatar, IconButton } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
 import ReportIcon from '@mui/icons-material/Report'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
-import LottieLoading from '../../components/LottieLoading.tsx'
-import { useAuthUser } from '../../contexts/UserContext.tsx'
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useUserStore from '../../store/user.store.ts'
+import LottieLoading from '../../components/LottieLoading.tsx'
 // import { updateName } from '../../firebase/profile/UpdateProfile.ts'
 const userFormSchema = z.object({
     username: z.string().min(1, 'Username is required').min(4, 'Username too short'),
@@ -18,26 +18,38 @@ const userFormSchema = z.object({
 })
 type FormValues = z.infer<typeof userFormSchema>
 
-const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
-    openProfile,
-}) => {
-    const { userData } = useAuthUser()
+interface UserProfileFragmentProps {
+    openProfile: React.Dispatch<SetStateAction<boolean>>
+}
+
+const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }) => {
+    const user = useUserStore((state) => state.user)
 
     const {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm<FormValues>({
         resolver: zodResolver(userFormSchema),
         mode: 'onChange',
         defaultValues: {
-            username: userData?.username ?? '',
-            name: userData?.name ?? '',
-            bio: userData?.bio ?? '',
+            username: user?.username ?? '',
+            name: user?.name ?? '',
+            bio: user?.bio ?? '',
         },
     })
 
-    console.log(errors.username)
+    useEffect(() => {
+        // reset form values when user loads
+        if (user) {
+            reset({
+                username: user.username ?? '',
+                name: user.name ?? '',
+                bio: user.bio ?? '',
+            })
+        }
+    }, [user, reset])
 
     const onSubmit: SubmitHandler<FormValues> = () => {
         console.log('Submitted')
@@ -45,20 +57,24 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
     const printUser = () => {
         //   change it into New Image and Updated Based on This
     }
-    if (!userData) {
-        return <LottieLoading />
+
+    if (!user) {
+        return <LottieLoading fullParent />
     }
 
     return (
         <div className={`h-full w-full  bg-transparent relative flex flex-col`}>
-            <div className={'text-white my-2 mx-4'}>
-                <IconButton
-                    onClick={() => {
-                        openProfile(false)
-                    }}>
-                    <ArrowBackIosIcon className={'text-white'} />
-                </IconButton>
-            </div>
+            {/* User Cannot go back until complete profile */}
+            {user.username && (
+                <div className={'text-white my-2 mx-4'}>
+                    <IconButton
+                        onClick={() => {
+                            openProfile(false)
+                        }}>
+                        <ArrowBackIosIcon className={'text-white'} />
+                    </IconButton>
+                </div>
+            )}
             <Paper
                 sx={{
                     display: 'flex',
@@ -68,9 +84,10 @@ const UserProfileFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction
                     padding: '30px 20px',
                 }}>
                 <Avatar
-                    src={userData.profileImage}
-                    alt={userData.name}
+                    src={user.profileImage}
+                    alt={user.name}
                     sx={{ width: 200, height: 200, fontSize: 100 }}
+                    imgProps={{ referrerPolicy: 'no-referrer' }}
                 />
 
                 <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUser}>

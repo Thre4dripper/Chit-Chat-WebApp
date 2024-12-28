@@ -1,39 +1,45 @@
-import { doc, setDoc, getDoc, getFirestore } from 'firebase/firestore'
 import { User } from 'firebase/auth'
-import { UserData } from '../../contexts/UserContext'
-import firebaseApp from '../FirebaseInit'
-const firestore = getFirestore(firebaseApp)
+import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
+import Utils from '../../utils/Utils.ts'
+import UserModel from '../../models/user.model.ts'
+import { UserStatus } from '../../enums/UserStatus.ts'
+import { doc, setDoc, Firestore } from 'firebase/firestore'
 
-export const registerInitialUser = async (user: User) => {
-    try {
-        // Check if user is already registered
-        const userDocRef = doc(firestore, 'Users', user.uid)
-        const userSnapshot = await getDoc(userDocRef)
+class FireStoreRegister {
+    static registerInitialUser(
+        firestore: Firestore,
+        user: User,
+        onSuccess: (isSuccess: boolean) => void
+    ) {
+        Utils.checkInitialRegistration(firestore, user, (isSuccess) => {
+            if (isSuccess) {
+                onSuccess(true)
+                return
+            }
 
-        if (userSnapshot.exists()) {
-            // console.log('User already exists', userSnapshot.data() as UserData)
-            return userSnapshot.data() as UserData // User already registered
-        }
+            const data = new UserModel(
+                user.uid,
+                '',
+                user.displayName!,
+                user.photoURL!,
+                '',
+                UserStatus.Online,
+                [],
+                '',
+                []
+            ).toObject()
 
-        // Create new user Just using this Not class Is it okey ??
-        const userData: UserData = {
-            uid: user.uid,
-            bio: '',
-            name: user.displayName || '',
-            profileImage: user.photoURL || '',
-            status: 'Online',
-            favourites: [],
-            fcmToken: '',
-            groups: [],
-            username: '',
-        }
-
-        // Register user with uid as document id
-        await setDoc(userDocRef, userData)
-
-        return userData as UserData
-    } catch (error) {
-        console.error('Error registering user:', error)
-        return null
+            const userDocRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, user.uid)
+            setDoc(userDocRef, data)
+                .then(() => {
+                    onSuccess(true)
+                })
+                .catch((error) => {
+                    console.error('Error adding document:', error)
+                    onSuccess(false)
+                })
+        })
     }
 }
+
+export default FireStoreRegister
