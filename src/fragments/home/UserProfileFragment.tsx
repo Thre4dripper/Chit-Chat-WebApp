@@ -1,22 +1,12 @@
-import React, { SetStateAction, useEffect } from 'react'
-import { Box, Paper, TextField, Typography, Avatar, IconButton } from '@mui/material'
+import React, { SetStateAction } from 'react'
+import { Box, Paper, Typography, Avatar, IconButton, Button } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
-import ReportIcon from '@mui/icons-material/Report'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
-import { z } from 'zod'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import useUserStore from '../../store/user.store.ts'
 import LottieLoading from '../../components/LottieLoading.tsx'
-// import { updateName } from '../../firebase/profile/UpdateProfile.ts'
-const userFormSchema = z.object({
-    username: z.string().min(1, 'Username is required').min(4, 'Username too short'),
-    name: z.string().min(1, 'Name is required').min(4, 'Name too short'),
-    bio: z.string().max(100, 'Bio is too long'),
-})
-type FormValues = z.infer<typeof userFormSchema>
+import InfoIcon from '@mui/icons-material/Info'
 
 interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -24,39 +14,6 @@ interface UserProfileFragmentProps {
 
 const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }) => {
     const user = useUserStore((state) => state.user)
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-    } = useForm<FormValues>({
-        resolver: zodResolver(userFormSchema),
-        mode: 'onChange',
-        defaultValues: {
-            username: user?.username ?? '',
-            name: user?.name ?? '',
-            bio: user?.bio ?? '',
-        },
-    })
-
-    useEffect(() => {
-        // reset form values when user loads
-        if (user) {
-            reset({
-                username: user.username ?? '',
-                name: user.name ?? '',
-                bio: user.bio ?? '',
-            })
-        }
-    }, [user, reset])
-
-    const onSubmit: SubmitHandler<FormValues> = () => {
-        console.log('Submitted')
-    }
-    const printUser = () => {
-        //   change it into New Image and Updated Based on This
-    }
 
     if (!user) {
         return <LottieLoading fullParent />
@@ -89,16 +46,18 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                     sx={{ width: 200, height: 200, fontSize: 100 }}
                     imgProps={{ referrerPolicy: 'no-referrer' }}
                 />
-
-                <Typography sx={{ color: 'skyblue', margin: '20px' }} onClick={printUser}>
+                <Button
+                    variant={'text'}
+                    sx={{
+                        textTransform: 'none',
+                        marginTop: '1rem',
+                        color: '#90B4F8',
+                    }}>
                     Set Profile Photo
-                </Typography>
+                </Button>
             </Paper>
 
             <Paper
-                component='form'
-                noValidate
-                onSubmit={handleSubmit(onSubmit)}
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -111,22 +70,20 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '1rem',
+                        gap: '1.5rem',
                         cursor: 'pointer',
                     }}>
-                    <Person2Icon />
-                    <TextField
-                        label='Username'
-                        {...register('username')}
-                        error={!!errors.username}
-                        helperText={errors.username?.message}
-                        size='small'
-                        variant='outlined'
-                        // disabled={true}
-                        sx={{ flexGrow: 1 }}
-                    />
-                    <IconButton sx={{ color: 'grey' }}>
-                        <ModeEditOutlineIcon />
+                    <Person2Icon className={'text-gray-500'} />
+                    <div className={'flex-1 flex flex-col gap-1.5'}>
+                        <Typography variant={'caption'} color={'textSecondary'}>
+                            Username
+                        </Typography>
+                        <Typography color={user.username.length === 0 ? 'error' : 'primary'}>
+                            {user.username.length === 0 ? 'No Username' : user.username}
+                        </Typography>
+                    </div>
+                    <IconButton>
+                        <ModeEditOutlineIcon className={'text-gray-700'} />
                     </IconButton>
                 </Box>
 
@@ -134,45 +91,38 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '1rem',
+                        gap: '1.5rem',
                         cursor: 'pointer',
                     }}>
-                    <ReportIcon />
-
-                    <TextField
-                        label='Name'
-                        {...register('name')}
-                        error={!!errors.name}
-                        helperText={errors.name?.message}
-                        size='small'
-                        variant='outlined'
-                        // disabled={true}
-                        sx={{ flexGrow: 1 }}
-                    />
-                    <IconButton sx={{ color: 'grey' }}>
-                        <ModeEditOutlineIcon />
+                    <InfoIcon className={'text-gray-500'} />
+                    <div className={'flex-1 flex flex-col gap-1.5'}>
+                        <Typography variant={'caption'} color={'textSecondary'}>
+                            Name
+                        </Typography>
+                        <Typography>{user.name}</Typography>
+                    </div>
+                    <IconButton>
+                        <ModeEditOutlineIcon className={'text-gray-700'} />
                     </IconButton>
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '1rem',
+                        gap: '1.5rem',
                         cursor: 'pointer',
                     }}>
-                    <MenuBookIcon />
-                    <TextField
-                        label='Bio'
-                        {...register('bio')}
-                        error={!!errors.bio}
-                        helperText={errors.bio?.message}
-                        size='small'
-                        variant='outlined'
-                        // disabled={true}
-                        sx={{ flexGrow: 1 }}
-                    />
-                    <IconButton sx={{ color: 'grey' }}>
-                        <ModeEditOutlineIcon />
+                    <MenuBookIcon className={'text-gray-500'} />
+                    <div className={'flex-1 flex flex-col gap-1.5'}>
+                        <Typography variant={'caption'} color={'textSecondary'}>
+                            Bio
+                        </Typography>
+                        <Typography color={'textSecondary'}>
+                            {user.bio.length === 0 ? 'No Bio' : user.bio}
+                        </Typography>
+                    </div>
+                    <IconButton>
+                        <ModeEditOutlineIcon className={'text-gray-700'} />
                     </IconButton>
                 </Box>
             </Paper>
