@@ -11,7 +11,6 @@ class CrudUtils {
         getDoc(docRef)
             .then((doc) => {
                 if (doc.exists()) {
-                    console.log('Document data:', doc.data())
                     onSuccess(doc.data())
                 } else {
                     onSuccess(null)

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import ChatsFragment from '../fragments/home/ChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
-import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
+import UserProfileFragment from '../fragments/profile/UserProfileFragment.tsx'
 import useHomeStore from '../store/home.store.ts'
 import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
-import CompleteProfileFragment from '../fragments/home/CompleteProfileFragment.tsx'
+import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()

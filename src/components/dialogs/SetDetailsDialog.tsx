@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import { Person, Info, Edit } from '@mui/icons-material'
 import useUserDetailsStore from '../../store/user.details.store.ts'
+import { LoadingButton } from '@mui/lab'
 
 interface SetDetailsDialogProps {
     open: boolean
@@ -149,17 +150,31 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type
             </DialogContent>
 
             <DialogActions sx={{ px: 3, py: 2 }}>
-                <Button onClick={() => setOpen(false)} variant='text' color='error'>
+                <Button onClick={() => setOpen(false)} variant='outlined' color='error'>
                     Cancel
                 </Button>
-                <Button
-                    onClick={() => {
-                        setDetails()
-                    }}
-                    variant='text'
-                    color='primary'>
-                    Set {type}
-                </Button>
+                {loading ? (
+                    <LoadingButton
+                        loading={loading}
+                        loadingPosition={'start'}
+                        startIcon={icon}
+                        onClick={() => {
+                            saveDetails()
+                        }}
+                        variant='outlined'
+                        color='primary'>
+                        Save
+                    </LoadingButton>
+                ) : (
+                    <Button
+                        onClick={() => {
+                            saveDetails()
+                        }}
+                        variant='outlined'
+                        color='primary'>
+                        Save
+                    </Button>
+                )}
             </DialogActions>
         </Dialog>
     )

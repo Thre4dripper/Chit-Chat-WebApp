@@ -8,7 +8,7 @@ import useHomeStore from '../../store/home.store.ts'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import InfoIcon from '@mui/icons-material/Info'
 import { enqueueSnackbar } from 'notistack'
-import SetDetailsDialog from './SetDetailsDialog.tsx'
+import SetDetailsDialog from '../../components/dialogs/SetDetailsDialog.tsx'
 
 interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -23,12 +23,11 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
         return <LottieLoading fullParent />
     }
 
-    const setUsername = () => {
-        console.log('set username', user.username)
+    const editUsername = () => {
         setOpen(true)
     }
 
-    const setName = () => {
+    const editName = () => {
         if (!user.username) {
             enqueueSnackbar('Set Username First', { variant: 'info', autoHideDuration: 3000 })
             return
@@ -37,7 +36,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
         setOpen(true)
     }
 
-    const setBio = () => {
+    const editBio = () => {
         if (!user.username) {
             enqueueSnackbar('Set Username First', { variant: 'info', autoHideDuration: 3000 })
             return
@@ -109,7 +108,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                             {user.username.length === 0 ? 'No Username' : user.username}
                         </Typography>
                     </div>
-                    <IconButton onClick={setUsername}>
+                    <IconButton onClick={editUsername}>
                         <ModeEditOutlineIcon className={'text-gray-700'} />
                     </IconButton>
                 </Box>
@@ -128,7 +127,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                         </Typography>
                         <Typography>{user.name}</Typography>
                     </div>
-                    <IconButton onClick={setName}>
+                    <IconButton onClick={editName}>
                         <ModeEditOutlineIcon className={'text-gray-700'} />
                     </IconButton>
                 </Box>
@@ -148,7 +147,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                             {user.bio.length === 0 ? 'No Bio' : user.bio}
                         </Typography>
                     </div>
-                    <IconButton onClick={setBio}>
+                    <IconButton onClick={editBio}>
                         <ModeEditOutlineIcon className={'text-gray-700'} />
                     </IconButton>
                 </Box>

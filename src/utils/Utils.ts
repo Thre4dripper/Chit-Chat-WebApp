@@ -44,11 +44,7 @@ class Utils {
             return
         }
 
-        const docRef = doc(
-            firestore,
-            FirestoreCollections.REGISTERED_IDS_COLLECTION,
-            user.displayName!
-        )
+        const docRef = doc(firestore, FirestoreCollections.REGISTERED_IDS_COLLECTION, user.uid!)
         getDoc(docRef)
             .then((doc) => {
                 if (doc.exists()) {

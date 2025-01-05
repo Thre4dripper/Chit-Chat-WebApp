@@ -5,9 +5,9 @@ import UserRepository from '../repositories/user.repository.ts'
 
 type UserDetailsActions = {
     getUserDetails: (onSuccess: (isSuccess: boolean) => void) => void
-    updateUsername: (username: string, callback: (updatedUsername: string) => void) => void
-    updateName: (name: string, callback: (updatedName: string) => void) => void
-    updateBio: (bio: string, callback: (updatedBio: string) => void) => void
+    updateUsername: (username: string, callback: (message: string) => void) => void
+    updateName: (name: string, callback: (message: string) => void) => void
+    updateBio: (bio: string, callback: (message: string) => void) => void
     updateProfilePicture: (
         profilePicture: string,
         callback: (updatedProfilePicture: string) => void
@@ -26,7 +26,7 @@ const useUserDetailsStore = create<UserDetailsActions>()(
             updateUsername: (username, callback) => {
                 // update username in firebase
                 // set username
-                UserRepository.updateUsernames(username, callback)
+                UserRepository.updateUsername(username, callback)
             },
             updateName: (name, callback) => {
                 // update name in firebase

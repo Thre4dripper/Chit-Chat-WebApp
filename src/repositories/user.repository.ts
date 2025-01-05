@@ -25,46 +25,35 @@ class UserRepository {
         })
     }
 
-    static updateUsernames(username: string, callback: (updatedUsername: string) => void) {
+    static updateUsername(username: string, callback: (message: string) => void) {
         const firestore = getFirestore()
         const auth = getAuth()
         const user = auth.currentUser
 
         Utils.checkCompleteRegistration(firestore, user, (isComplete) => {
             if (!isComplete) {
-                FireStoreRegister.registerCompleteUser(
-                    firestore,
-                    user,
-                    username,
-                    (updatedUsername) => {
-                        // update in user state
-                        const user = useHomeStore.getState().user
-                        if (user) {
-                            user.username = updatedUsername
-                            useHomeStore.setState({ user })
-                        }
-                        callback(updatedUsername)
+                FireStoreRegister.registerCompleteUser(firestore, user, username, (message) => {
+                    // update in user state
+                    const user = useHomeStore.getState().user
+                    if (user) {
+                        user.username = username
+                        useHomeStore.setState({ user })
                     }
-                )
+                    callback(message)
+                })
                 return
             }
 
             const prevUsername = useHomeStore.getState().user?.username || null
-            UpdateProfile.UpdateUsername(
-                firestore,
-                user!,
-                prevUsername,
-                username,
-                (updatedUsername) => {
-                    // update in user state
-                    const user = useHomeStore.getState().user
-                    if (user) {
-                        user.username = updatedUsername
-                        useHomeStore.setState({ user })
-                    }
-                    callback(updatedUsername)
+            UpdateProfile.UpdateUsername(firestore, user!, prevUsername, username, (message) => {
+                // update in user state
+                const user = useHomeStore.getState().user
+                if (user) {
+                    user.username = username
+                    useHomeStore.setState({ user })
                 }
-            )
+                callback(message)
+            })
         })
     }
 }
