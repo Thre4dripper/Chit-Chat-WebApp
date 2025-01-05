@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import ChatsFragment from '../fragments/home/ChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
-import useUserStore from '../store/user.store.ts'
+import useHomeStore from '../store/home.store.ts'
 import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
 import CompleteProfileFragment from '../fragments/home/CompleteProfileFragment.tsx'
@@ -12,8 +12,8 @@ const HomeScreen: React.FC = () => {
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
 
-    const checkUserRegistration = useUserStore((state) => state.checkUserRegistration)
-    const isLoading = useUserStore((state) => state.isLoading)
+    const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
+    const isLoading = useHomeStore((state) => state.isLoading)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {

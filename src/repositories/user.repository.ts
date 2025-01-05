@@ -3,6 +3,7 @@ import { getAuth } from 'firebase/auth'
 import GetProfile from '../firebase/profile/GetProfile.ts'
 import useLocalStore from '../store/local.store.ts'
 import useUserStore from '../store/user.store.ts'
+import useHomeStore from '../store/home.store.ts'
 
 class UserRepository {
     static getUserDetails(onSuccess: (isSuccess: boolean) => void) {
@@ -13,10 +14,10 @@ class UserRepository {
 
         GetProfile.getProfile(firestore, user, username, (profile) => {
             if (profile) {
-                useUserStore.setState({ user: profile })
+                useHomeStore.setState({ user: profile })
                 onSuccess(true)
             } else {
-                useUserStore.setState({ user: null })
+                useHomeStore.setState({ user: null })
                 onSuccess(false)
             }
         })

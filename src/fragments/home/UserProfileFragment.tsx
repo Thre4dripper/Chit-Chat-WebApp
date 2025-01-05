@@ -4,7 +4,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
-import useUserStore from '../../store/user.store.ts'
+import useHomeStore from '../../store/home.store.ts'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import InfoIcon from '@mui/icons-material/Info'
 
@@ -14,6 +14,7 @@ interface UserProfileFragmentProps {
 
 const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }) => {
     const user = useUserStore((state) => state.user)
+    const user = useHomeStore((state) => state.user)
 
     if (!user) {
         return <LottieLoading fullParent />
