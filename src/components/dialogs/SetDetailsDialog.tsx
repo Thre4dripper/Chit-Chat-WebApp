@@ -121,6 +121,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type
                         autoHideDuration: 3000,
                     })
                     useLocalStore.getState().setUsername(inputValue)
+                    setInputValue('')
                     setOpen(false)
                     break
                 case ErrorMessages.USERNAME_ALREADY_EXISTS:
@@ -149,6 +150,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type
                     variant: 'success',
                     autoHideDuration: 3000,
                 })
+                setInputValue('')
                 setOpen(false)
             } else {
                 setError(message)
@@ -166,6 +168,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type
                     variant: 'success',
                     autoHideDuration: 3000,
                 })
+                setInputValue('')
                 setOpen(false)
             } else {
                 setError(message)
