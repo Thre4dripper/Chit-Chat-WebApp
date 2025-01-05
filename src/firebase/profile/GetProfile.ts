@@ -50,7 +50,7 @@ class GetProfile {
             profile(null)
             return
         }
-        const docRef = doc(firestore, FirestoreCollections.REGISTERED_IDS_COLLECTION, username)
+        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, username)
         getDoc(docRef)
             .then((doc) => {
                 if (doc.exists()) {
