@@ -15,7 +15,8 @@ class FireStoreRegister {
         user: User,
         onSuccess: (isSuccess: boolean) => void
     ) {
-        Utils.checkInitialRegistration(firestore, user, (isSuccess) => {
+        //check if user is already registered
+        Utils.checkCompleteRegistration(firestore, user, (isSuccess) => {
             if (isSuccess) {
                 onSuccess(true)
                 return

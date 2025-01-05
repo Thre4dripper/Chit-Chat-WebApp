@@ -22,7 +22,7 @@ const HomeScreen: React.FC = () => {
                 setShowCompleteProfile(true)
                 console.log('User is registered')
             } else {
-                navigate('/auth')
+                // TODO Get chats
             }
         })
     }, [checkUserRegistration, navigate])
