@@ -8,6 +8,7 @@ import useHomeStore from '../../store/home.store.ts'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import InfoIcon from '@mui/icons-material/Info'
 import { enqueueSnackbar } from 'notistack'
+import SetDetailsDialog from './SetDetailsDialog.tsx'
 
 interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -16,12 +17,15 @@ interface UserProfileFragmentProps {
 const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }) => {
     const user = useHomeStore((state) => state.user)
 
+    const [open, setOpen] = React.useState(false)
+
     if (!user) {
         return <LottieLoading fullParent />
     }
 
     const setUsername = () => {
         console.log('set username', user.username)
+        setOpen(true)
     }
 
     const setName = () => {
@@ -30,6 +34,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
             return
         }
 
+        setOpen(true)
     }
 
     const setBio = () => {
@@ -38,6 +43,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
             return
         }
 
+        setOpen(true)
     }
 
     return (
@@ -147,6 +153,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                     </IconButton>
                 </Box>
             </Paper>
+            <SetDetailsDialog open={open} setOpen={setOpen} type={'Username'} />
         </div>
     )
 }
