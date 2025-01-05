@@ -1,17 +1,18 @@
-import { doc, Firestore, getDoc } from 'firebase/firestore'
+import { doc, Firestore, getDoc, setDoc, deleteDoc } from 'firebase/firestore'
 
 class CrudUtils {
     static getFirestoreDocument(
         firestore: Firestore,
         collectionName: string,
         documentId: string,
-        onSuccess: (data: Map<string, never> | null) => void
+        onSuccess: (data: { [key: string]: any } | null) => void
     ) {
         const docRef = doc(firestore, collectionName, documentId)
         getDoc(docRef)
             .then((doc) => {
                 if (doc.exists()) {
-                    onSuccess(doc.data() as Map<string, never>)
+                    console.log('Document data:', doc.data())
+                    onSuccess(doc.data())
                 } else {
                     onSuccess(null)
                 }
@@ -19,6 +20,56 @@ class CrudUtils {
             .catch((error) => {
                 console.error('Error getting document:', error)
                 onSuccess(null)
+            })
+    }
+
+    static createFirestoreDocument(
+        firestore: Firestore,
+        collection: string,
+        document: string,
+        data: { [key: string]: any },
+        success: (isSuccess: boolean) => void
+    ) {
+        const docRef = doc(firestore, collection, document)
+        setDoc(docRef, data)
+            .then(() => {
+                success(true)
+            })
+            .catch(() => {
+                success(false)
+            })
+    }
+
+    static updateFirestoreDocument(
+        firestore: Firestore,
+        collection: string,
+        document: string,
+        data: { [key: string]: any },
+        success: (isSuccess: boolean) => void
+    ) {
+        const docRef = doc(firestore, collection, document)
+        setDoc(docRef, data)
+            .then(() => {
+                success(true)
+            })
+            .catch(() => {
+                success(false)
+            })
+    }
+
+    static deleteFirestoreDocument(
+        firestore: Firestore,
+        collection: string,
+        document: string,
+        success: (isSuccess: boolean) => void
+    ) {
+        const docRef = doc(firestore, collection, document)
+        deleteDoc(docRef)
+            .then(() => {
+                success(true)
+            })
+            .catch(() => {
+                success(false)
             })
     }
 }
