@@ -16,6 +16,10 @@ import {
 import { Person, Info, Edit } from '@mui/icons-material'
 import useUserDetailsStore from '../../store/user.details.store.ts'
 import { LoadingButton } from '@mui/lab'
+import { enqueueSnackbar } from 'notistack'
+import { SuccessMessages } from '../../constants/SuccessMessages.ts'
+import { ErrorMessages } from '../../constants/ErrorMessages.ts'
+import useLocalStore from '../../store/local.store.ts'
 
 interface SetDetailsDialogProps {
     open: boolean
@@ -28,7 +32,7 @@ const configs = [
         type: 'Username',
         title: 'Set Username',
         description:
-            'You have to choose a username on Chit Chat in order to be found by the people. People will be able to find you by this username and contact you.\n\nYou can use a–z, 0–9, and underscores. Minimum length is 5 characters, and it has to be unique.\n\nRemember: Username can only be set once.',
+            'You have to choose a username on Chit Chat in order to be found by the people. People will be able to find you by this username and contact you.\n\nYou can use a–z, 0–9, and underscores. Minimum length is 4 characters, and it has to be unique.\n\nRemember: Username can only be set once.',
         icon: <Person />,
     },
     {
@@ -50,47 +54,124 @@ const configs = [
 const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type }) => {
     const config = configs.find((config) => config.type === type)
 
-    const [inputValue, setInputValue] = useState('')
+    const [inputValue, setInputValue] = useState<string>('')
+    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const { updateUsername, updateName, updateBio } = useUserDetailsStore()
 
     if (!config) {
         return null
     }
+    const { title, description, icon } = config
 
-    const setDetails = () => {
+    const saveDetails = () => {
         switch (type) {
             case 'Username':
-                updateUsername(inputValue, (success) => {
-                    if (success) {
-                        setOpen(false)
-                    } else {
-                        console.log('Username already exists')
-                    }
-                })
+                saveUsername()
                 break
             case 'Name':
-                updateName(inputValue, (success) => {
-                    if (success) {
-                        setOpen(false)
-                    }
-                })
+                saveName()
                 break
             case 'Bio':
-                updateBio(inputValue, (success) => {
-                    if (success) {
-                        setOpen(false)
-                    }
-                })
+                saveBio()
                 break
             default:
                 break
         }
     }
 
-    const { title, description, icon } = config
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value)
+    }
+
+    const saveUsername = () => {
+        setLoading(true)
+        if (inputValue.length === 0) {
+            setError('Username cannot be empty')
+            setLoading(false)
+            return
+        }
+
+        if (inputValue.length < 4) {
+            setError('Username must be at least 4 characters long')
+            setLoading(false)
+            return
+        }
+
+        if (inputValue.length > 15) {
+            setError('Username must be at most 15 characters long')
+            setLoading(false)
+            return
+        }
+
+        const regex = RegExp('^[a-zA-Z0-9_]*$')
+        if (!regex.test(inputValue)) {
+            setError('Username can only contain letters, numbers, underscores')
+            setLoading(false)
+            return
+        }
+
+        setError(null)
+        updateUsername(inputValue, (message) => {
+            switch (message) {
+                case SuccessMessages.USERNAME_UPDATED_SUCCESSFULLY:
+                    enqueueSnackbar(message, {
+                        variant: 'success',
+                        autoHideDuration: 3000,
+                    })
+                    useLocalStore.getState().setUsername(inputValue)
+                    setOpen(false)
+                    break
+                case ErrorMessages.USERNAME_ALREADY_EXISTS:
+                    setError(message)
+                    break
+                default:
+                    setError(message)
+                    break
+            }
+            setLoading(false)
+        })
+    }
+
+    const saveName = () => {
+        setLoading(true)
+        if (inputValue.length === 0) {
+            setError('Name cannot be empty')
+            setLoading(false)
+            return
+        }
+
+        setError(null)
+        updateName(inputValue, (message) => {
+            if (message === SuccessMessages.NAME_UPDATED_SUCCESSFULLY) {
+                enqueueSnackbar(message, {
+                    variant: 'success',
+                    autoHideDuration: 3000,
+                })
+                setOpen(false)
+            } else {
+                setError(message)
+            }
+            setLoading(false)
+        })
+    }
+
+    const saveBio = () => {
+        setLoading(true)
+        setError(null)
+        updateBio(inputValue, (message) => {
+            if (message === SuccessMessages.BIO_UPDATED_SUCCESSFULLY) {
+                enqueueSnackbar(message, {
+                    variant: 'success',
+                    autoHideDuration: 3000,
+                })
+                setOpen(false)
+            } else {
+                setError(message)
+            }
+            setLoading(false)
+        })
     }
 
     return (
@@ -98,7 +179,6 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type
             fullWidth
             maxWidth='sm'
             open={open}
-            onClose={() => setOpen(false)}
             sx={{
                 '& .MuiDialog-paper': {
                     borderRadius: 4,
@@ -128,11 +208,12 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ open, setOpen, type
                             label={type}
                             variant='outlined'
                             value={inputValue}
+                            error={Boolean(error)}
                             onChange={handleInputChange}
-                            helperText={`Enter your ${type.toLowerCase()} here.`}
+                            helperText={`${error ? error : ''}`}
                         />
                         <Typography variant='body2' color='text.secondary' textAlign='right'>
-                            {inputValue.length}/50 characters
+                            {inputValue.length}/15 characters
                         </Typography>
                     </Stack>
 
