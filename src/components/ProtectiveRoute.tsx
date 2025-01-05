@@ -20,6 +20,7 @@ const ProtectiveRoute = ({ children }: PropsWithChildren) => {
                 enqueueSnackbar('Welcome', {
                     variant: 'success',
                     anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+                    autoHideDuration: 3000,
                 })
             }
         })
