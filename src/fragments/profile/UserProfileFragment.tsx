@@ -14,17 +14,27 @@ interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
 }
 
+export interface DialogState {
+    open: boolean
+    type: string
+    value: string
+}
+
 const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }) => {
     const user = useHomeStore((state) => state.user)
 
-    const [open, setOpen] = React.useState(false)
+    const [dialogState, setDialogState] = React.useState<DialogState>({
+        open: false,
+        type: 'Username',
+        value: '',
+    })
 
     if (!user) {
         return <LottieLoading fullParent />
     }
 
     const editUsername = () => {
-        setOpen(true)
+        setDialogState({ open: true, type: 'Username', value: user.username })
     }
 
     const editName = () => {
@@ -33,7 +43,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
             return
         }
 
-        setOpen(true)
+        setDialogState({ open: true, type: 'Name', value: user.name })
     }
 
     const editBio = () => {
@@ -42,7 +52,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
             return
         }
 
-        setOpen(true)
+        setDialogState({ open: true, type: 'Bio', value: user.bio })
     }
 
     return (
@@ -152,7 +162,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                     </IconButton>
                 </Box>
             </Paper>
-            <SetDetailsDialog open={open} setOpen={setOpen} type={'Username'} />
+            <SetDetailsDialog dialogState={dialogState} setDialogState={setDialogState} />
         </div>
     )
 }
