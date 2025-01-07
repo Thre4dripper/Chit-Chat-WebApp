@@ -13,7 +13,6 @@ import {
     Stack,
     Box,
 } from '@mui/material'
-import { Person, Info, Edit, Save } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { enqueueSnackbar } from 'notistack'
 import { z } from 'zod'
@@ -22,6 +21,10 @@ import { useForm } from 'react-hook-form'
 import useUserDetailsStore from '../../store/user.details.store.ts'
 import { SuccessMessages } from '../../constants/SuccessMessages.ts'
 import { DialogState } from '../../fragments/profile/UserProfileFragment.tsx'
+import Person2Icon from '@mui/icons-material/Person2'
+import InfoIcon from '@mui/icons-material/Info'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
+import { Save } from '@mui/icons-material'
 
 const configs = [
     {
@@ -29,7 +32,7 @@ const configs = [
         title: 'Set Username',
         description:
             'You have to choose a username on Chit Chat in order to be found by the people. People will be able to find you by this username and contact you.\n\nYou can use a–z, 0–9, and underscores. Minimum length is 5 characters, and it has to be unique.\n\nRemember: Username can only be set once.',
-        icon: <Person />,
+        icon: <Person2Icon />,
         min: 5,
         max: 15,
         regex: /^[a-zA-Z0-9_]*$/,
@@ -42,10 +45,10 @@ const configs = [
         title: 'Set Name',
         description:
             'You have to choose a name on Chit Chat. It will appear on your profile.\n\nYou can use a–z, 0–9, and underscores. Minimum length is 5 characters.',
-        icon: <Edit />,
+        icon: <InfoIcon />,
         min: 5,
-        max: 15,
-        regex: /^[a-zA-Z0-9_]*$/,
+        max: 25,
+        regex: /^[a-zA-Z0-9_ ]*$/,
         updateFunction: (inputValue: string, callback: (message: string) => void) => {
             useUserDetailsStore.getState().updateName(inputValue, callback)
         },
@@ -55,7 +58,7 @@ const configs = [
         title: 'Set Bio',
         description:
             'You can add something about yourself. It will appear on your profile. Anyone who visits your profile will be able to see it.',
-        icon: <Info />,
+        icon: <MenuBookIcon />,
         min: 0,
         max: 100,
         regex: /.*/,
