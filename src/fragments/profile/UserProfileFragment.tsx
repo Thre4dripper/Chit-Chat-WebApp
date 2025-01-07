@@ -61,6 +61,11 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
     }
 
     const browseProfilePic = () => {
+        if (!user.username) {
+            enqueueSnackbar('Set Username First', { variant: 'info', autoHideDuration: 3000 })
+            return
+        }
+
         const input = document.createElement('input')
         input.type = 'file'
         input.accept = 'image/*'
