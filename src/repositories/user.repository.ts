@@ -56,6 +56,37 @@ class UserRepository {
             })
         })
     }
+
+    static updateName(name: string, callback: (message: string) => void) {
+        const firestore = getFirestore()
+        const username = useLocalStore.getState().username ?? ''
+
+        UpdateProfile.UpdateName(firestore, username, name, (message) => {
+            // update in user state
+            const user = useHomeStore.getState().user
+            if (user) {
+                user.name = name
+                useHomeStore.setState({ user })
+            }
+            callback(message)
+        })
+    }
+
+    static updateBio(bio: string, callback: (message: string) => void) {
+        const firestore = getFirestore()
+        const username = useLocalStore.getState().username ?? ''
+
+        UpdateProfile.UpdateBio(firestore, username, bio, (message) => {
+            // update in user state
+            const user = useHomeStore.getState().user
+            if (user) {
+                user.bio = bio
+                useHomeStore.setState({ user })
+            }
+            callback(message)
+        })
+    }
+
 }
 
 export default UserRepository

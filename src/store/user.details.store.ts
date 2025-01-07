@@ -31,14 +31,12 @@ const useUserDetailsStore = create<UserDetailsActions>()(
             updateName: (name, callback) => {
                 // update name in firebase
                 // set name
-                // TODO implement this
-                callback('')
+                UserRepository.updateName(name, callback)
             },
             updateBio: (bio, callback) => {
                 // update bio in firebase
                 // set bio
-                // TODO implement this
-                callback('')
+                UserRepository.updateBio(bio, callback)
             },
             updateProfilePicture: (profilePicture, callback) => {
                 // update profile picture in firebase

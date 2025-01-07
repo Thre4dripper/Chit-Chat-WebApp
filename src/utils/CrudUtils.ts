@@ -47,7 +47,7 @@ class CrudUtils {
         success: (isSuccess: boolean) => void
     ) {
         const docRef = doc(firestore, collection, document)
-        setDoc(docRef, data)
+        setDoc(docRef, data, { merge: true })
             .then(() => {
                 success(true)
             })

@@ -1,4 +1,4 @@
-import { Firestore } from 'firebase/firestore'
+import { doc, Firestore, setDoc } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import Utils from '../../utils/Utils.ts'
 import { ErrorMessages } from '../../constants/ErrorMessages.ts'
@@ -135,6 +135,62 @@ class UpdateProfile {
     }
 
     //TODO implement updateName, updateBio, updateProfilePicture
+    /**
+     * Function to update name
+     * @param firestore - Firestore instance
+     * @param username - Username of the user
+     * @param name - New name of the user
+     * @param callback - Callback function to return the message
+     * @constructor
+     */
+    static UpdateName(
+        firestore: Firestore,
+        username: string,
+        name: string,
+        callback: (message: string) => void
+    ) {
+        const data = {
+            [UserConstants.NAME]: name,
+        }
+
+        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, username)
+        setDoc(docRef, data, { merge: true })
+            .then(() => {
+                callback(SuccessMessages.NAME_UPDATED_SUCCESSFULLY)
+            })
+            .catch(() => {
+                callback(ErrorMessages.ERROR_UPDATING_NAME)
+            })
+    }
+
+    /**
+     * Function to update bio
+     * @param firestore
+     * @param username
+     * @param bio
+     * @param callback
+     * @constructor
+     */
+    static UpdateBio(
+        firestore: Firestore,
+        username: string,
+        bio: string,
+        callback: (message: string) => void
+    ) {
+        const data = {
+            [UserConstants.BIO]: bio,
+        }
+
+        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, username)
+        setDoc(docRef, data, { merge: true })
+            .then(() => {
+                callback(SuccessMessages.BIO_UPDATED_SUCCESSFULLY)
+            })
+            .catch(() => {
+                callback(ErrorMessages.ERROR_UPDATING_BIO)
+            })
+    }
+
 }
 
 export default UpdateProfile
