@@ -1,4 +1,5 @@
 import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 import { getAuth } from 'firebase/auth'
 import GetProfile from '../firebase/profile/GetProfile.ts'
 import useLocalStore from '../store/local.store.ts'
@@ -6,6 +7,9 @@ import useHomeStore from '../store/home.store.ts'
 import Utils from '../utils/Utils.ts'
 import FireStoreRegister from '../firebase/auth/FireStoreRegister.ts'
 import UpdateProfile from '../firebase/profile/UpdateProfile.ts'
+import StorageUtils from '../utils/StorageUtils.ts'
+import { StorageFolders } from '../constants/StorageFolders.ts'
+import { ErrorMessages } from '../constants/ErrorMessages.ts'
 
 class UserRepository {
     static getUserDetails(onSuccess: (isSuccess: boolean) => void) {
@@ -87,6 +91,40 @@ class UserRepository {
         })
     }
 
+    static updateProfilePicture(profilePicture: File, callback: (message: string) => void) {
+        const storage = getStorage()
+        const firestore = getFirestore()
+        const username = useLocalStore.getState().username ?? ''
+        const prevProfilePicture = useHomeStore.getState().user!.profileImage
+
+        StorageUtils.getUrlFromStorage(
+            storage,
+            `${StorageFolders.PROFILE_IMAGE_FOLDER}/${username}`,
+            profilePicture,
+            (url) => {
+                if (!url) {
+                    callback(ErrorMessages.ERROR_UPDATING_PROFILE_PICTURE)
+                    return
+                }
+
+                UpdateProfile.updateProfilePicture(
+                    firestore,
+                    username,
+                    prevProfilePicture,
+                    url,
+                    (message) => {
+                        // update in user state
+                        const user = useHomeStore.getState().user
+                        if (user) {
+                            user.profileImage = url
+                            useHomeStore.setState({ user })
+                        }
+                        callback(message)
+                    }
+                )
+            }
+        )
+    }
 }
 
 export default UserRepository

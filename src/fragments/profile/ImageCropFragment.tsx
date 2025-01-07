@@ -6,6 +6,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Typography from '@mui/material/Typography'
 import { CropRotate } from '@mui/icons-material'
 import CustomSmoothSlider from '../../components/CustomSmoothSlider.tsx'
+import StorageUtils from '../../utils/StorageUtils.ts'
 
 interface OutputSize {
     width: number
@@ -18,7 +19,7 @@ interface ImageCropFragmentProps {
     outputSize: OutputSize
     image: string | null
     onCancel: () => void
-    onConfirmed: (image: string) => void
+    onConfirmed: (image: File) => void
 }
 
 const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
@@ -148,7 +149,7 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                     reader.onloadend = () => {
                         const base64data = reader.result
                         if (typeof base64data === 'string') {
-                            onConfirmed(base64data)
+                            onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
                         }
                     }
                 },

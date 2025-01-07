@@ -7,6 +7,7 @@ import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
 import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
 import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
+import useUserDetailsStore from '../store/user.details.store.ts'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
@@ -17,6 +18,7 @@ const HomeScreen: React.FC = () => {
 
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
+    const updateProfilePic = useUserDetailsStore((state) => state.updateProfilePicture)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {
@@ -46,8 +48,11 @@ const HomeScreen: React.FC = () => {
                                 aspect={1}
                                 outputSize={{ width: 300, height: 300 }}
                                 onCancel={() => setBrowseImage(null)}
-                                onConfirmed={() => {
+                                onConfirmed={(image) => {
                                     setBrowseImage(null)
+                                    updateProfilePic(image, (url) => {
+                                        console.log(url)
+                                    })
                                 }}
                             />
                         ) : (

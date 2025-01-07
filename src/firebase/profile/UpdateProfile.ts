@@ -134,7 +134,6 @@ class UpdateProfile {
         )
     }
 
-    //TODO implement updateName, updateBio, updateProfilePicture
     /**
      * Function to update name
      * @param firestore - Firestore instance
@@ -191,6 +190,30 @@ class UpdateProfile {
             })
     }
 
+    static updateProfilePicture(
+        firestore: Firestore,
+        username: string,
+        prevProfilePicture: string,
+        profilePicture: string,
+        callback: (message: string) => void
+    ) {
+        const data = {
+            [UserConstants.PROFILE_IMAGE]: profilePicture,
+        }
+
+        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, username)
+        setDoc(docRef, data, { merge: true })
+            .then(() => {
+                callback(SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY)
+            })
+            .catch(() => {
+                callback(ErrorMessages.ERROR_UPDATING_PROFILE_PICTURE)
+            })
+
+        // TODO update in chats
+        // TODO update in groups
+        console.log(prevProfilePicture)
+    }
 }
 
 export default UpdateProfile

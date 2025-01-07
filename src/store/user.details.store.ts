@@ -9,7 +9,7 @@ type UserDetailsActions = {
     updateName: (name: string, callback: (message: string) => void) => void
     updateBio: (bio: string, callback: (message: string) => void) => void
     updateProfilePicture: (
-        profilePicture: string,
+        profilePicture: File,
         callback: (updatedProfilePicture: string) => void
     ) => void
 }
@@ -41,8 +41,7 @@ const useUserDetailsStore = create<UserDetailsActions>()(
             updateProfilePicture: (profilePicture, callback) => {
                 // update profile picture in firebase
                 // set profile picture
-                // TODO implement this
-                callback('')
+                UserRepository.updateProfilePicture(profilePicture, callback)
             },
         }))
     )
