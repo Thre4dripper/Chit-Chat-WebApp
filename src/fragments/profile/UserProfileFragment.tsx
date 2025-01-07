@@ -9,7 +9,7 @@ import LottieLoading from '../../components/LottieLoading.tsx'
 import InfoIcon from '@mui/icons-material/Info'
 import { enqueueSnackbar } from 'notistack'
 import SetDetailsDialog from '../../components/dialogs/SetDetailsDialog.tsx'
-import Utils from '../../utils/Utils.ts'
+import StorageUtils from '../../utils/StorageUtils.ts'
 
 interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -67,7 +67,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
         input.onchange = async (event) => {
             const target = event.target as HTMLInputElement
             const file: File = (target.files as FileList)[0]
-            const base64 = await Utils.fileToBase64(file)
+            const base64 = await StorageUtils.fileToBase64(file)
             setBrowsedImage(base64)
         }
         input.click()
