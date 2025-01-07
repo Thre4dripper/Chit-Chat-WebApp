@@ -17,6 +17,7 @@ const HomeScreen: React.FC = () => {
 
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
+    const user = useHomeStore((state) => state.user)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {
@@ -29,6 +30,11 @@ const HomeScreen: React.FC = () => {
             }
         })
     }, [checkUserRegistration, navigate])
+
+    useEffect(() => {
+        setShowCompleteProfile(!user?.username)
+        setProfileOpen(!user?.username)
+    }, [user?.username])
 
     if (isLoading) {
         return <LottieLoading fullScreen />

@@ -40,8 +40,7 @@ class UserRepository {
                     // update in user state
                     const user = useHomeStore.getState().user
                     if (user) {
-                        user.username = username
-                        useHomeStore.setState({ user })
+                        useHomeStore.getState().setUsername(username)
                     }
                     callback(message)
                 })
@@ -53,8 +52,7 @@ class UserRepository {
                 // update in user state
                 const user = useHomeStore.getState().user
                 if (user) {
-                    user.username = username
-                    useHomeStore.setState({ user })
+                    useHomeStore.getState().setUsername(username)
                 }
                 callback(message)
             })
@@ -69,8 +67,7 @@ class UserRepository {
             // update in user state
             const user = useHomeStore.getState().user
             if (user) {
-                user.name = name
-                useHomeStore.setState({ user })
+                useHomeStore.getState().setName(name)
             }
             callback(message)
         })
@@ -84,8 +81,7 @@ class UserRepository {
             // update in user state
             const user = useHomeStore.getState().user
             if (user) {
-                user.bio = bio
-                useHomeStore.setState({ user })
+                useHomeStore.getState().setBio(bio)
             }
             callback(message)
         })
@@ -116,8 +112,7 @@ class UserRepository {
                         // update in user state
                         const user = useHomeStore.getState().user
                         if (user) {
-                            user.profileImage = url
-                            useHomeStore.setState({ user })
+                            useHomeStore.getState().setProfilePicture(url)
                         }
                         callback(message)
                     }

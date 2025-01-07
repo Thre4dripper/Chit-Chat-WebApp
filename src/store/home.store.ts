@@ -14,6 +14,10 @@ type HomeState = {
 
 type HomeActions = {
     checkUserRegistration: (callback: (onSuccess: boolean) => void) => void
+    setUsername: (username: string) => void
+    setName: (name: string) => void
+    setBio: (bio: string) => void
+    setProfilePicture: (profilePicture: string) => void
 }
 
 const initUserDetails = () => {
@@ -55,6 +59,26 @@ const useHomeStore = create<HomeState & HomeActions>()(
                     //init user details everytime even if the user is not completely registered
                     //it will handle it inside the function
                     initUserDetails()
+                })
+            },
+            setUsername: (username) => {
+                set((state) => {
+                    state.user!.username = username
+                })
+            },
+            setName: (name) => {
+                set((state) => {
+                    state.user!.name = name
+                })
+            },
+            setBio: (bio) => {
+                set((state) => {
+                    state.user!.bio = bio
+                })
+            },
+            setProfilePicture: (profilePicture) => {
+                set((state) => {
+                    state.user!.profileImage = profilePicture
                 })
             },
         }))
