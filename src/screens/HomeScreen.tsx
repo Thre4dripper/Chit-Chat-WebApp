@@ -6,11 +6,14 @@ import useHomeStore from '../store/home.store.ts'
 import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
 import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
+import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
+
+    const [browsedImage, setBrowseImage] = React.useState<string | null>(null)
 
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
@@ -35,7 +38,25 @@ const HomeScreen: React.FC = () => {
         <div className={'flex flex-row bg-slate-900/90 '}>
             <div className={'w-[25rem]'}>
                 {profileOpen ? (
-                    <UserProfileFragment openProfile={setProfileOpen} />
+                    <>
+                        {browsedImage ? (
+                            <ImageCropFragment
+                                image={browsedImage}
+                                cropShape={'round'}
+                                aspect={1}
+                                outputSize={{ width: 300, height: 300 }}
+                                onCancel={() => setBrowseImage(null)}
+                                onConfirmed={() => {
+                                    setBrowseImage(null)
+                                }}
+                            />
+                        ) : (
+                            <UserProfileFragment
+                                openProfile={setProfileOpen}
+                                setBrowsedImage={setBrowseImage}
+                            />
+                        )}
+                    </>
                 ) : (
                     <ChatsFragment openProfile={setProfileOpen} />
                 )}

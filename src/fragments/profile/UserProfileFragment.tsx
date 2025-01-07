@@ -9,9 +9,11 @@ import LottieLoading from '../../components/LottieLoading.tsx'
 import InfoIcon from '@mui/icons-material/Info'
 import { enqueueSnackbar } from 'notistack'
 import SetDetailsDialog from '../../components/dialogs/SetDetailsDialog.tsx'
+import Utils from '../../utils/Utils.ts'
 
 interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
+    setBrowsedImage: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export interface DialogState {
@@ -20,7 +22,10 @@ export interface DialogState {
     value: string
 }
 
-const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }) => {
+const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
+    openProfile,
+    setBrowsedImage,
+}) => {
     const user = useHomeStore((state) => state.user)
 
     const [dialogState, setDialogState] = React.useState<DialogState>({
@@ -55,6 +60,19 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
         setDialogState({ open: true, type: 'Bio', value: user.bio })
     }
 
+    const browseProfilePic = () => {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = 'image/*'
+        input.onchange = async (event) => {
+            const target = event.target as HTMLInputElement
+            const file: File = (target.files as FileList)[0]
+            const base64 = await Utils.fileToBase64(file)
+            setBrowsedImage(base64)
+        }
+        input.click()
+    }
+
     return (
         <div className={`h-full w-full  bg-transparent relative flex flex-col`}>
             {/* User Cannot go back until complete profile */}
@@ -84,6 +102,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({ openProfile }
                 />
                 <Button
                     variant={'text'}
+                    onClick={browseProfilePic}
                     sx={{
                         textTransform: 'none',
                         marginTop: '1rem',
