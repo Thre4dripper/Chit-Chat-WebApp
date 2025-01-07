@@ -13,7 +13,7 @@ import {
     Stack,
     Box,
 } from '@mui/material'
-import { Person, Info, Edit } from '@mui/icons-material'
+import { Person, Info, Edit, Save } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { enqueueSnackbar } from 'notistack'
 import { z } from 'zod'
@@ -91,7 +91,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
         formState: { errors },
         reset,
         watch,
-    } = useForm({
+    } = useForm<z.infer<typeof schema>>({
         resolver: zodResolver(schema),
         mode: 'onChange',
         defaultValues: {
@@ -198,7 +198,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                     loading={loading}
                     disabled={errors.inputValue !== undefined}
                     loadingPosition='start'
-                    startIcon={icon}
+                    startIcon={<Save />}
                     variant='contained'
                     color='primary'>
                     Save
