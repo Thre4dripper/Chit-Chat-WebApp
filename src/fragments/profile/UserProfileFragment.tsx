@@ -118,7 +118,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
                     flexDirection: 'column',
                     gap: '1rem',
                     flexGrow: 1,
-                    borderRadius: '20px 20px 0 0',
+                    borderRadius: '30px 30px 0 0',
                     padding: '20px 40px',
                 }}>
                 <Box

@@ -1,12 +1,16 @@
-import React, { useRef } from 'react'
-import { Container } from '@mui/material'
+import React, { useRef, useState } from 'react'
+import { Paper } from '@mui/material'
 import Button from '@mui/material/Button'
 import { centerCrop, convertToPixelCrop, Crop, makeAspectCrop, ReactCrop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import Typography from '@mui/material/Typography'
-import { CropRotate } from '@mui/icons-material'
+import { CropRotate, Save } from '@mui/icons-material'
 import CustomSmoothSlider from '../../components/CustomSmoothSlider.tsx'
 import StorageUtils from '../../utils/StorageUtils.ts'
+import { LoadingButton } from '@mui/lab'
+import useUserDetailsStore from '../../store/user.details.store.ts'
+import { enqueueSnackbar } from 'notistack'
+import { SuccessMessages } from '../../constants/SuccessMessages.ts'
 
 interface OutputSize {
     width: number
@@ -104,6 +108,8 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
         )
     }
 
+    const [loading, setLoading] = useState(false)
+    const updateProfilePicture = useUserDetailsStore((state) => state.updateProfilePicture)
     const generateImage = (canvas: HTMLCanvasElement) => {
         const maxWidth = outputSize.width
         const maxHeight = outputSize.height
@@ -149,7 +155,19 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                     reader.onloadend = () => {
                         const base64data = reader.result
                         if (typeof base64data === 'string') {
-                            onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                            setLoading(true)
+                            updateProfilePicture(file, (message) => {
+                                enqueueSnackbar(message, {
+                                    variant: 'success',
+                                    autoHideDuration: 3000,
+                                })
+                                if (
+                                    message === SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY
+                                ) {
+                                    onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                                }
+                                setLoading(false)
+                            })
                         }
                     }
                 },
@@ -160,13 +178,8 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
     }
 
     return (
-        <Container
-            component='main'
-            maxWidth='xs'
-            sx={{
-                width: '100%',
-            }}>
-            <div className={'flex flex-col gap-4 justify-center my-8'}>
+        <div className={'w-full h-full'}>
+            <div className={'w-full h-full flex flex-col gap-4 justify-center pt-8'}>
                 <div className={'flex flex-col gap-4 justify-center items-center'}>
                     <div
                         className={
@@ -191,57 +204,70 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                         }}
                     />
                 </div>
-                <ReactCrop
-                    onChange={(_, percentageCrop) => {
-                        setCrop(percentageCrop)
-                    }}
-                    onComplete={onCropComplete}
-                    circularCrop={cropShape === 'round'}
-                    crop={crop}
-                    aspect={aspect}>
-                    <img src={image ?? ''} alt={''} ref={imageRef} onLoad={onImageLoaded} />
-                </ReactCrop>
-                {/*Controls*/}
-                <div className={'flex flex-row gap-8 justify-center items-center mt-8'}>
-                    <CropRotate />
-                    <CustomSmoothSlider
-                        value={rotation}
-                        min={0}
-                        max={360}
-                        valueLabelDisplay='auto'
-                        color='primary'
-                        step={1}
-                        onChange={(_event: Event, newValue: number | number[]) => {
-                            const value = newValue as number
-                            setRotation(value)
-                            setCanvasPreview(
-                                imageRef.current!,
-                                canvasRef.current!,
-                                convertToPixelCrop(
-                                    crop!,
-                                    imageRef.current!.width,
-                                    imageRef.current!.height
-                                ),
-                                value
-                            )
+                <Paper
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1rem',
+                        flexGrow: 1,
+                        borderRadius: '30px 30px 0 0',
+                        padding: '20px 40px',
+                    }}>
+                    <ReactCrop
+                        onChange={(_, percentageCrop) => {
+                            setCrop(percentageCrop)
                         }}
-                    />
-                </div>
-                <div className={'flex flex-row gap-4 justify-end items-center'}>
-                    <Button variant='outlined' color='error' onClick={onCancel}>
-                        Cancel
-                    </Button>
-                    <Button
-                        variant='contained'
-                        color='primary'
-                        onClick={() => {
-                            generateImage(canvasRef.current!)
-                        }}>
-                        Confirm
-                    </Button>
-                </div>
+                        onComplete={onCropComplete}
+                        circularCrop={cropShape === 'round'}
+                        crop={crop}
+                        aspect={aspect}>
+                        <img src={image ?? ''} alt={''} ref={imageRef} onLoad={onImageLoaded} />
+                    </ReactCrop>
+                    {/*Controls*/}
+                    <div className={'flex flex-row gap-8 justify-center items-center mt-8'}>
+                        <CropRotate />
+                        <CustomSmoothSlider
+                            value={rotation}
+                            min={0}
+                            max={360}
+                            valueLabelDisplay='auto'
+                            color='primary'
+                            step={1}
+                            onChange={(_event: Event, newValue: number | number[]) => {
+                                const value = newValue as number
+                                setRotation(value)
+                                setCanvasPreview(
+                                    imageRef.current!,
+                                    canvasRef.current!,
+                                    convertToPixelCrop(
+                                        crop!,
+                                        imageRef.current!.width,
+                                        imageRef.current!.height
+                                    ),
+                                    value
+                                )
+                            }}
+                        />
+                    </div>
+                    <div className={'flex flex-row gap-4 justify-end items-center'}>
+                        <Button variant='outlined' color='error' onClick={onCancel}>
+                            Cancel
+                        </Button>
+                        <LoadingButton
+                            variant='contained'
+                            color='primary'
+                            onClick={() => {
+                                generateImage(canvasRef.current!)
+                            }}
+                            loading={loading}
+                            loadingPosition={'start'}
+                            startIcon={<Save />}>
+                            Confirm
+                        </LoadingButton>
+                    </div>
+                </Paper>
             </div>
-        </Container>
+        </div>
     )
 }
 
