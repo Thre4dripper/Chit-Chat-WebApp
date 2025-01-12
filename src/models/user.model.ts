@@ -1,5 +1,4 @@
 import BaseModel from './base.model.ts'
-import { UserStatus } from '../enums/UserStatus.ts'
 
 class UserModel extends BaseModel {
     uid: string
@@ -7,7 +6,7 @@ class UserModel extends BaseModel {
     name: string
     profileImage: string
     bio: string
-    status: UserStatus
+    status: string
     favourites: string[]
     fcmToken: string
     groups: string[]
@@ -18,7 +17,7 @@ class UserModel extends BaseModel {
         name: string,
         profileImage: string,
         bio: string,
-        status: UserStatus,
+        status: string,
         favourites: string[],
         fcmToken: string,
         groups: string[]
