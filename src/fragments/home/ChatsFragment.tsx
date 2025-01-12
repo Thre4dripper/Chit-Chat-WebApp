@@ -7,14 +7,14 @@ import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
 import useAuthStore from '../../store/auth.store.ts'
-import useUserStore from '../../store/user.store.ts'
+import useHomeStore from '../../store/home.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 
 const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
     openProfile,
 }) => {
     const { logout } = useAuthStore()
-    const { user } = useUserStore()
+    const { user } = useHomeStore()
     const setUsername = useLocalStore((state) => state.setUsername)
 
     const logoutUser = async () => {

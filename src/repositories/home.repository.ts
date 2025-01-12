@@ -3,6 +3,7 @@ import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import CrudUtils from '../utils/CrudUtils.ts'
 import { FirestoreCollections } from '../constants/FireStoreCollections.ts'
+import { UserConstants } from '../constants/UserConstants.ts'
 
 class HomeRepository {
     static getUsername(onSuccess: (username: string | null) => void) {
@@ -16,7 +17,7 @@ class HomeRepository {
             user!.uid,
             (data) => {
                 if (data) {
-                    onSuccess(data.get('username') as unknown as string)
+                    onSuccess(data[UserConstants.USERNAME] as string)
                 } else {
                     onSuccess(null)
                 }

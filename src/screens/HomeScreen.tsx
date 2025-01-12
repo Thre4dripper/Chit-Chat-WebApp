@@ -1,19 +1,23 @@
 import React, { useEffect } from 'react'
 import ChatsFragment from '../fragments/home/ChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
-import UserProfileFragment from '../fragments/home/UserProfileFragment.tsx'
-import useUserStore from '../store/user.store.ts'
+import UserProfileFragment from '../fragments/profile/UserProfileFragment.tsx'
+import useHomeStore from '../store/home.store.ts'
 import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
-import CompleteProfileFragment from '../fragments/home/CompleteProfileFragment.tsx'
+import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
+import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
 
-    const checkUserRegistration = useUserStore((state) => state.checkUserRegistration)
-    const isLoading = useUserStore((state) => state.isLoading)
+    const [browsedImage, setBrowseImage] = React.useState<string | null>(null)
+
+    const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
+    const isLoading = useHomeStore((state) => state.isLoading)
+    const user = useHomeStore((state) => state.user)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {
@@ -22,10 +26,15 @@ const HomeScreen: React.FC = () => {
                 setShowCompleteProfile(true)
                 console.log('User is registered')
             } else {
-                navigate('/auth')
+                // TODO Get chats
             }
         })
     }, [checkUserRegistration, navigate])
+
+    useEffect(() => {
+        setShowCompleteProfile(!user?.username)
+        setProfileOpen(!user?.username)
+    }, [user?.username])
 
     if (isLoading) {
         return <LottieLoading fullScreen />
@@ -35,7 +44,25 @@ const HomeScreen: React.FC = () => {
         <div className={'flex flex-row bg-slate-900/90 '}>
             <div className={'w-[25rem]'}>
                 {profileOpen ? (
-                    <UserProfileFragment openProfile={setProfileOpen} />
+                    <>
+                        {browsedImage ? (
+                            <ImageCropFragment
+                                image={browsedImage}
+                                cropShape={'round'}
+                                aspect={1}
+                                outputSize={{ width: 300, height: 300 }}
+                                onCancel={() => setBrowseImage(null)}
+                                onConfirmed={() => {
+                                    setBrowseImage(null)
+                                }}
+                            />
+                        ) : (
+                            <UserProfileFragment
+                                openProfile={setProfileOpen}
+                                setBrowsedImage={setBrowseImage}
+                            />
+                        )}
+                    </>
                 ) : (
                     <ChatsFragment openProfile={setProfileOpen} />
                 )}

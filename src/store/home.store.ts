@@ -6,15 +6,18 @@ import HomeRepository from '../repositories/home.repository.ts'
 import useLocalStore from './local.store.ts'
 import UserRepository from '../repositories/user.repository.ts'
 
-type UserState = {
+type HomeState = {
     user: UserModel | null
     isLoading: boolean | null
     isSuccess: boolean | null
 }
 
-type UserActions = {
+type HomeActions = {
     checkUserRegistration: (callback: (onSuccess: boolean) => void) => void
-    getUserDetails: () => Promise<void>
+    setUsername: (username: string) => void
+    setName: (name: string) => void
+    setBio: (bio: string) => void
+    setProfilePicture: (profilePicture: string) => void
 }
 
 const initUserDetails = () => {
@@ -37,22 +40,12 @@ const initUserDetails = () => {
     })
 }
 
-const useUserStore = create<UserState & UserActions>()(
+const useHomeStore = create<HomeState & HomeActions>()(
     devtools(
         immer((set) => ({
             user: null,
             isLoading: null,
             isSuccess: null,
-            getUserDetails: async () => {
-                set({ isLoading: true })
-                try {
-                    // fetch user details from firebase
-                    // set user details
-                } catch (error) {
-                    console.error(error)
-                }
-                set({ isLoading: false })
-            },
             checkUserRegistration: (onSuccess) => {
                 set({ isLoading: true })
                 set({ isSuccess: null })
@@ -68,8 +61,28 @@ const useUserStore = create<UserState & UserActions>()(
                     initUserDetails()
                 })
             },
+            setUsername: (username) => {
+                set((state) => {
+                    state.user!.username = username
+                })
+            },
+            setName: (name) => {
+                set((state) => {
+                    state.user!.name = name
+                })
+            },
+            setBio: (bio) => {
+                set((state) => {
+                    state.user!.bio = bio
+                })
+            },
+            setProfilePicture: (profilePicture) => {
+                set((state) => {
+                    state.user!.profileImage = profilePicture
+                })
+            },
         }))
     )
 )
 
-export default useUserStore
+export default useHomeStore
