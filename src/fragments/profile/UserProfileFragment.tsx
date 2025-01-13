@@ -142,8 +142,10 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
                             {user.username.length === 0 ? 'No Username' : user.username}
                         </Typography>
                     </div>
-                    <IconButton onClick={editUsername}>
-                        <ModeEditOutlineIcon className={'text-gray-700'} />
+                    <IconButton disabled={user.username.length !== 0} onClick={editUsername}>
+                        <ModeEditOutlineIcon
+                            className={`${user.username.length === 0 ? 'text-gray-700' : 'text-gray-400'}`}
+                        />
                     </IconButton>
                 </Box>
 

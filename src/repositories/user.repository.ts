@@ -10,6 +10,7 @@ import UpdateProfile from '../firebase/profile/UpdateProfile.ts'
 import StorageUtils from '../utils/StorageUtils.ts'
 import { StorageFolders } from '../constants/StorageFolders.ts'
 import { ErrorMessages } from '../constants/ErrorMessages.ts'
+import { SuccessMessages } from '../constants/SuccessMessages.ts'
 
 class UserRepository {
     static getUserDetails(onSuccess: (isSuccess: boolean) => void) {
@@ -39,7 +40,7 @@ class UserRepository {
                 FireStoreRegister.registerCompleteUser(firestore, user, username, (message) => {
                     // update in user state
                     const user = useHomeStore.getState().user
-                    if (user) {
+                    if (user && message === SuccessMessages.USERNAME_UPDATED_SUCCESSFULLY) {
                         useHomeStore.getState().setUsername(username)
                     }
                     callback(message)

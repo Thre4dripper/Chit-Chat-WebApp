@@ -94,6 +94,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
         formState: { errors },
         reset,
         watch,
+        setError,
     } = useForm<z.infer<typeof schema>>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -123,6 +124,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                 reset()
             } else {
                 enqueueSnackbar(message, { variant: 'error', autoHideDuration: 3000 })
+                setError('inputValue', { type: 'value', message })
             }
             setLoading(false)
         })
