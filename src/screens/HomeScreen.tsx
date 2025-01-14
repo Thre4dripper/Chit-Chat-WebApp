@@ -69,7 +69,7 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
-                {showCompleteProfile ? <CompleteProfileFragment /> :<ChattingFragment />}
+                {showCompleteProfile ? <CompleteProfileFragment /> : <ChattingFragment />}
                 <AddChatsFragment />
             </div>
         </div>
