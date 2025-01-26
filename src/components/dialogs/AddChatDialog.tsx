@@ -27,20 +27,20 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
     const [searchValue, setSearchValue] = useState({ value: '', error: '' })
     const [totalusers, setTotalUsers] = useState<UserModel[]>([])
 
-    const handleSearch = async (e:React.ChangeEvent<HTMLInputElement>) => {
-        AddChatsRepository.searchUsers(e.target.value);
-        setSearchValue({value:e.target.value, error: '' })
+    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        AddChatsRepository.searchUsers(e.target.value)
+        setSearchValue({ value: e.target.value, error: '' })
 
-        if(e.target.value.length==0){
-                setSearchValue({value:e.target.value, error: 'No Username Found' })
-            }
+        if (e.target.value.length == 0) {
+            setSearchValue({ value: e.target.value, error: 'No Username Found' })
+        }
 
-       MutableLiveDataStore.getState().searchResult.forEach((user:UserModel)=>{
-            if(user.username.includes(e.target.value)){
+        MutableLiveDataStore.getState().searchResult.forEach((user: UserModel) => {
+            if (user.username.includes(e.target.value)) {
                 setTotalUsers([user])
-            }})
+            }
+        })
     }
-    
 
     return (
         <Dialog
@@ -89,36 +89,38 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
             </DialogContent>
 
             <DialogContent sx={{ maxHeight: '30vh', overflowY: 'auto' }}>
-                {totalusers.length>0 && totalusers.map((user, index) => {
-                    return (
-                        <Box
-                            key={index}
-                            my={2}
-                            display='flex'
-                            justifyContent='space-around'
-                            alignItems='center'
-                            gap={3}>
-                            <Box display='flex' alignItems='center' gap={2}>
-                                <Avatar sx={{ bgcolor: 'primary.main', color: 'white' }}></Avatar>
-                                <Box>
-                                    <Typography variant='h5' fontWeight='medium'>
-                                        {user.username}
-                                    </Typography>
-                                    <Typography variant='body2' fontWeight='light'>
-                                        {' '}
-                                        {user.name}
-                                    </Typography>
+                {totalusers.length > 0 &&
+                    totalusers.map((user, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                my={2}
+                                display='flex'
+                                justifyContent='space-around'
+                                alignItems='center'
+                                gap={3}>
+                                <Box display='flex' alignItems='center' gap={2}>
+                                    <Avatar
+                                        sx={{ bgcolor: 'primary.main', color: 'white' }}></Avatar>
+                                    <Box>
+                                        <Typography variant='h5' fontWeight='medium'>
+                                            {user.username}
+                                        </Typography>
+                                        <Typography variant='body2' fontWeight='light'>
+                                            {' '}
+                                            {user.name}
+                                        </Typography>
+                                    </Box>
                                 </Box>
+                                <IconButton
+                                    onClick={() => {
+                                        setDialogState({ ...dialogState, open: false })
+                                    }}>
+                                    <Send />
+                                </IconButton>
                             </Box>
-                            <IconButton
-                                onClick={() => {
-                                    setDialogState({ ...dialogState, open: false })
-                                }}>
-                                <Send />
-                            </IconButton>
-                        </Box>
-                    )
-                })}
+                        )
+                    })}
             </DialogContent>
         </Dialog>
     )

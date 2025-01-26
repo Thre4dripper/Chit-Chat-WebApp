@@ -16,10 +16,9 @@ const MutableLiveDataStore = create<MutableLiveDataState & MutableLiveDataAction
             searchResult: [],
             setSearchResult: (newSearchResult) =>
                 set((state) => {
-                    state.searchResult = newSearchResult;
+                    state.searchResult = newSearchResult
                 }),
         }))
     )
-
 )
 export default MutableLiveDataStore
