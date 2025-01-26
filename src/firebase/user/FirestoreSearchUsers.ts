@@ -13,7 +13,7 @@ class FirestoreSearchUsers {
     ) {
         
         const users = collection(firestore, FirestoreCollections.USERS_COLLECTION);
-
+       
         const userQuery = query(users,
             where(UserConstants.USERNAME, "!=", ""),
             orderBy(UserConstants.USERNAME),
@@ -28,6 +28,7 @@ class FirestoreSearchUsers {
                         userList.push(user);
                     }
                 });
+                console.log("userList In Firebase file", userList);
                 SearchResult(userList);
             })
             .catch((error) => {

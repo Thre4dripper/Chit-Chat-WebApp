@@ -7,13 +7,11 @@ import LottieLoading from '../components/LottieLoading.tsx'
 import { useNavigate } from 'react-router-dom'
 import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
 import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
-import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
-
     const [browsedImage, setBrowseImage] = React.useState<string | null>(null)
 
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
@@ -70,7 +68,7 @@ const HomeScreen: React.FC = () => {
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 {showCompleteProfile ? <CompleteProfileFragment /> : <ChattingFragment />}
-                <AddChatsFragment />
+                
             </div>
         </div>
     )

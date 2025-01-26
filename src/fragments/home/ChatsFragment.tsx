@@ -22,8 +22,8 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
         setUsername(null)
     }
 
-    const chats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const favChats: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // this Will Changed Soon based on User Data current
+    const chats: number[] = []
+    const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>

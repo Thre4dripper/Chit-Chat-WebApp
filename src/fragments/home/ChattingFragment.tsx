@@ -2,8 +2,13 @@ import React from 'react'
 import ChatInput from '../../components/chat/ChatInput.tsx'
 import ChatHeader from '../../components/chat/ChatHeader.tsx'
 import ChatBox from '../../components/chat/ChatBox.tsx'
-
+import AddChatsFragment from '../profile/AddChatsFragment.tsx'
 const ChattingFragment: React.FC = () => {
+    const chats: number[] = [];
+
+    if(chats.length === 0) {
+          return <AddChatsFragment />
+    }
     return (
         <div
             className={

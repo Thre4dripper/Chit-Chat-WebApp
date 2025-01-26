@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
     Avatar,
     Dialog,
-    DialogActions,
     TextField,
     DialogContent,
     DialogTitle,
@@ -12,9 +11,11 @@ import {
     Box,
     IconButton,
 } from '@mui/material'
-
+import MutableLiveDataStore from '../../store/MutableLiveData.store'
 import { Send } from '@mui/icons-material'
 import { DialogState } from '../../fragments/profile/UserProfileFragment'
+import UserModel from '../../models/user.model'
+import AddChatsRepository from '../../repositories/AddChats.repository'
 
 interface SetDetailsDialogProps {
     dialogState: DialogState
@@ -24,29 +25,22 @@ interface SetDetailsDialogProps {
 const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialogState }) => {
     const { open } = dialogState
     const [searchValue, setSearchValue] = useState({ value: '', error: '' })
-    const [loading, setLoading] = useState(false)
-    const [totalusers, setTotalUsers] = useState([
-        {
-            username: 'username',
-            name: 'name',
-        },
-        {
-            username: 'username',
-            name: 'name',
-        },
-        {
-            username: 'username',
-            name: 'name',
-        },
-        {
-            username: 'username',
-            name: 'name',
-        },
-        {
-            username: 'username',
-            name: 'name',
-        },
-    ])
+    const [totalusers, setTotalUsers] = useState<UserModel[]>([])
+
+    const handleSearch = async (e:React.ChangeEvent<HTMLInputElement>) => {
+        AddChatsRepository.searchUsers(e.target.value);
+        setSearchValue({value:e.target.value, error: '' })
+
+        if(e.target.value.length==0){
+                setSearchValue({value:e.target.value, error: 'No Username Found' })
+            }
+
+       MutableLiveDataStore.getState().searchResult.forEach((user:UserModel)=>{
+            if(user.username.includes(e.target.value)){
+                setTotalUsers([user])
+            }})
+    }
+    
 
     return (
         <Dialog
@@ -85,9 +79,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                             fullWidth
                             label='search'
                             value={searchValue.value}
-                            onChange={(e) =>
-                                setSearchValue({ ...searchValue, value: e.target.value })
-                            }
+                            onChange={handleSearch}
                             variant='outlined'
                             helperText={searchValue.error ? 'No Username Found' : ''}
                             error={!!searchValue.error}
@@ -97,7 +89,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
             </DialogContent>
 
             <DialogContent sx={{ maxHeight: '30vh', overflowY: 'auto' }}>
-                {totalusers.map((user, index) => {
+                {totalusers.length>0 && totalusers.map((user, index) => {
                     return (
                         <Box
                             key={index}
