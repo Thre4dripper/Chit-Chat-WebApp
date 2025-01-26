@@ -37,9 +37,9 @@ class FirestoreSearchUsers {
                     if (user.uid !== loggedInUser?.uid) {
                         userList.push(user)
                     }
-                });
-                console.log("userList In Firebase file", userList.length);
-                SearchResult(userList);
+                })
+                console.log('userList In Firebase file', userList.length)
+                SearchResult(userList)
             })
             .catch((error) => {
                 console.error('Error searching users:', error)

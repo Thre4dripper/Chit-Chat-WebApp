@@ -2,7 +2,7 @@ import React from 'react'
 import addFriend from '../../assets/lottie/add_friends.json'
 import Lottie from 'lottie-react'
 import { Button } from '@mui/material'
-import AddChatDialog,{DialogState} from '../../components/dialogs/AddChatDialog'
+import AddChatDialog, { DialogState } from '../../components/dialogs/AddChatDialog'
 const AddChatsFragment: React.FC = () => {
     const [dialogState, setDialogState] = React.useState<DialogState>({
         open: false,
