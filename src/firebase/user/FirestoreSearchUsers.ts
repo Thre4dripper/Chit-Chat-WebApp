@@ -20,11 +20,11 @@ class FirestoreSearchUsers {
         SearchQuery: string,
         SearchResult: (userList: UserModel[]) => void
     ) {
-        
-        const users = collection(firestore, FirestoreCollections.USERS_COLLECTION);
-       
-        const userQuery = query(users,
-            where(UserConstants.USERNAME, "!=", ""),
+        const users = collection(firestore, FirestoreCollections.USERS_COLLECTION)
+
+        const userQuery = query(
+            users,
+            where(UserConstants.USERNAME, '!=', ''),
             orderBy(UserConstants.USERNAME),
             startAt(SearchQuery),
             endAt(SearchQuery + '\uf8ff')

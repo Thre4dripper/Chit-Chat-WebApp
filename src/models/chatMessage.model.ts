@@ -5,22 +5,22 @@ class ChatMessageModel extends BaseModel {
     type: ChatMessageType
     text: string
     image: string
-    sticker : number
-    time :string
-    seenBy : string[]
-    from : string
-    to : string
+    sticker: number
+    time: string
+    seenBy: string[]
+    from: string
+    to: string
 
     constructor(
         id: string,
         type: ChatMessageType,
         text: string,
         image: string,
-        sticker : number,
-        time :string,
-        seenBy : string[],
-        from : string,
-        to : string,
+        sticker: number,
+        time: string,
+        seenBy: string[],
+        from: string,
+        to: string
     ) {
         super()
         this.id = id
@@ -32,9 +32,7 @@ class ChatMessageModel extends BaseModel {
         this.seenBy = seenBy
         this.from = from
         this.to = to
-
-        
     }
 }
 
-export default ChatMessageModel;
+export default ChatMessageModel
