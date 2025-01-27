@@ -13,15 +13,12 @@ type AddChatActions = {
 
 const AddChatsStore = create<AddChatState & AddChatActions>()(
     devtools(
-        immer((set) => (
-                {
-                    searchedUsers: [],
-                    setSearchedUsers: (searchQuery) => {
-                        AddChatsRepository.searchUsers(searchQuery,set);
-                    },
-                }
-            ),
-        ),
-    ),
+        immer((set) => ({
+            searchedUsers: [],
+            setSearchedUsers: (searchQuery) => {
+                AddChatsRepository.searchUsers(searchQuery, set)
+            },
+        }))
+    )
 )
 export default AddChatsStore

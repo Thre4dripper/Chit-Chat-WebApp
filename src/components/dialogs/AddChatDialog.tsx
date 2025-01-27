@@ -26,14 +26,16 @@ interface SetDetailsDialogProps {
 const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialogState }) => {
     const [searchUser, setSearchUser] = useState('')
     const { searchedUsers, setSearchedUsers } = AddChatsStore()
-    const [loading,setLoading]=useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false)
     useEffect(() => {
-        setLoading(true);
+        setLoading(true)
         const timer = setTimeout(() => {
             setSearchedUsers(searchUser)
             setLoading(false)
         }, 300)
-        return () => {clearTimeout(timer);}
+        return () => {
+            clearTimeout(timer)
+        }
     }, [searchUser])
 
     return (
@@ -98,7 +100,9 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                     justifyContent: 'start',
                     alignItems: 'center',
                 }}>
-                {loading?<LottieLoading/>:searchedUsers.length == 0 ? (
+                {loading ? (
+                    <LottieLoading />
+                ) : searchedUsers.length == 0 ? (
                     <Lottie
                         className={'max-h-[200px] max-w-[200px]'}
                         animationData={NoResult}

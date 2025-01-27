@@ -68,7 +68,6 @@ const HomeScreen: React.FC = () => {
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 {showCompleteProfile ? <CompleteProfileFragment /> : <AddChatsFragment />}
-
             </div>
         </div>
     )

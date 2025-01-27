@@ -35,12 +35,12 @@ class FirestoreSearchUsers {
                 for (const doc of userQuerySnapshot.docs) {
                     const user = doc.data() as UserModel
                     if (user.uid === loggedInUser?.uid) {
-                        continue;
+                        continue
                     }
                     userList.push(user)
                 }
-                console.log("userList In Firebase file", userList.length);
-                SearchResult(userList);
+                console.log('userList In Firebase file', userList.length)
+                SearchResult(userList)
             })
             .catch((error) => {
                 console.error('Error searching users:', error)
