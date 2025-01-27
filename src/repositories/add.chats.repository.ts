@@ -2,22 +2,18 @@ import FirestoreSearchUsers from '../firebase/user/FirestoreSearchUsers'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import UserModel from '../models/user.model'
-import MutableLiveDataStore from '../store/MutableLiveData.store'
 class AddChatsRepository {
-    static searchUsers = (searchQuery: string) => {
+    static searchUsers = (searchQuery: string,set:any) => {
         const firestore = getFirestore()
         const loggedInUser = getAuth().currentUser
-        if (!loggedInUser) {
-            //  user is not logged in Threaddripper will handle this
-            return
-        }
         FirestoreSearchUsers.searchUsers(
             firestore,
             loggedInUser,
             searchQuery,
             (userList: UserModel[]) => {
-                const setSearchResult = MutableLiveDataStore.getState().setSearchResult
-                setSearchResult(userList)
+                set((state: any) => {
+                    state.searchedUsers = userList;
+                });
             }
         )
     }

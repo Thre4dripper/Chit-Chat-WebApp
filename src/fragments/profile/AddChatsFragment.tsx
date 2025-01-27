@@ -2,14 +2,9 @@ import React from 'react'
 import addFriend from '../../assets/lottie/add_friends.json'
 import Lottie from 'lottie-react'
 import { Button } from '@mui/material'
-import AddChatDialog,{DialogState} from '../../components/dialogs/AddChatDialog'
+import AddChatDialog from '../../components/dialogs/AddChatDialog'
 const AddChatsFragment: React.FC = () => {
-    const [dialogState, setDialogState] = React.useState<DialogState>({
-        open: false,
-        type: 'Username',
-        value: '',
-        error: false,
-    })
+    const [dialogState, setDialogState] = React.useState<boolean>(false)
     return (
         <div
             className={
@@ -30,7 +25,7 @@ const AddChatsFragment: React.FC = () => {
                         maxWidth: '200px',
                         margin: 'auto',
                     }}
-                    onClick={() => setDialogState({ ...dialogState, open: true })}>
+                    onClick={() => setDialogState(true)}>
                     Add Chats
                 </Button>
                 {/* <Alert icon={<InfoIcon fontSize='inherit' />} severity='info'>
