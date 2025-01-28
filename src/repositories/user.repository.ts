@@ -21,10 +21,10 @@ class UserRepository {
 
         GetProfile.getProfile(firestore, user, username, (profile) => {
             if (profile) {
-                useHomeStore.setState({ user: profile })
+                useHomeStore.getState().setUser(profile)
                 onSuccess(true)
             } else {
-                useHomeStore.setState({ user: null })
+                useHomeStore.getState().setUser(null)
                 onSuccess(false)
             }
         })

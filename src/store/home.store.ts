@@ -14,6 +14,7 @@ type HomeState = {
 
 type HomeActions = {
     checkUserRegistration: (callback: (onSuccess: boolean) => void) => void
+    setUser: (user: UserModel | null) => void
     setUsername: (username: string) => void
     setName: (name: string) => void
     setBio: (bio: string) => void
@@ -59,6 +60,11 @@ const useHomeStore = create<HomeState & HomeActions>()(
                     //init user details everytime even if the user is not completely registered
                     //it will handle it inside the function
                     initUserDetails()
+                })
+            },
+            setUser: (user) => {
+                set((state) => {
+                    state.user = user
                 })
             },
             setUsername: (username) => {
