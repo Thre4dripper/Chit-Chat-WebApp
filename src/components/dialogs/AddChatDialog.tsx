@@ -11,7 +11,7 @@ import {
     Box,
     IconButton,
 } from '@mui/material'
-import AddChatsStore from '../../store/add.chats.store.ts'
+import useAddChatsStore from '../../store/add.chats.store.ts'
 import { Send, Close } from '@mui/icons-material'
 import NoResult from '../../assets/lottie/no_search_results.json'
 import Lottie from 'lottie-react'
@@ -25,16 +25,22 @@ interface SetDetailsDialogProps {
 
 const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialogState }) => {
     const [searchUser, setSearchUser] = useState('')
-    const { searchedUsers, setSearchedUsers } = AddChatsStore()
-    const [loading,setLoading]=useState<boolean>(false);
-    useEffect(() => {
-        setLoading(true);
+    const searchedUsers = useAddChatsStore((state) => state.searchedUsers)
+    const searchUsers = useAddChatsStore((state) => state.searchUsers)
+    const isLoading=useAddChatsStore((state)=>state.isLoading)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchUser(e.target.value)
+        useAddChatsStore.setState({isLoading:true})
         const timer = setTimeout(() => {
-            setSearchedUsers(searchUser)
-            setLoading(false)
+            searchUsers(e.target.value)
         }, 300)
-        return () => {clearTimeout(timer);}
-    }, [searchUser])
+        return () => clearTimeout(timer)
+    }
+    //  calling all user on component mount
+    useEffect(() => {
+        searchUsers(searchUser)
+    }, [])
 
     return (
         <Dialog
@@ -83,7 +89,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                             fullWidth
                             label='search'
                             value={searchUser}
-                            onChange={(e) => setSearchUser(e.target.value)}
+                            onChange={handleChange}
                             variant='outlined'
                         />
                     </Stack>
@@ -98,7 +104,9 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                     justifyContent: 'start',
                     alignItems: 'center',
                 }}>
-                {loading?<LottieLoading/>:searchedUsers.length == 0 ? (
+                {isLoading ? (
+                    <LottieLoading />
+                ) : searchedUsers.length == 0 ? (
                     <Lottie
                         className={'max-h-[200px] max-w-[200px]'}
                         animationData={NoResult}

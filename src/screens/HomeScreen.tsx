@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
 import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
 import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
-
+import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
@@ -17,7 +17,8 @@ const HomeScreen: React.FC = () => {
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
-
+    //  dummy state chat we will create store soon for chats
+    const chats=[]
     useEffect(() => {
         checkUserRegistration((isInitial) => {
             if (isInitial) {
@@ -67,7 +68,7 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
-                {showCompleteProfile ? <CompleteProfileFragment /> : <AddChatsFragment />}
+                {showCompleteProfile ? <CompleteProfileFragment /> :chats.length==0?<AddChatsFragment />:<ChattingFragment/> }
 
             </div>
         </div>

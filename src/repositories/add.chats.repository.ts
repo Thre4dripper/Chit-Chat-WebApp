@@ -2,8 +2,10 @@ import FirestoreSearchUsers from '../firebase/user/FirestoreSearchUsers'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import UserModel from '../models/user.model'
+import useAddChatsStore from '../store/add.chats.store.ts'
+
 class AddChatsRepository {
-    static searchUsers = (searchQuery: string,set:any) => {
+    static searchUsers = (searchQuery: string) => {
         const firestore = getFirestore()
         const loggedInUser = getAuth().currentUser
         FirestoreSearchUsers.searchUsers(
@@ -11,9 +13,7 @@ class AddChatsRepository {
             loggedInUser,
             searchQuery,
             (userList: UserModel[]) => {
-                set((state: any) => {
-                    state.searchedUsers = userList;
-                });
+                useAddChatsStore.setState({searchedUsers:userList})
             }
         )
     }
