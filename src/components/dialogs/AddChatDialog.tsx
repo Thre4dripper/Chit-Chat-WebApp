@@ -27,11 +27,11 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
     const [searchUser, setSearchUser] = useState('')
     const searchedUsers = useAddChatsStore((state) => state.searchedUsers)
     const searchUsers = useAddChatsStore((state) => state.searchUsers)
-    const isLoading=useAddChatsStore((state)=>state.isLoading)
+    const isLoading = useAddChatsStore((state) => state.isLoading)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchUser(e.target.value)
-        useAddChatsStore.setState({isLoading:true})
+        useAddChatsStore.setState({ isLoading: true })
         const timer = setTimeout(() => {
             searchUsers(e.target.value)
         }, 300)

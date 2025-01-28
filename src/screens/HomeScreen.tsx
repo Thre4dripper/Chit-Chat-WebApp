@@ -18,7 +18,7 @@ const HomeScreen: React.FC = () => {
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
     //  dummy state chat we will create store soon for chats
-    const chats=[]
+    const chats = []
     useEffect(() => {
         checkUserRegistration((isInitial) => {
             if (isInitial) {
@@ -68,8 +68,13 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
-                {showCompleteProfile ? <CompleteProfileFragment /> :chats.length==0?<AddChatsFragment />:<ChattingFragment/> }
-
+                {showCompleteProfile ? (
+                    <CompleteProfileFragment />
+                ) : chats.length == 0 ? (
+                    <AddChatsFragment />
+                ) : (
+                    <ChattingFragment />
+                )}
             </div>
         </div>
     )
