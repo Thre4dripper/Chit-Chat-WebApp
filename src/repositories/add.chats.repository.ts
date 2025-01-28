@@ -13,7 +13,7 @@ class AddChatsRepository {
             loggedInUser,
             searchQuery,
             (userList: UserModel[]) => {
-                useAddChatsStore.setState({ searchedUsers: userList })
+                useAddChatsStore.setState({ searchedUsers: userList, isLoading: false })
             }
         )
     }

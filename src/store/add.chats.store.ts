@@ -5,7 +5,7 @@ import UserModel from '../models/user.model'
 import AddChatsRepository from '../repositories/add.chats.repository.ts'
 
 type AddChatState = {
-    isLoading: boolean
+    isLoading: boolean | null
     searchedUsers: UserModel[]
 }
 type AddChatActions = {
@@ -15,11 +15,11 @@ type AddChatActions = {
 const useAddChatsStore = create<AddChatState & AddChatActions>()(
     devtools(
         immer((set) => ({
+            isLoading: null,
             searchedUsers: [],
-            isLoading: false,
             searchUsers: (searchQuery) => {
+                set({ isLoading: true })
                 AddChatsRepository.searchUsers(searchQuery)
-                set({ isLoading: false })
             },
         }))
     )
