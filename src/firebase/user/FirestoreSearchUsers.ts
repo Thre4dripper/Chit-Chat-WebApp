@@ -39,7 +39,6 @@ class FirestoreSearchUsers {
                     }
                     userList.push(user)
                 }
-                console.log('userList In Firebase file', userList.length)
                 SearchResult(userList)
             })
             .catch((error) => {
@@ -48,4 +47,5 @@ class FirestoreSearchUsers {
             })
     }
 }
+
 export default FirestoreSearchUsers
