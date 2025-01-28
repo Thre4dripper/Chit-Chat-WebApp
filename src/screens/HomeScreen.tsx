@@ -8,6 +8,7 @@ import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragmen
 import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
 import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
+
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
@@ -36,7 +37,8 @@ const HomeScreen: React.FC = () => {
         setProfileOpen(!user?.username)
     }, [user?.username])
 
-    if (isLoading) {
+    // show loading until user is fetched
+    if (isLoading || user === null) {
         return <LottieLoading fullScreen />
     }
 
