@@ -10,6 +10,7 @@ type AddChatState = {
 }
 type AddChatActions = {
     searchUsers: (query: string) => void
+    setSearchedUsers: (users: UserModel[]) => void
 }
 
 const useAddChatsStore = create<AddChatState & AddChatActions>()(
@@ -20,6 +21,9 @@ const useAddChatsStore = create<AddChatState & AddChatActions>()(
             searchUsers: (searchQuery) => {
                 set({ isLoading: true })
                 AddChatsRepository.searchUsers(searchQuery)
+            },
+            setSearchedUsers: (users) => {
+                set({ searchedUsers: users, isLoading: false })
             },
         }))
     )
