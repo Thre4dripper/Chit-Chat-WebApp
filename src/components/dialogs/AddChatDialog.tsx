@@ -25,7 +25,9 @@ interface SetDetailsDialogProps {
 }
 
 const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialogState }) => {
-    const { searchUsers, searchedUsers, isLoading } = useAddChatsStore()
+    const searchedUsers = useAddChatsStore((state) => state.searchedUsers)
+    const isLoading = useAddChatsStore((state) => state.isLoading)
+    const searchUsers = useAddChatsStore((state) => state.searchUsers)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         debounce(() => {
