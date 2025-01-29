@@ -3,13 +3,13 @@ import ChatModel from '../models/user.chat.model.ts'
 import { FirestoreCollections } from '../constants/FireStoreCollections.ts'
 
 class ChatUtils {
-    static getUserChatDocId  (chatUserId1: string, chatUserId2: string): string {
+    static getUserChatDocId(chatUserId1: string, chatUserId2: string): string {
         if (chatUserId1 < chatUserId2) {
             return chatUserId1 + '-' + chatUserId2
         }
         return chatUserId2 + '-' + chatUserId1
     }
-    static checkIfUserChatExists (
+    static checkIfUserChatExists(
         firestore: Firestore,
         chatUserId1: string,
         chatUserId2: string,

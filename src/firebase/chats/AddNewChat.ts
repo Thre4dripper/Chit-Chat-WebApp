@@ -1,4 +1,4 @@
-import { collection, doc, Firestore, setDoc ,Timestamp} from 'firebase/firestore'
+import { collection, doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
 import UserModel from '../../models/user.model.ts'
 import ChatUtils from '../../utils/ChatUtils.ts'
 import ChatModel, { DMChatUserModel } from '../../models/user.chat.model.ts'
@@ -6,9 +6,9 @@ import { UserStatus } from '../../enums/UserStatus.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 import ChatMessageModel from '../../models/chat.message.model.ts'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
 class AddNewChat {
-    static addNewChat (
+    static addNewChat(
         firestore: Firestore,
         newChatUser: UserModel,
         currentUser: UserModel,
@@ -25,7 +25,7 @@ class AddNewChat {
             new DMChatUserModel(
                 newChatUser.username,
                 newChatUser.profileImage,
-                UserStatus.LastSeen+Timestamp.now().seconds
+                UserStatus.LastSeen + Timestamp.now().seconds
             ).toObject(),
             [
                 new ChatMessageModel(

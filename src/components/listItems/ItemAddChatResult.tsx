@@ -5,17 +5,15 @@ import UserModel from '../../models/user.model.ts'
 import AddChatsStore from '../../store/add.chats.store.ts'
 interface ItemAddChatResultProps {
     user: UserModel
-   setDialogueState: React.Dispatch<boolean>
+    setDialogueState: React.Dispatch<boolean>
 }
 
-
 const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, setDialogueState }) => {
-    const dmChat=AddChatsStore.getState().dmChat;
+    const dmChat = AddChatsStore.getState().dmChat
 
-    const handleNewChat=()=>{
-         dmChat(user)
-         setDialogueState(false);
-
+    const handleNewChat = () => {
+        dmChat(user)
+        setDialogueState(false)
     }
     return (
         <>

@@ -1,4 +1,4 @@
 export enum UserStatus {
-    Online="Online",
-    LastSeen="LastSeen",
+    Online = 'Online',
+    LastSeen = 'LastSeen',
 }

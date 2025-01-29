@@ -29,11 +29,7 @@ export class DMChatUserModel extends BaseModel {
     profileImage: string
     status: string
 
-    constructor(
-        username: string,
-        profileImage: string,
-        status: string)
-    {
+    constructor(username: string, profileImage: string, status: string) {
         super()
         this.username = username
         this.profileImage = profileImage
