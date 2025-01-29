@@ -131,10 +131,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                         <ItemAddChatResult
                             key={user.username}
                             user={user}
-                            addChat={() => {
-                                console.log('Add Chat')
-                                setDialogState(false)
-                            }}
+                            setDialogueState={setDialogState}
                         />
                     ))
                 )}

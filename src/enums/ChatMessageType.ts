@@ -1,6 +1,7 @@
 export enum ChatMessageType {
-    FIRST_MESSAGE,
-    TEXT,
-    IMAGE,
-    STICKER,
+    TypeFirstMessage = "TypeFirstMessage",
+    TypeText = "TypeText",
+    TypeImage = "TypeImage",
+    TypeSticker = "TypeSticker",
+    TypeDeletedMessage = "TypeDeletedMessage",
 }

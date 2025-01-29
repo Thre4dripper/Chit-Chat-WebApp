@@ -27,7 +27,7 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
     return (
         <div className={'w-full flex flex-row px-4 py-2 justify-end'}>
             <div>
-                {type === ChatMessageType.TEXT && (
+                {type === ChatMessageType.TypeText && (
                     <div
                         style={{ backgroundColor: rightMessageColor }}
                         className={
@@ -38,7 +38,7 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
                         <MsgText message={message ?? ''} className={'text-white/80'} />
                     </div>
                 )}
-                {type === ChatMessageType.IMAGE && (
+                {type === ChatMessageType.TypeImage && (
                     <div
                         style={{ backgroundColor: rightMessageColor }}
                         className={
@@ -49,7 +49,7 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
                         <MsgImage image={image ?? ''} />
                     </div>
                 )}
-                {type === ChatMessageType.STICKER && (
+                {type === ChatMessageType.TypeSticker && (
                     <div
                         className={
                             'max-w-[36rem] w-full ' +

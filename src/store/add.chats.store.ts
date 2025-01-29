@@ -11,6 +11,7 @@ type AddChatState = {
 type AddChatActions = {
     searchUsers: (query: string) => void
     setSearchedUsers: (users: UserModel[]) => void
+    dmChat:(newChatUser:UserModel)=>void
 }
 
 const useAddChatsStore = create<AddChatState & AddChatActions>()(
@@ -25,6 +26,11 @@ const useAddChatsStore = create<AddChatState & AddChatActions>()(
             setSearchedUsers: (users) => {
                 set({ searchedUsers: users, isLoading: false })
             },
+            dmChat:(newChatUser)=>{
+                AddChatsRepository.addChat(newChatUser,()=>{
+                    console.log("called store Function")
+                })
+            }
         }))
     )
 )

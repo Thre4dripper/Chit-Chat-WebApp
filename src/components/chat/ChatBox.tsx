@@ -20,14 +20,14 @@ const ChatBox: React.FC = () => {
             {/*Chatting list*/}
             <div className={'flex flex-col gap-2'}>
                 <LeftChatMessage
-                    type={ChatMessageType.TEXT}
+                    type={ChatMessageType.TypeText}
                     profileImage={'https://i.pravatar.cc/300'}
                     message={'Hello world'}
                     time={'10:00'}
                 />
 
                 <LeftChatMessage
-                    type={ChatMessageType.IMAGE}
+                    type={ChatMessageType.TypeImage}
                     profileImage={'https://i.pravatar.cc/300'}
                     image={
                         'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'
@@ -36,21 +36,21 @@ const ChatBox: React.FC = () => {
                 />
 
                 <LeftChatMessage
-                    type={ChatMessageType.STICKER}
+                    type={ChatMessageType.TypeSticker}
                     profileImage={'https://i.pravatar.cc/300'}
                     sticker={stickerData}
                     time={'10:00'}
                 />
 
                 <RightChatMessage
-                    type={ChatMessageType.TEXT}
+                    type={ChatMessageType.TypeText}
                     seen={['https://i.pravatar.cc/300']}
                     message={'Hello world'}
                     time={'10:00'}
                 />
 
                 <RightChatMessage
-                    type={ChatMessageType.IMAGE}
+                    type={ChatMessageType.TypeImage}
                     seen={['https://i.pravatar.cc/300']}
                     image={
                         'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'
@@ -59,7 +59,7 @@ const ChatBox: React.FC = () => {
                 />
 
                 <RightChatMessage
-                    type={ChatMessageType.STICKER}
+                    type={ChatMessageType.TypeSticker}
                     seen={['https://i.pravatar.cc/300']}
                     sticker={stickerData}
                     time={'10:00'}
