@@ -2,13 +2,19 @@ import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material'
 import { Send } from '@mui/icons-material'
 import React from 'react'
 import UserModel from '../../models/user.model.ts'
-
+import AddChatsStore from '../../store/add.chats.store.ts'
 interface ItemAddChatResultProps {
     user: UserModel
-    addChat: () => void
+    setDialogueState: React.Dispatch<boolean>
 }
 
-const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, addChat }) => {
+const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, setDialogueState }) => {
+    const dmChat = AddChatsStore.getState().dmChat
+
+    const handleNewChat = () => {
+        dmChat(user)
+        setDialogueState(false)
+    }
     return (
         <>
             <Box
@@ -39,7 +45,7 @@ const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, addChat }) 
                     </Typography>
                 </Box>
                 <div className={'flex-1'} />
-                <IconButton onClick={addChat}>
+                <IconButton onClick={handleNewChat}>
                     <Send className={'text-[#1D2C48]'} />
                 </IconButton>
             </Box>

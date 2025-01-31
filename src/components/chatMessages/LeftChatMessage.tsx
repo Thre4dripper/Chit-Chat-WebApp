@@ -30,7 +30,7 @@ const LeftChatMessage: React.FC<ItemChatLeftMsgProps> = ({
                 <CircularImage image={profileImage} size={28} alt={'Profile image'} />
             </div>
             <div>
-                {type === ChatMessageType.TEXT && (
+                {type === ChatMessageType.TypeText && (
                     <div
                         style={{ backgroundColor: leftMessageColor }}
                         className={
@@ -41,7 +41,7 @@ const LeftChatMessage: React.FC<ItemChatLeftMsgProps> = ({
                         <MsgText message={message ?? ''} className={'text-black/80'} />
                     </div>
                 )}
-                {type === ChatMessageType.IMAGE && (
+                {type === ChatMessageType.TypeImage && (
                     <div
                         style={{ backgroundColor: leftMessageColor }}
                         className={
@@ -52,7 +52,7 @@ const LeftChatMessage: React.FC<ItemChatLeftMsgProps> = ({
                         <MsgImage image={image ?? ''} />
                     </div>
                 )}
-                {type === ChatMessageType.STICKER && (
+                {type === ChatMessageType.TypeSticker && (
                     <div
                         className={
                             'max-w-[36rem] w-full ' +

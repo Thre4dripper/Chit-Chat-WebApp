@@ -1,27 +1,26 @@
 import BaseModel from './base.model.ts'
-import { ChatMessageType } from '../enums/ChatMessageType.ts'
+import { GroupMessageType } from '../enums/GroupMessageType.ts'
 import { Timestamp } from '@firebase/firestore'
-class ChatMessageModel extends BaseModel {
+
+class GroupMessageModel extends BaseModel {
     id: string
-    type: ChatMessageType
+    type: GroupMessageType
     text: string | null
     image: string | null
     sticker: number | null
     time: Timestamp
     seenBy: string[]
     from: string
-    to: string
 
     constructor(
         id: string,
-        type: ChatMessageType,
+        type: GroupMessageType,
         text: string | null,
         image: string | null,
         sticker: number | null,
         time: Timestamp,
         seenBy: string[],
-        from: string,
-        to: string
+        from: string
     ) {
         super()
         this.id = id
@@ -32,8 +31,7 @@ class ChatMessageModel extends BaseModel {
         this.time = time
         this.seenBy = seenBy
         this.from = from
-        this.to = to
     }
 }
 
-export default ChatMessageModel
+export default GroupMessageModel
