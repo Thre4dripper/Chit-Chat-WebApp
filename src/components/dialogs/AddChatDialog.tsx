@@ -19,7 +19,7 @@ import Lottie from 'lottie-react'
 import LottieLoading from '../LottieLoading.tsx'
 import ItemAddChatResult from '../listItems/ItemAddChatResult.tsx'
 
-interface SetDetailsDialogProps {
+export interface SetDetailsDialogProps {
     dialogState: boolean
     setDialogState: React.Dispatch<React.SetStateAction<boolean>>
 }

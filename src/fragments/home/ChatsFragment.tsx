@@ -1,6 +1,7 @@
 import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
+import ChatIcon from '@mui/icons-material/Chat'
 import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
@@ -9,10 +10,12 @@ import Avatar from '@mui/material/Avatar'
 import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
 import useLocalStore from '../../store/local.store.ts'
+import AddChatsStore from '../../store/add.chats.store.ts'
 
-const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
-    openProfile,
-}) => {
+const ChatsFragment: React.FC<{
+    openProfile: React.Dispatch<SetStateAction<boolean>>
+    setDialogState: React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState }) => {
     const { logout } = useAuthStore()
     const { user } = useHomeStore()
     const setUsername = useLocalStore((state) => state.setUsername)
@@ -22,7 +25,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
         setUsername(null)
     }
 
-    const chats: number[] = []
+    const chats = AddChatsStore((state) => state.UserChats)
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
@@ -32,7 +35,13 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         {GlobalConstants.APP_NAME}
                     </Typography>
                 </div>
+
                 <div className={'flex-1'} />
+                <div className={'flex flex-col justify-center'}>
+                    <IconButton onClick={()=>setDialogState(true)}>
+                        <ChatIcon className={'text-white'} />
+                    </IconButton>
+                </div>
                 <div className={'flex flex-col justify-center rounded-full'}>
                     <IconButton
                         onClick={() => {
@@ -122,12 +131,13 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         <div className={'flex flex-col'}>
                             {chats.map((item) => (
                                 <ItemChat
-                                    key={item}
-                                    image={'https://i.pravatar.cc/300'}
-                                    primaryText={`Item ${item}`}
-                                    secondaryText={`Item ${item}`}
-                                    time={'10:00'}
-                                    notification={1}
+                                    key={item.chatId}
+                                    chatId={item.chatId}
+                                    image={item.dmChatUser2.username==user?.username?item.dmChatUser1.profileImage:item.dmChatUser2.profileImage}
+                                    primaryText={item.dmChatUser2.username==user?.username?item.dmChatUser1.username:item.dmChatUser2.username}
+                                    secondaryText={item.chatMessages[0].text??'blank'}
+                                    time={item.chatMessages[0].time.toDate().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",hour12:true})}
+                                    notification={item.chatMessages.length}
                                 />
                             ))}
                         </div>

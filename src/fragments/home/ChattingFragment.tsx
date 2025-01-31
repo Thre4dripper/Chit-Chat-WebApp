@@ -3,6 +3,7 @@ import ChatInput from '../../components/chat/ChatInput.tsx'
 import ChatHeader from '../../components/chat/ChatHeader.tsx'
 import ChatBox from '../../components/chat/ChatBox.tsx'
 
+
 const ChattingFragment: React.FC = () => {
     return (
         <div
