@@ -16,7 +16,7 @@ class UserChatsRepository {
         })
     }
 
-    static getUserChatById(chatId: string, onSuccess: (chat: ChatModel | null) => void){
+    static getUserChatById(chatId: string, onSuccess: (chat: ChatModel | null) => void) {
         const firestore = getFirestore(firebaseApp)
         GetChats.getUserChatById(firestore, chatId, onSuccess)
     }

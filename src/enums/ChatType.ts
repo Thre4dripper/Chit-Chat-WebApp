@@ -1,4 +1,4 @@
-export enum ChatType{
-    USER="USER",
-    GROUP="GROUP"
+export enum ChatType {
+    USER = 'USER',
+    GROUP = 'GROUP',
 }

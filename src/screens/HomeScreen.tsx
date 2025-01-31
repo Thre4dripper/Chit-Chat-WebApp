@@ -21,9 +21,9 @@ const HomeScreen: React.FC = () => {
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
-    const CallChats= AddChatsStore((state)=>state.setUserChats)
-    const chats=AddChatsStore((state)=>state.UserChats)
-    const chatById=AddChatsStore((state)=>state.chatById);
+    const CallChats = AddChatsStore((state) => state.setUserChats)
+    const chats = AddChatsStore((state) => state.UserChats)
+    const chatById = AddChatsStore((state) => state.chatById)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {
@@ -41,7 +41,6 @@ const HomeScreen: React.FC = () => {
     useEffect(() => {
         setShowCompleteProfile(!user?.username)
         setProfileOpen(!user?.username)
-
     }, [user?.username])
 
     // show loading until user is fetched
@@ -73,7 +72,7 @@ const HomeScreen: React.FC = () => {
                         )}
                     </>
                 ) : (
-                    <ChatsFragment openProfile={setProfileOpen} setDialogState={setDialogState}  />
+                    <ChatsFragment openProfile={setProfileOpen} setDialogState={setDialogState} />
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
@@ -81,8 +80,10 @@ const HomeScreen: React.FC = () => {
                     <CompleteProfileFragment />
                 ) : chats.length == 0 ? (
                     <AddChatsFragment dialogState={dialogState} setDialogState={setDialogState} />
+                ) : chatById ? (
+                    <ChattingFragment />
                 ) : (
-                    chatById?<ChattingFragment />:<EmptyChatFragment/>
+                    <EmptyChatFragment />
                 )}
             </div>
             <AddChatDialog dialogState={dialogState} setDialogState={setDialogState} />

@@ -38,7 +38,7 @@ const ChatsFragment: React.FC<{
 
                 <div className={'flex-1'} />
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={()=>setDialogState(true)}>
+                    <IconButton onClick={() => setDialogState(true)}>
                         <ChatIcon className={'text-white'} />
                     </IconButton>
                 </div>
@@ -133,10 +133,24 @@ const ChatsFragment: React.FC<{
                                 <ItemChat
                                     key={item.chatId}
                                     chatId={item.chatId}
-                                    image={item.dmChatUser2.username==user?.username?item.dmChatUser1.profileImage:item.dmChatUser2.profileImage}
-                                    primaryText={item.dmChatUser2.username==user?.username?item.dmChatUser1.username:item.dmChatUser2.username}
-                                    secondaryText={item.chatMessages[0].text??'blank'}
-                                    time={item.chatMessages[0].time.toDate().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",hour12:true})}
+                                    image={
+                                        item.dmChatUser2.username == user?.username
+                                            ? item.dmChatUser1.profileImage
+                                            : item.dmChatUser2.profileImage
+                                    }
+                                    primaryText={
+                                        item.dmChatUser2.username == user?.username
+                                            ? item.dmChatUser1.username
+                                            : item.dmChatUser2.username
+                                    }
+                                    secondaryText={item.chatMessages[0].text ?? 'blank'}
+                                    time={item.chatMessages[0].time
+                                        .toDate()
+                                        .toLocaleTimeString('en-US', {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        })}
                                     notification={item.chatMessages.length}
                                 />
                             ))}

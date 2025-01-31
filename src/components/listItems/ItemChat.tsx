@@ -4,7 +4,7 @@ import CircularImage from '../CircularImage.tsx'
 import AddChatsStore from '../../store/add.chats.store.ts'
 
 interface ItemChatProps {
-    chatId:string
+    chatId: string
     image: string
     primaryText: string
     secondaryText: string
@@ -24,16 +24,14 @@ const ItemChat: React.FC<ItemChatProps> = ({
         primaryText = primaryText.substring(0, 24) + '...'
     }
 
-        const call=AddChatsStore.getState().getChatById
-        const chatById=AddChatsStore.getState().chatById
+    const call = AddChatsStore.getState().getChatById
+    const chatById = AddChatsStore.getState().chatById
 
     return (
         <div>
             <button
-                onClick={()=> call(chatId)}
-                className={
-                    `${chatById?.chatId===chatId?"bg-slate-900":""} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`
-                }>
+                onClick={() => call(chatId)}
+                className={`${chatById?.chatId === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
                 <CircularImage image={image} size={48} />
                 <div className={'flex flex-col flex-auto justify-center'}>
                     {/*create a primary text container with ellipses effect on longer text and time container at the end*/}

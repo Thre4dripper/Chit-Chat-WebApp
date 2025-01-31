@@ -1,8 +1,8 @@
 export enum GroupMessageType {
-    TypeCreatedGroup = "TypeCreatedGroup",
-    TypeLeavedMember="TypeLeavedMember",
-    TypeText = "TypeText",
-    TypeImage = "TypeImage",
-    TypeSticker = "TypeSticker",
-    TypeDeletedMessage = "TypeDeletedMessage",
+    TypeCreatedGroup = 'TypeCreatedGroup',
+    TypeLeavedMember = 'TypeLeavedMember',
+    TypeText = 'TypeText',
+    TypeImage = 'TypeImage',
+    TypeSticker = 'TypeSticker',
+    TypeDeletedMessage = 'TypeDeletedMessage',
 }

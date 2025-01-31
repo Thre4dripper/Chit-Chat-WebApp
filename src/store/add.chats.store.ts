@@ -9,17 +9,15 @@ import UserChatsRepository from '../repositories/user.chats.repository.ts'
 type AddChatState = {
     isLoading: boolean | null
     searchedUsers: UserModel[]
-    UserChats:ChatModel[]
-    chatById:ChatModel|null
-
+    UserChats: ChatModel[]
+    chatById: ChatModel | null
 }
 type AddChatActions = {
     searchUsers: (query: string) => void
     setSearchedUsers: (users: UserModel[]) => void
     dmChat: (newChatUser: UserModel) => void
-    setUserChats:()=>void
-    getChatById:(chatId:string)=>void
-
+    setUserChats: () => void
+    getChatById: (chatId: string) => void
 }
 
 const useAddChatsStore = create<AddChatState & AddChatActions>()(
@@ -27,8 +25,8 @@ const useAddChatsStore = create<AddChatState & AddChatActions>()(
         immer((set) => ({
             isLoading: null,
             searchedUsers: [],
-            chatById:null,
-            UserChats:[],
+            chatById: null,
+            UserChats: [],
             searchUsers: (searchQuery) => {
                 set({ isLoading: true })
                 AddChatsRepository.searchUsers(searchQuery)
@@ -38,40 +36,34 @@ const useAddChatsStore = create<AddChatState & AddChatActions>()(
             },
             dmChat: (newChatUser) => {
                 AddChatsRepository.addChat(newChatUser, (chatId) => {
-                    if(!chatId){
+                    if (!chatId) {
                         console.log('AddChat Repository')
-                        return;
+                        return
                     }
-                    UserChatsRepository.getUserChatById(chatId,(chat)=>{
-                        if(chat){
-                            set({chatById:chat})
+                    UserChatsRepository.getUserChatById(chatId, (chat) => {
+                        if (chat) {
+                            set({ chatById: chat })
+                        } else {
+                            set({ chatById: null })
                         }
-                        else{
-                            set({chatById:null})
-                        }
-
                     })
                     UserChatsRepository.getAllUserChats()
                 })
             },
-            setUserChats:()=>{
+            setUserChats: () => {
                 console.log('Called Here')
                 UserChatsRepository.getAllUserChats()
             },
-            getChatById:(chatId:string)=>{
-
-                 UserChatsRepository.getUserChatById(chatId,(chat)=>{
-                     if(chat){
-                         console.log("Chat Id :",chat.chatId)
-                         set({chatById:chat})
-                     }
-                     else{
-                         set({chatById:null})
-                     }
-
-                 })
-
-            }
+            getChatById: (chatId: string) => {
+                UserChatsRepository.getUserChatById(chatId, (chat) => {
+                    if (chat) {
+                        console.log('Chat Id :', chat.chatId)
+                        set({ chatById: chat })
+                    } else {
+                        set({ chatById: null })
+                    }
+                })
+            },
         }))
     )
 )

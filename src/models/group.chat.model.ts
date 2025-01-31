@@ -1,7 +1,6 @@
 import BaseModel from './base.model.ts'
 import GroupMessageModel from './group.message.model.ts'
 
-
 class GroupChatModel extends BaseModel {
     id: string
     name: string
