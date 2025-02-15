@@ -1,72 +1,118 @@
 import React, { useEffect, useRef } from 'react'
-// import LeftChatMessage from '../chatMessages/LeftChatMessage.tsx'
-// import { ChatMessageType } from '../../enums/ChatMessageType.ts'
+import LeftChatMessage from '../chatMessages/LeftChatMessage.tsx'
+import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 // import stickerData from '../../assets/stickers/sticker_ghost_1.json'
-// import RightChatMessage from '../chatMessages/RightChatMessage.tsx'
+import stickerData from '../../assets/stickers/sticker_owl_1.json'
+import RightChatMessage from '../chatMessages/RightChatMessage.tsx'
+import useHomeChatsStore from '../../store/home.chats.store.ts'
+import useLocalStore from '../../store/local.store.ts'
+
 
 const ChatBox: React.FC = () => {
     // for scrolling to bottom
     const bottomRef = useRef<HTMLDivElement>(null)
 
+
+    const CurrentChats = useHomeChatsStore((state) => state._chatDetails);
+
+    const username=useLocalStore((state)=>state.username)
+
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [])
+    }, [CurrentChats])
     return (
         <div
             className={
                 'z-0 flex-1 bg-white overflow-y-scroll ' +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
             }>
-            {/*Chatting list*/}
-            <div className={'flex flex-col gap-2'}>
-                {/*<LeftChatMessage*/}
-                {/*    type={ChatMessageType.TypeText}*/}
-                {/*    profileImage={'https://i.pravatar.cc/300'}*/}
-                {/*    message={'Hello world'}*/}
-                {/*    time={'10:00'}*/}
-                {/*/>*/}
+            {CurrentChats ? [...CurrentChats.chatMessages]
+                .reverse()
+                .map((chat) => (
+                    <div className={'flex gap-2'} key={chat.time.toMillis()}>
+                        {chat.from !== username ? (
+                            <>
+                                {chat.type === ChatMessageType.TypeText && (
+                                    <LeftChatMessage
+                                        type={ChatMessageType.TypeText}
+                                        profileImage={CurrentChats.dmChatUser2.profileImage}
+                                        message={chat.text as string}
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
 
-                {/*<LeftChatMessage*/}
-                {/*    type={ChatMessageType.TypeImage}*/}
-                {/*    profileImage={'https://i.pravatar.cc/300'}*/}
-                {/*    image={*/}
-                {/*        'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'*/}
-                {/*    }*/}
-                {/*    time={'10:00'}*/}
-                {/*/>*/}
+                                {chat.type === ChatMessageType.TypeImage && chat.image && (
+                                    <LeftChatMessage
+                                        type={ChatMessageType.TypeImage}
+                                        profileImage={CurrentChats.dmChatUser2.profileImage}
+                                        image={chat.image}
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
 
-                {/*<LeftChatMessage*/}
-                {/*    type={ChatMessageType.TypeSticker}*/}
-                {/*    profileImage={'https://i.pravatar.cc/300'}*/}
-                {/*    sticker={stickerData}*/}
-                {/*    time={'10:00'}*/}
-                {/*/>*/}
+                                {chat.type === ChatMessageType.TypeSticker && chat.sticker && (
+                                    <LeftChatMessage
+                                        type={ChatMessageType.TypeSticker}
+                                        profileImage={CurrentChats.dmChatUser2.profileImage}
+                                        sticker={stickerData}
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
 
-                {/*<RightChatMessage*/}
-                {/*    type={ChatMessageType.TypeText}*/}
-                {/*    seen={['https://i.pravatar.cc/300']}*/}
-                {/*    message={'Hello world'}*/}
-                {/*    time={'10:00'}*/}
-                {/*/>*/}
+                                {chat.type === ChatMessageType.TypeFirstMessage && (
+                                    <LeftChatMessage
+                                        type={ChatMessageType.TypeSticker}
+                                        profileImage={CurrentChats.dmChatUser2.profileImage}
+                                        sticker={stickerData} // ✅ Default first message sticker
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                {chat.type === ChatMessageType.TypeText && (
+                                    <RightChatMessage
+                                        type={ChatMessageType.TypeText}
+                                        seen={[CurrentChats.dmChatUser1.profileImage as string]}
+                                        message={chat.text as string}
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
 
-                {/*<RightChatMessage*/}
-                {/*    type={ChatMessageType.TypeImage}*/}
-                {/*    seen={['https://i.pravatar.cc/300']}*/}
-                {/*    image={*/}
-                {/*        'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'*/}
-                {/*    }*/}
-                {/*    time={'10:00'}*/}
-                {/*/>*/}
+                                {chat.type === ChatMessageType.TypeImage && chat.image && (
+                                    <RightChatMessage
+                                        type={ChatMessageType.TypeImage}
+                                        seen={[CurrentChats.dmChatUser1.profileImage as string]}
+                                        image={chat.image}
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
 
-                {/*<RightChatMessage*/}
-                {/*    type={ChatMessageType.TypeSticker}*/}
-                {/*    seen={['https://i.pravatar.cc/300']}*/}
-                {/*    sticker={stickerData}*/}
-                {/*    time={'10:00'}*/}
-                {/*/>*/}
+                                {chat.type === ChatMessageType.TypeSticker && chat.sticker && (
+                                    <RightChatMessage
+                                        type={ChatMessageType.TypeSticker}
+                                        seen={[CurrentChats.dmChatUser1.profileImage as string]}
+                                        sticker={stickerData}
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
 
-                <div ref={bottomRef} />
+                                {chat.type === ChatMessageType.TypeFirstMessage && (
+                                    <RightChatMessage
+                                        type={ChatMessageType.TypeSticker}
+                                        seen={[CurrentChats.dmChatUser1.profileImage as string]}
+                                        sticker={stickerData} // ✅ Default first message sticker
+                                        time={chat.time.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                    />
+                                )}
+                            </>
+                        )}
+                    <div ref={bottomRef} />
+                </div>
+            )):<div className={`flex flex-col gap-2`}>
+                  Select Any Chat from Left
             </div>
+            }
         </div>
     )
 }

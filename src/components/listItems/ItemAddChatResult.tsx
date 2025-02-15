@@ -2,15 +2,14 @@ import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material'
 import { Send } from '@mui/icons-material'
 import React from 'react'
 import UserModel from '../../models/user.model.ts'
-import AddChatsStore from '../../store/add.chats.store.ts'
+import useHomeChatsStore from '../../store/home.chats.store.ts'
 interface ItemAddChatResultProps {
     user: UserModel
     setDialogueState: React.Dispatch<boolean>
 }
 
 const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, setDialogueState }) => {
-    const dmChat = AddChatsStore.getState().dmChat
-
+    const dmChat= useHomeChatsStore((state) => state.dmChat)
     const handleNewChat = () => {
         dmChat(user)
         setDialogueState(false)
