@@ -14,20 +14,20 @@ type homeChatState = {
 type homeChatActions = {
     setHomeChats: () => void
     setChatDetails: (chatId: string) => void
-    dmChat: (dmUser:UserModel) => void
+    dmChat: (dmUser: UserModel) => void
 }
 
 const useHomeChatsStore = create<homeChatState & homeChatActions & { unsubscribe?: () => void }>()(
     devtools(
-        immer((set,get) => ({
+        immer((set, get) => ({
             homeChats: [],
             _chatDetails: null,
             unsubscribe: undefined,
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },
-            dmChat: (newChatUser:UserModel) => {
-                addChatsRepository.addChat(newChatUser,(chatId)=>{
+            dmChat: (newChatUser: UserModel) => {
+                addChatsRepository.addChat(newChatUser, (chatId) => {
                     if (!chatId) {
                         console.log('AddChat Repository')
                         return
@@ -38,15 +38,14 @@ const useHomeChatsStore = create<homeChatState & homeChatActions & { unsubscribe
                         }
                     })
                 })
-
             },
             setChatDetails: (chatId) => {
-                get().unsubscribe?.();
-                set({ _chatDetails: null });
+                get().unsubscribe?.()
+                set({ _chatDetails: null })
                 const unsubscribe = UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
-                    set({ _chatDetails: chat });
-                });
-                set({ unsubscribe });
+                    set({ _chatDetails: chat })
+                })
+                set({ unsubscribe })
             },
         }))
     )

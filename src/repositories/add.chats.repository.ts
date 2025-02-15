@@ -8,7 +8,6 @@ import AddNewChat from '../firebase/chats/AddNewChat.ts'
 import HomeStore from '../store/home.store.ts'
 
 class AddChatsRepository {
-
     static searchUsers(searchQuery: string) {
         const firestore = getFirestore()
         const loggedInUser = getAuth().currentUser

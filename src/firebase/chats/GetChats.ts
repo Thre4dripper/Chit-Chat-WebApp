@@ -1,4 +1,13 @@
-import { collection, doc, Firestore, query, or, where, getDoc,onSnapshot } from 'firebase/firestore'
+import {
+    collection,
+    doc,
+    Firestore,
+    query,
+    or,
+    where,
+    getDoc,
+    onSnapshot,
+} from 'firebase/firestore'
 import ChatModel from '../../models/user.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 
@@ -20,13 +29,19 @@ class GetChats {
                 where('dmChatUser2.username', '==', username)
             )
         )
-        return onSnapshot(chatQuery, (chatQuerySnapshot) => {
-            const ChatList: ChatModel[] = chatQuerySnapshot.docs.map((doc) => doc.data() as ChatModel);
-            onSuccess(ChatList);
-        }, (error) => {
-            console.error('Issue in getting chats', error);
-            onSuccess([]);
-        });
+        return onSnapshot(
+            chatQuery,
+            (chatQuerySnapshot) => {
+                const ChatList: ChatModel[] = chatQuerySnapshot.docs.map(
+                    (doc) => doc.data() as ChatModel
+                )
+                onSuccess(ChatList)
+            },
+            (error) => {
+                console.error('Issue in getting chats', error)
+                onSuccess([])
+            }
+        )
     }
 
     static getUserChatById(
@@ -55,28 +70,27 @@ class GetChats {
         chatId: string,
         onSuccess: (chat: ChatModel | null) => void
     ): () => void {
-        const ChatRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatId);
+        const ChatRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatId)
 
         // Listen for real-time updates
         const unsubscribe = onSnapshot(
             ChatRef,
             (doc) => {
                 if (doc.exists()) {
-                    onSuccess(doc.data() as ChatModel);
+                    onSuccess(doc.data() as ChatModel)
                 } else {
-                    onSuccess(null);
+                    onSuccess(null)
                 }
             },
             (error) => {
-                console.error('Error getting real-time document:', error);
-                onSuccess(null);
+                console.error('Error getting real-time document:', error)
+                onSuccess(null)
             }
-        );
+        )
 
         // Return unsubscribe function to stop listening when needed
-        return unsubscribe;
+        return unsubscribe
     }
-
 }
 
 export default GetChats

@@ -25,8 +25,6 @@ const useAddChatsStore = create<AddChatState & AddChatActions>()(
             setSearchedUsers: (users) => {
                 set({ searchedUsers: users, isLoading: false })
             },
-
-
         }))
     )
 )

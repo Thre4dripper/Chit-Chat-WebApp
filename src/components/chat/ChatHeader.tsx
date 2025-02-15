@@ -5,18 +5,14 @@ import React from 'react'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
 
 const ChatHeader: React.FC = () => {
-
-    const CurrentChats = useHomeChatsStore((state) => state._chatDetails);
+    const CurrentChats = useHomeChatsStore((state) => state._chatDetails)
 
     return (
         <div
             className={
                 'z-10 bg-slate-300 rounded-3xl shadow-slate-950/20 shadow-md flex flex-row px-4 pt-4 pb-2'
             }>
-            <CircularImage
-                image={CurrentChats?.dmChatUser2.profileImage as string}
-                size={48}
-            />
+            <CircularImage image={CurrentChats?.dmChatUser2.profileImage as string} size={48} />
             <div className={'mx-4 flex flex-col flex-auto justify-center'}>
                 <div className={'flex flex-row justify-between'}>
                     <span className={'text-black text-lg font-bold'}>

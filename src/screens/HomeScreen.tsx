@@ -11,7 +11,6 @@ import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import AddChatDialog from '../components/dialogs/AddChatDialog.tsx'
 import useHomeChatsStore from '../store/home.chats.store.ts'
 
-
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
@@ -21,7 +20,7 @@ const HomeScreen: React.FC = () => {
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
-    const chats= useHomeChatsStore((state)=>state.homeChats)
+    const chats = useHomeChatsStore((state) => state.homeChats)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {
@@ -31,9 +30,8 @@ const HomeScreen: React.FC = () => {
                 console.log('User is registered')
             } else {
                 // TODO Get chats
-                const callChat=useHomeChatsStore.getState().setHomeChats;
-                callChat();
-
+                const callChat = useHomeChatsStore.getState().setHomeChats
+                callChat()
             }
         })
     }, [checkUserRegistration, navigate])
@@ -78,7 +76,7 @@ const HomeScreen: React.FC = () => {
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 {showCompleteProfile ? (
                     <CompleteProfileFragment />
-                ) : chats.length===0 ? (
+                ) : chats.length === 0 ? (
                     <AddChatsFragment dialogState={dialogState} setDialogState={setDialogState} />
                 ) : (
                     <ChattingFragment />
