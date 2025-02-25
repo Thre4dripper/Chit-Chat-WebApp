@@ -70,10 +70,12 @@ const RightChatMessage: React.FC<ItemChatRightMsgProps> = ({
                         })}
                     </div>
                     <div className={'flex flex-col justify-center'}>
-                        <span className={'text-slate-400 font-bold text-xs'}>{time.toDate().toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        })}</span>
+                        <span className={'text-slate-400 font-bold text-xs'}>
+                            {time.toDate().toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                            })}
+                        </span>
                     </div>
                 </div>
             </div>

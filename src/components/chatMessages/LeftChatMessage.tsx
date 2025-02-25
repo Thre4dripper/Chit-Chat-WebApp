@@ -63,10 +63,12 @@ const LeftChatMessage: React.FC<ItemChatLeftMsgProps> = ({
                     </div>
                 )}
                 <div className={'flex justify-start my-2'}>
-                    <span className={'text-slate-400 font-bold text-xs'}>{time.toDate().toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    })}</span>
+                    <span className={'text-slate-400 font-bold text-xs'}>
+                        {time.toDate().toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        })}
+                    </span>
                 </div>
             </div>
         </div>

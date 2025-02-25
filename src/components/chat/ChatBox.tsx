@@ -7,7 +7,6 @@ import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 
 const ChatBox: React.FC = () => {
-
     const bottomRef = useRef<HTMLDivElement>(null)
 
     const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
