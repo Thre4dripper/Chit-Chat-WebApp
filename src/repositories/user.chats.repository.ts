@@ -9,8 +9,6 @@ import HomeChatModel from '../models/home.chat.model.ts'
 
 
 class UserChatsRepository {
-
-
     static getAllUserChats() {
         const firestore = getFirestore(firebaseApp)
 
@@ -20,44 +18,37 @@ class UserChatsRepository {
         }
 
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
-
             useHomeChatsStore.getState().homeChats = []
-            const newList:HomeChatModel[] =[];
-             userChats.forEach(chat => {
-                           newList.push(
-                               new HomeChatModel(chat.chatId,
-                                   ChatType.USER,
-                                   chat,
-                                   null,
-                                   chat.chatMessages[0].time||0
-                                   ))
-                     }
+            const newList: HomeChatModel[] = []
+            userChats.forEach((chat) => {
+                newList.push(
+                    new HomeChatModel(
+                        chat.chatId,
+                        ChatType.USER,
+                        chat,
+                        null,
+                        chat.chatMessages[0].time || 0
+                    )
                 )
-        //     sort them based on time stamp
+            })
+            //     sort them based on time stamp
 
             newList.sort((a, b) => {
                 return b.lastMessageTimestamp.toMillis() - a.lastMessageTimestamp.toMillis()
             })
-            useHomeChatsStore.setState({ homeChats: newList });
-
+            useHomeChatsStore.setState({ homeChats: newList })
         })
     }
-
-
-
 
     static getUserChatById(chatId: string, onSuccess: (chat: ChatModel | null) => void) {
         const firestore = getFirestore(firebaseApp)
         GetChats.getUserChatById(firestore, chatId, onSuccess)
     }
 
-    static getLiveUserChatById (chatId:string,
-                                chatModel:(chatModel:ChatModel|null)=>void ){
-        const firestore = getFirestore(firebaseApp);
-        return GetChats.getLiveUserChatById(firestore,chatId,chatModel)
+    static getLiveUserChatById(chatId: string, chatModel: (chatModel: ChatModel | null) => void) {
+        const firestore = getFirestore(firebaseApp)
+        return GetChats.getLiveUserChatById(firestore, chatId, chatModel)
     }
 }
-
-
 
 export default UserChatsRepository

@@ -23,8 +23,8 @@ const ItemChat: React.FC<ItemChatProps> = ({
     if (primaryText.length > 20) {
         primaryText = primaryText.substring(0, 24) + '...'
     }
-    const currentChat = useHomeChatsStore((state) => state._chatDetails);
-    const setCurrentChat = useHomeChatsStore((state) => state.setChatDetails);
+    const currentChat = useHomeChatsStore((state) => state._chatDetails)
+    const setCurrentChat = useHomeChatsStore((state) => state.setChatDetails)
 
     return (
         <div>

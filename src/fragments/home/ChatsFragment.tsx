@@ -121,7 +121,7 @@ const ChatsFragment: React.FC<{
                 )}
 
                 {/*Chats list*/}
-                {homeChats.length > 0?(
+                {homeChats.length > 0 ? (
                     <div>
                         <div className={'flex flex-col m-4'}>
                             <Typography className={'select-none'} color={'white'} variant={'h6'}>
@@ -129,46 +129,51 @@ const ChatsFragment: React.FC<{
                             </Typography>
                         </div>
                         <div className={'flex flex-col'}>
-                            { homeChats.map((chat) => {
-                                const unseenMessagesCount = chat.userChat?.chatMessages.filter(msg => msg.seenBy.length === 1).length;
-                             return (
-                                 <ItemChat
-                                     key={chat.id}
-                                     chatId={chat.id}
-                                     image={
-                                         chat.userChat?.dmChatUser1.username === user?.username
-                                             ? (chat.userChat?.dmChatUser2.profileImage as string)
-                                             : (chat.userChat?.dmChatUser1.profileImage as string)
-                                     }
-                                     primaryText={
-                                         chat.userChat?.dmChatUser1.username === user?.username
-                                             ? (chat.userChat?.dmChatUser2.username as string)
-                                             : (chat.userChat?.dmChatUser1.username as string)
-                                     }
-                                     secondaryText={chat.userChat?.chatMessages[0].text as string} // dummy message
-                                     time={chat.userChat?.chatMessages[0].time
-                                         .toDate()
-                                         .toLocaleTimeString('en-US', {
-                                             hour: '2-digit',
-                                             minute: '2-digit',
-                                             hour12: true,
-                                         }) as string} // dummy time
-                                     notification={unseenMessagesCount as number}
-
-                                 />
-                             )
-                        })}
-
-
+                            {homeChats.map((chat) => {
+                                const unseenMessagesCount = chat.userChat?.chatMessages.filter(
+                                    (msg) => msg.seenBy.length === 1
+                                ).length
+                                return (
+                                    <ItemChat
+                                        key={chat.id}
+                                        chatId={chat.id}
+                                        image={
+                                            chat.userChat?.dmChatUser1.username === user?.username
+                                                ? (chat.userChat?.dmChatUser2
+                                                      .profileImage as string)
+                                                : (chat.userChat?.dmChatUser1
+                                                      .profileImage as string)
+                                        }
+                                        primaryText={
+                                            chat.userChat?.dmChatUser1.username === user?.username
+                                                ? (chat.userChat?.dmChatUser2.username as string)
+                                                : (chat.userChat?.dmChatUser1.username as string)
+                                        }
+                                        secondaryText={
+                                            chat.userChat?.chatMessages[0].text as string
+                                        } // dummy message
+                                        time={
+                                            chat.userChat?.chatMessages[0].time
+                                                .toDate()
+                                                .toLocaleTimeString('en-US', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true,
+                                                }) as string
+                                        } // dummy time
+                                        notification={unseenMessagesCount as number}
+                                    />
+                                )
+                            })}
                         </div>
                     </div>
-                    ):(
+                ) : (
                     <div className={'flex justify-center items-center h-3/4'}>
                         <Typography color={'gray'} variant={'h6'}>
                             No chats found
                         </Typography>
                     </div>
-                    )}
+                )}
             </div>
         </div>
     )
