@@ -12,26 +12,24 @@ type homeChatState = {
 }
 type homeChatActions = {
     setHomeChats: () => void
-    dmChat: (dmUser:UserModel) => void
+    dmChat: (dmUser: UserModel) => void
 }
 
-const useHomeChatsStore = create<homeChatState & homeChatActions >()(
+const useHomeChatsStore = create<homeChatState & homeChatActions>()(
     devtools(
         immer((set) => ({
             homeChats: [],
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },
-            dmChat: (newChatUser:UserModel) => {
-                addChatsRepository.addChat(newChatUser,(chatId)=>{
+            dmChat: (newChatUser: UserModel) => {
+                addChatsRepository.addChat(newChatUser, (chatId) => {
                     if (!chatId) {
-                        console.log('AddChat Repository',set)
+                        console.log('AddChat Repository', set)
                         return
                     }
                     useChatDetailsStore.getState().setChatDetails(chatId)
-
                 })
-
             },
         }))
     )

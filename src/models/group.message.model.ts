@@ -3,7 +3,6 @@ import { GroupMessageType } from '../enums/GroupMessageType.ts'
 import { Timestamp } from '@firebase/firestore'
 
 class GroupMessageModel extends MessageModel {
-
     type: GroupMessageType
     from: string
 

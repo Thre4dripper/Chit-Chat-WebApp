@@ -17,21 +17,22 @@ class UserChatsRepository {
         }
 
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
-            const oldList=useHomeChatsStore.getState().homeChats
-            let updatedList= oldList;
-            updatedList = updatedList.filter(item => item.type !== ChatType.USER);
+            const oldList = useHomeChatsStore.getState().homeChats
+            let updatedList = oldList
+            updatedList = updatedList.filter((item) => item.type !== ChatType.USER)
             updatedList = [
                 ...updatedList,
-                ...userChats.map(chat =>
-                    new HomeChatModel(
-                        chat.chatId,
-                        ChatType.USER,
-                        chat,
-                        null,
-                        chat.chatMessages[0]?.time
-                    )
-                )
-            ];
+                ...userChats.map(
+                    (chat) =>
+                        new HomeChatModel(
+                            chat.chatId,
+                            ChatType.USER,
+                            chat,
+                            null,
+                            chat.chatMessages[0]?.time
+                        )
+                ),
+            ]
 
             //   tell me Here I have Done A sort in descending order as in android
             //   if You need to use reverse can I change it to increasing order here Just asking
@@ -40,7 +41,7 @@ class UserChatsRepository {
             })
             // Tell which one i choose
 
-            useHomeChatsStore.getState().homeChats=updatedList
+            useHomeChatsStore.getState().homeChats = updatedList
 
             // useHomeChatsStore.setState({ homeChats: updatedList })
         })
