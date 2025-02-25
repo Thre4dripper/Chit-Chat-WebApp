@@ -7,13 +7,12 @@ import { ChatType } from '../enums/ChatType.ts'
 import ChatModel from '../models/user.chat.model.ts'
 import HomeChatModel from '../models/home.chat.model.ts'
 
-
 class UserChatsRepository {
     static getAllUserChats() {
         const firestore = getFirestore(firebaseApp)
 
         const loggedInUser = useLocalStore.getState().username
-        if(!loggedInUser){
+        if (!loggedInUser) {
             return
         }
 

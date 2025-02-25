@@ -54,7 +54,7 @@ class AddNewChat {
             []
         )
 
-        const docRef = doc(firestore,FirestoreCollections.CHATS_COLLECTION,chatDocId)
+        const docRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatDocId)
         setDoc(docRef, data.toObject())
             .then(() => {
                 chatId(chatDocId)
