@@ -1,14 +1,9 @@
-import BaseModel from './base.model.ts'
+import MessageModel from './message.model.ts'
 import { ChatMessageType } from '../enums/ChatMessageType.ts'
 import { Timestamp } from '@firebase/firestore'
-class ChatMessageModel extends BaseModel {
-    id: string
+
+class ChatMessageModel extends MessageModel {
     type: ChatMessageType
-    text: string | null
-    image: string | null
-    sticker: number | null
-    time: Timestamp
-    seenBy: string[]
     from: string
     to: string
 
@@ -23,14 +18,8 @@ class ChatMessageModel extends BaseModel {
         from: string,
         to: string
     ) {
-        super()
-        this.id = id
+        super(id, text, image, sticker, time, seenBy)
         this.type = type
-        this.text = text
-        this.image = image
-        this.sticker = sticker
-        this.time = time
-        this.seenBy = seenBy
         this.from = from
         this.to = to
     }

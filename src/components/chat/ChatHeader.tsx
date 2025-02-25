@@ -2,12 +2,12 @@ import CircularImage from '../CircularImage.tsx'
 import { IconButton } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import React from 'react'
-import useHomeChatsStore from '../../store/home.chats.store.ts'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 
 const ChatHeader: React.FC = () => {
 
-    const CurrentChats = useHomeChatsStore((state) => state._chatDetails);
+    const CurrentChats = useChatDetailsStore((state) => state._chatDetails);
     const username= useLocalStore((state) => state.username)
     return (
         <div

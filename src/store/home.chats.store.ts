@@ -2,18 +2,16 @@ import HomeChatModel from '../models/home.chat.model.ts'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
-import ChatModel from '../models/user.chat.model.ts'
 import UserChatsRepository from '../repositories/user.chats.repository.ts'
 import addChatsRepository from '../repositories/add.chats.repository.ts'
 import UserModel from '../models/user.model.ts'
+import useChatDetailsStore from './chat.details.store.ts'
 
 type homeChatState = {
     homeChats: HomeChatModel[]
-    _chatDetails: ChatModel | null
 }
 type homeChatActions = {
     setHomeChats: () => void
-    setChatDetails: (chatId: string) => void
     dmChat: (dmUser:UserModel) => void
 }
 
@@ -21,29 +19,19 @@ const useHomeChatsStore = create<homeChatState & homeChatActions >()(
     devtools(
         immer((set) => ({
             homeChats: [],
-            _chatDetails: null,
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },
             dmChat: (newChatUser:UserModel) => {
                 addChatsRepository.addChat(newChatUser,(chatId)=>{
                     if (!chatId) {
-                        console.log('AddChat Repository')
+                        console.log('AddChat Repository',set)
                         return
                     }
-                    UserChatsRepository.getUserChatById(chatId, (chat) => {
-                        if (chat) {
-                            set({ _chatDetails: chat })
-                        }
-                    })
+                    useChatDetailsStore.getState().setChatDetails(chatId)
+
                 })
 
-            },
-            setChatDetails: (chatId) => {
-                set({ _chatDetails: null });
-                UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
-                    set({ _chatDetails: chat });
-                });
             },
         }))
     )

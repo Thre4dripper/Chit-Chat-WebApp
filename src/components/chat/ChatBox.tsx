@@ -3,14 +3,14 @@ import LeftChatMessage from '../chatMessages/LeftChatMessage.tsx'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import stickerData from '../../assets/stickers/hello_message.json'
 import RightChatMessage from '../chatMessages/RightChatMessage.tsx'
-import useHomeChatsStore from '../../store/home.chats.store.ts'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 
 const ChatBox: React.FC = () => {
 
     const bottomRef = useRef<HTMLDivElement>(null)
 
-    const CurrentChats = useHomeChatsStore((state) => state._chatDetails)
+    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
 
     const username = useLocalStore((state) => state.username)
 

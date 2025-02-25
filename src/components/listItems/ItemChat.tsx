@@ -1,7 +1,7 @@
 import { Divider, Typography } from '@mui/material'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
-import useHomeChatsStore from '../../store/home.chats.store.ts'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
 
 interface ItemChatProps {
     chatId: string
@@ -23,8 +23,8 @@ const ItemChat: React.FC<ItemChatProps> = ({
     if (primaryText.length > 20) {
         primaryText = primaryText.substring(0, 24) + '...'
     }
-    const currentChat = useHomeChatsStore((state) => state._chatDetails)
-    const setCurrentChat = useHomeChatsStore((state) => state.setChatDetails)
+    const currentChat = useChatDetailsStore((state)=>state._chatDetails)
+    const setCurrentChat = useChatDetailsStore((state) => state.setChatDetails)
 
     return (
         <div>
