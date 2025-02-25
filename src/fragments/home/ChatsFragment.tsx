@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar'
 import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
 import useLocalStore from '../../store/local.store.ts'
-import homeChatsStore from '../../store/home.chats.store.ts'
+import useHomeChatsStore from '../../store/home.chats.store.ts'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -19,7 +19,7 @@ const ChatsFragment: React.FC<{
     const { logout } = useAuthStore()
     const { user } = useHomeStore()
     const setUsername = useLocalStore((state) => state.setUsername)
-    const homeChats = homeChatsStore((state) => state.homeChats)
+    const homeChats = useHomeChatsStore((state) => state.homeChats)
 
     const logoutUser = async () => {
         await logout()

@@ -17,12 +17,11 @@ type homeChatActions = {
     dmChat: (dmUser:UserModel) => void
 }
 
-const useHomeChatsStore = create<homeChatState & homeChatActions & { unsubscribe?: () => void }>()(
+const useHomeChatsStore = create<homeChatState & homeChatActions >()(
     devtools(
-        immer((set,get) => ({
+        immer((set) => ({
             homeChats: [],
             _chatDetails: null,
-            unsubscribe: undefined,
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },
@@ -41,12 +40,10 @@ const useHomeChatsStore = create<homeChatState & homeChatActions & { unsubscribe
 
             },
             setChatDetails: (chatId) => {
-                get().unsubscribe?.();
                 set({ _chatDetails: null });
-                const unsubscribe = UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
+                UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
                     set({ _chatDetails: chat });
                 });
-                set({ unsubscribe });
             },
         }))
     )

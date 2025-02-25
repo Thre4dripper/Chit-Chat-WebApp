@@ -5,6 +5,7 @@ import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import MsgImage from './common/MsgImage.tsx'
 import MsgSticker from './common/MsgSticker.tsx'
 import { LottieOptions } from 'lottie-react'
+import { Timestamp } from '@firebase/firestore'
 
 interface ItemChatLeftMsgProps {
     type: ChatMessageType
@@ -12,7 +13,7 @@ interface ItemChatLeftMsgProps {
     message?: string
     image?: string
     sticker?: LottieOptions['animationData']
-    time: string
+    time: Timestamp
 }
 
 const LeftChatMessage: React.FC<ItemChatLeftMsgProps> = ({
@@ -62,7 +63,10 @@ const LeftChatMessage: React.FC<ItemChatLeftMsgProps> = ({
                     </div>
                 )}
                 <div className={'flex justify-start my-2'}>
-                    <span className={'text-slate-400 font-bold text-xs'}>{time}</span>
+                    <span className={'text-slate-400 font-bold text-xs'}>{time.toDate().toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    })}</span>
                 </div>
             </div>
         </div>

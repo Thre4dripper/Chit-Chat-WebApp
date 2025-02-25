@@ -1,4 +1,4 @@
-import { collection, doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
+import { doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
 import UserModel from '../../models/user.model.ts'
 import ChatUtils from '../../utils/ChatUtils.ts'
 import ChatModel, { DMChatUserModel } from '../../models/user.chat.model.ts'
@@ -54,14 +54,13 @@ class AddNewChat {
             []
         )
 
-        const chatCollection = collection(firestore, FirestoreCollections.CHATS_COLLECTION)
-
-        setDoc(doc(chatCollection, chatDocId), data.toObject())
+        const docRef = doc(firestore,FirestoreCollections.CHATS_COLLECTION,chatDocId)
+        setDoc(docRef, data.toObject())
             .then(() => {
                 chatId(chatDocId)
             })
-            .catch((error) => {
-                console.log('Error in Chat Document', error)
+            .catch((e) => {
+                console.log('Error in Chat Document', e)
                 chatId(null)
             })
     }

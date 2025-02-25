@@ -5,12 +5,9 @@ import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 class GetChats {
     static getAllUserChats(
         firestore: Firestore,
-        username: string | null,
+        username: string ,
         onSuccess: (chatList: ChatModel[]) => void
     ) {
-        if (!username) {
-            onSuccess([])
-        }
         const ChatCollection = collection(firestore, FirestoreCollections.CHATS_COLLECTION)
 
         const chatQuery = query(
@@ -54,11 +51,10 @@ class GetChats {
         firestore: Firestore,
         chatId: string,
         onSuccess: (chat: ChatModel | null) => void
-    ): () => void {
+    ) {
         const ChatRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatId);
 
-        // Listen for real-time updates
-        const unsubscribe = onSnapshot(
+         onSnapshot(
             ChatRef,
             (doc) => {
                 if (doc.exists()) {
@@ -73,8 +69,6 @@ class GetChats {
             }
         );
 
-        // Return unsubscribe function to stop listening when needed
-        return unsubscribe;
     }
 
 }
