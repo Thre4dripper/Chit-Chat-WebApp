@@ -30,7 +30,11 @@ const ChatBox: React.FC = () => {
                                 {chat.type === ChatMessageType.TypeText && (
                                     <LeftChatMessage
                                         type={ChatMessageType.TypeText}
-                                        profileImage={CurrentChats.dmChatUser2.username===username?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage}
+                                        profileImage={
+                                            CurrentChats.dmChatUser2.username === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        }
                                         message={chat.text as string}
                                         time={chat.time}
                                     />
@@ -39,7 +43,11 @@ const ChatBox: React.FC = () => {
                                 {chat.type === ChatMessageType.TypeImage && chat.image && (
                                     <LeftChatMessage
                                         type={ChatMessageType.TypeImage}
-                                        profileImage={CurrentChats.dmChatUser2.username===username?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage}
+                                        profileImage={
+                                            CurrentChats.dmChatUser2.username === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        }
                                         image={chat.image}
                                         time={chat.time}
                                     />
@@ -48,7 +56,11 @@ const ChatBox: React.FC = () => {
                                 {chat.type === ChatMessageType.TypeSticker && chat.sticker && (
                                     <LeftChatMessage
                                         type={ChatMessageType.TypeSticker}
-                                        profileImage={CurrentChats.dmChatUser2.username===username?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage}
+                                        profileImage={
+                                            CurrentChats.dmChatUser2.username === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        }
                                         sticker={stickerData}
                                         time={chat.time}
                                     />
@@ -57,7 +69,11 @@ const ChatBox: React.FC = () => {
                                 {chat.type === ChatMessageType.TypeFirstMessage && (
                                     <LeftChatMessage
                                         type={ChatMessageType.TypeSticker}
-                                        profileImage={CurrentChats.dmChatUser2.username===username?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage}
+                                        profileImage={
+                                            CurrentChats.dmChatUser2.username === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        }
                                         sticker={stickerData}
                                         time={chat.time}
                                     />
