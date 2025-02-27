@@ -39,11 +39,7 @@ class UserChatsRepository {
             updatedList.sort((a, b) => {
                 return b.lastMessageTimestamp.toMillis() - a.lastMessageTimestamp.toMillis()
             })
-            // Tell which one i choose
-
-            useHomeChatsStore.getState().homeChats = updatedList
-
-            // useHomeChatsStore.setState({ homeChats: updatedList })
+            useHomeChatsStore.setState({ homeChats: updatedList })
         })
     }
 
