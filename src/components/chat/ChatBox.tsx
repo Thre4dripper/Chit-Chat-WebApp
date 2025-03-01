@@ -27,14 +27,11 @@ const ChatBox: React.FC = () => {
                 'z-0 flex-1 bg-white overflow-y-scroll ' +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
             }>
-
             {CurrentChats && <ItemChatHelloMessage />}
-
 
             {CurrentChats ? (
                 [...CurrentChats.chatMessages].reverse().map((chat) => (
                     <div className={'flex gap-2'} key={chat.time.toMillis()}>
-
                         {chat.from !== username ? (
                             <>
                                 {chat.type === ChatMessageType.TypeText && (
@@ -77,7 +74,11 @@ const ChatBox: React.FC = () => {
                             <>
                                 {chat.type === ChatMessageType.TypeText && (
                                     <ItemChatTextRight
-                                        seen={chat.seenBy.map((item) => item===username ? CurrentChats.dmChatUser1.profileImage : CurrentChats.dmChatUser2.profileImage)}
+                                        seen={chat.seenBy.map((item) =>
+                                            item === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        )}
                                         message={chat.text as string}
                                         time={chat.time}
                                     />
@@ -85,7 +86,11 @@ const ChatBox: React.FC = () => {
 
                                 {chat.type === ChatMessageType.TypeImage && chat.image && (
                                     <ItemChatImageRight
-                                        seen={chat.seenBy.map((item) => item===username ? CurrentChats.dmChatUser1.profileImage : CurrentChats.dmChatUser2.profileImage)}
+                                        seen={chat.seenBy.map((item) =>
+                                            item === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        )}
                                         image={chat.image}
                                         time={chat.time}
                                     />
@@ -93,14 +98,16 @@ const ChatBox: React.FC = () => {
 
                                 {chat.type === ChatMessageType.TypeSticker && chat.sticker && (
                                     <ItemChatStickerRight
-                                        seen={chat.seenBy.map((item) => item===username ? CurrentChats.dmChatUser1.profileImage : CurrentChats.dmChatUser2.profileImage)}
+                                        seen={chat.seenBy.map((item) =>
+                                            item === username
+                                                ? CurrentChats.dmChatUser1.profileImage
+                                                : CurrentChats.dmChatUser2.profileImage
+                                        )}
                                         sticker={stickerData}
                                         time={chat.time}
                                     />
                                 )}
-
                             </>
-
                         )}
                         <div ref={bottomRef} />
                     </div>

@@ -5,12 +5,12 @@ import CircularImage from '../CircularImage.tsx'
 import { LottieOptions } from 'lottie-react'
 
 interface ItemChatStickerRightProps {
-    seen: string[],
+    seen: string[]
     sticker: LottieOptions['animationData']
     time: Timestamp
 }
 
-const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen,sticker, time }) => {
+const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, sticker, time }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',

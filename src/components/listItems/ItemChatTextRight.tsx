@@ -4,12 +4,12 @@ import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 
 interface ItemChatTextLeftProps {
-    seen: string[],
-    message:string
+    seen: string[]
+    message: string
     time: Timestamp
 }
 
-const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ seen,message, time }) => {
+const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ seen, message, time }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
