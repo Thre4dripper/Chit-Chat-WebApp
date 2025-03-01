@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { IconButton, TextareaAutosize } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SendIcon from '@mui/icons-material/Send'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
 
 const ChatInput: React.FC = () => {
     const [message, setMessage] = useState('')
@@ -13,7 +14,9 @@ const ChatInput: React.FC = () => {
             setMessage('')
         }
     }
-
+    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
+    if(!CurrentChats)
+        return <></>
     return (
         <div
             className={

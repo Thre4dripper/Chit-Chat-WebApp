@@ -17,11 +17,9 @@ class UserChatsRepository {
         }
 
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
-            const oldList = useHomeChatsStore.getState().homeChats
-            let updatedList = oldList
-            updatedList = updatedList.filter((item) => item.type !== ChatType.USER)
-            updatedList = [
-                ...updatedList,
+            const oldList = useHomeChatsStore.getState().homeChats.filter((item) => item.type !== ChatType.USER)
+            const newList=[
+                ...oldList,
                 ...userChats.map(
                     (chat) =>
                         new HomeChatModel(
@@ -36,10 +34,10 @@ class UserChatsRepository {
 
             //   tell me Here I have Done A sort in descending order as in android
             //   if You need to use reverse can I change it to increasing order here Just asking
-            updatedList.sort((a, b) => {
+            newList.sort((a, b) => {
                 return b.lastMessageTimestamp.toMillis() - a.lastMessageTimestamp.toMillis()
             })
-            useHomeChatsStore.setState({ homeChats: updatedList })
+            useHomeChatsStore.setState({ homeChats: newList })
         })
     }
 
