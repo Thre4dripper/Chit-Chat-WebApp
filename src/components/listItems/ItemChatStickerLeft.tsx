@@ -18,7 +18,7 @@ const ItemChatStickerLeft: React.FC<ItemChatStickerLeftProps> = ({
         hour: '2-digit',
         minute: '2-digit',
     })
-    console.log("sticker value from chat Box",sticker);
+    console.log('sticker value from chat Box', sticker)
     return (
         <>
             <div>

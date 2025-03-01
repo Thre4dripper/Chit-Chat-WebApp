@@ -56,17 +56,19 @@ const ChatBox: React.FC = () => {
                                     />
                                 )}
 
-                                {chat.type === ChatMessageType.TypeSticker && chat.sticker !== null && chat.sticker !== undefined  && (
-                                    <ItemChatStickerLeft
-                                        profileImage={
-                                            CurrentChats.dmChatUser2.username === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        }
-                                        sticker={chat.sticker}
-                                        time={chat.time}
-                                    />
-                                )}
+                                {chat.type === ChatMessageType.TypeSticker &&
+                                    chat.sticker !== null &&
+                                    chat.sticker !== undefined && (
+                                        <ItemChatStickerLeft
+                                            profileImage={
+                                                CurrentChats.dmChatUser2.username === username
+                                                    ? CurrentChats.dmChatUser1.profileImage
+                                                    : CurrentChats.dmChatUser2.profileImage
+                                            }
+                                            sticker={chat.sticker}
+                                            time={chat.time}
+                                        />
+                                    )}
                             </>
                         ) : (
                             <>
@@ -94,17 +96,19 @@ const ChatBox: React.FC = () => {
                                     />
                                 )}
 
-                                {chat.type === ChatMessageType.TypeSticker && chat.sticker !== null && chat.sticker !== undefined  && (
-                                    <ItemChatStickerRight
-                                        seen={chat.seenBy.map((item) =>
-                                            item === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        )}
-                                        sticker={chat.sticker}
-                                        time={chat.time}
-                                    />
-                                )}
+                                {chat.type === ChatMessageType.TypeSticker &&
+                                    chat.sticker !== null &&
+                                    chat.sticker !== undefined && (
+                                        <ItemChatStickerRight
+                                            seen={chat.seenBy.map((item) =>
+                                                item === username
+                                                    ? CurrentChats.dmChatUser1.profileImage
+                                                    : CurrentChats.dmChatUser2.profileImage
+                                            )}
+                                            sticker={chat.sticker}
+                                            time={chat.time}
+                                        />
+                                    )}
                             </>
                         )}
                         <div ref={bottomRef} />

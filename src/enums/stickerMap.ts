@@ -41,7 +41,6 @@ import assets39 from '../assets/stickers/sticker_yoda_2.json'
 import assets40 from '../assets/stickers/sticker_yoda_3.json'
 import assets41 from '../assets/stickers/sticker_yoda_4.json'
 
-
 const stickerMap: Record<number, any> = {
     0: assets0,
     1: assets1,
@@ -85,8 +84,8 @@ const stickerMap: Record<number, any> = {
     39: assets39,
     40: assets40,
     41: assets41,
-};
- const stickerValue=(sticker: number)=>{
+}
+const stickerValue = (sticker: number) => {
     return stickerMap[sticker] || null
 }
 export default stickerValue
