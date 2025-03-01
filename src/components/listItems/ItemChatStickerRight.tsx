@@ -2,11 +2,10 @@ import { Timestamp } from '@firebase/firestore'
 import MsgSticker from '../chatMessages/common/MsgSticker.tsx'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
-import { LottieOptions } from 'lottie-react'
-
+import stickerValue from '../../enums/stickerMap.ts'
 interface ItemChatStickerRightProps {
     seen: string[]
-    sticker: LottieOptions['animationData']
+    sticker: number
     time: Timestamp
 }
 
@@ -23,7 +22,7 @@ const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, stick
                         'max-w-[36rem] w-full ' +
                         'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl flex justify-end'
                     }>
-                    <MsgSticker stickerData={sticker ?? ''} />
+                    <MsgSticker stickerData={stickerValue(sticker) ?? ''} />
                 </div>
                 <div className={'flex justify-end'}>
                     <div className={'flex flex-row-reverse'}>

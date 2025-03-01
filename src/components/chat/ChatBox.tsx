@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
-import stickerData from '../../assets/stickers/hello_message.json'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import ItemChatTextLeft from '../listItems/ItemChatTextLeft.tsx'
@@ -57,14 +56,14 @@ const ChatBox: React.FC = () => {
                                     />
                                 )}
 
-                                {chat.type === ChatMessageType.TypeSticker && chat.sticker && (
+                                {chat.type === ChatMessageType.TypeSticker && chat.sticker !== null && chat.sticker !== undefined  && (
                                     <ItemChatStickerLeft
                                         profileImage={
                                             CurrentChats.dmChatUser2.username === username
                                                 ? CurrentChats.dmChatUser1.profileImage
                                                 : CurrentChats.dmChatUser2.profileImage
                                         }
-                                        sticker={stickerData}
+                                        sticker={chat.sticker}
                                         time={chat.time}
                                     />
                                 )}
@@ -95,14 +94,14 @@ const ChatBox: React.FC = () => {
                                     />
                                 )}
 
-                                {chat.type === ChatMessageType.TypeSticker && chat.sticker && (
+                                {chat.type === ChatMessageType.TypeSticker && chat.sticker !== null && chat.sticker !== undefined  && (
                                     <ItemChatStickerRight
                                         seen={chat.seenBy.map((item) =>
                                             item === username
                                                 ? CurrentChats.dmChatUser1.profileImage
                                                 : CurrentChats.dmChatUser2.profileImage
                                         )}
-                                        sticker={stickerData}
+                                        sticker={chat.sticker}
                                         time={chat.time}
                                     />
                                 )}
