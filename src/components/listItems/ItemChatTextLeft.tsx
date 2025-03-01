@@ -1,15 +1,15 @@
 import { Timestamp } from '@firebase/firestore'
-import MsgImage from '../chatMessages/common/MsgImage.tsx'
+import MsgText from '../chatMessages/common/MsgText.tsx'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 
-interface ItemChatImageLeftProps {
+interface ItemChatTextLeftProps {
     profileImage: string,
-    image: string,
+    message:string
     time: Timestamp
 }
 
-const ItemChatImageLeft: React.FC<ItemChatImageLeftProps> = ({ profileImage,image, time }) => {
+const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage,message, time }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -28,7 +28,7 @@ const ItemChatImageLeft: React.FC<ItemChatImageLeftProps> = ({ profileImage,imag
                         'min-w-[16rem] max-w-[36rem] w-full ' +
                         'rounded-tl-3xl rounded-bl-lg rounded-br-3xl rounded-tr-3xl overflow-hidden'
                     }>
-                    <MsgImage image={image ?? ''} />
+                    <MsgText message={message ?? ''} className={'text-black/80'} />
                 </div>
                 <div className={'flex justify-start my-2'}>
                     <span className={'text-slate-400 font-bold text-xs'}>{FormatedTime}</span>
@@ -37,4 +37,4 @@ const ItemChatImageLeft: React.FC<ItemChatImageLeftProps> = ({ profileImage,imag
         </>
     )
 }
-export default ItemChatImageLeft
+export default ItemChatTextLeft

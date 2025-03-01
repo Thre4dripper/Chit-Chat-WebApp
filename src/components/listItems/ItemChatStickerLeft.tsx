@@ -1,20 +1,19 @@
 import { Timestamp } from '@firebase/firestore'
-import MsgImage from '../chatMessages/common/MsgImage.tsx'
+import MsgSticker from '../chatMessages/common/MsgSticker.tsx'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
-
-interface ItemChatImageLeftProps {
+import { LottieOptions } from 'lottie-react'
+interface ItemChatStickerLeftProps {
     profileImage: string,
-    image: string,
+    sticker: LottieOptions['animationData']
     time: Timestamp
 }
 
-const ItemChatImageLeft: React.FC<ItemChatImageLeftProps> = ({ profileImage,image, time }) => {
+const ItemChatStickerLeft: React.FC<ItemChatStickerLeftProps> = ({ profileImage,sticker, time }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
     })
-    const leftMessageColor = '#DAE2FF'
     return (
         <>
             <div>
@@ -22,13 +21,11 @@ const ItemChatImageLeft: React.FC<ItemChatImageLeftProps> = ({ profileImage,imag
             </div>
             <div>
                 <div
-                    style={{ backgroundColor: leftMessageColor }}
                     className={
-                        'shadow-slate-950/20 shadow-md ' +
-                        'min-w-[16rem] max-w-[36rem] w-full ' +
-                        'rounded-tl-3xl rounded-bl-lg rounded-br-3xl rounded-tr-3xl overflow-hidden'
+                        'max-w-[36rem] w-full ' +
+                        'rounded-tl-3xl rounded-bl-lg rounded-br-3xl rounded-tr-3xl'
                     }>
-                    <MsgImage image={image ?? ''} />
+                    <MsgSticker stickerData={sticker ?? ''} />
                 </div>
                 <div className={'flex justify-start my-2'}>
                     <span className={'text-slate-400 font-bold text-xs'}>{FormatedTime}</span>
@@ -37,4 +34,4 @@ const ItemChatImageLeft: React.FC<ItemChatImageLeftProps> = ({ profileImage,imag
         </>
     )
 }
-export default ItemChatImageLeft
+export default ItemChatStickerLeft

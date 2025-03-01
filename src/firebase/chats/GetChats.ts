@@ -26,7 +26,7 @@ class GetChats {
                 where('dmChatUser2.username', '==', username)
             )
         )
-        return onSnapshot(
+        onSnapshot(
             chatQuery,
             (chatQuerySnapshot) => {
                 const ChatList: ChatModel[] = chatQuerySnapshot.docs.map(
