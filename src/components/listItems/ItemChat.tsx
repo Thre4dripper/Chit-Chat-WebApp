@@ -28,7 +28,7 @@ const ItemChat: React.FC<ItemChatProps> = ({
 
     return (
         <div>
-            <div
+            <button
                 onClick={() => setCurrentChat(chatId)}
                 className={`${currentChat?.chatId === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
                 <CircularImage image={image} size={48} />
@@ -56,7 +56,7 @@ const ItemChat: React.FC<ItemChatProps> = ({
                         </div>
                     </div>
                 </div>
-            </div>
+            </button>
             {/*Separator*/}
             <div className={'flex justify-end'}>
                 <Divider className={'bg-white/20 w-4/5'} />
