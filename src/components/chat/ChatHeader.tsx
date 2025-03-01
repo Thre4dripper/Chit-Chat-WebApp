@@ -8,8 +8,7 @@ import useLocalStore from '../../store/local.store.ts'
 const ChatHeader: React.FC = () => {
     const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
     const username = useLocalStore((state) => state.username)
-    if(!CurrentChats)
-        return <></>
+    if (!CurrentChats) return <></>
     return (
         <div
             className={

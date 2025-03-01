@@ -17,8 +17,10 @@ class UserChatsRepository {
         }
 
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
-            const oldList = useHomeChatsStore.getState().homeChats.filter((item) => item.type !== ChatType.USER)
-            const newList=[
+            const oldList = useHomeChatsStore
+                .getState()
+                .homeChats.filter((item) => item.type !== ChatType.USER)
+            const newList = [
                 ...oldList,
                 ...userChats.map(
                     (chat) =>

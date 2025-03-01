@@ -15,8 +15,7 @@ const ChatInput: React.FC = () => {
         }
     }
     const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
-    if(!CurrentChats)
-        return <></>
+    if (!CurrentChats) return <></>
     return (
         <div
             className={
