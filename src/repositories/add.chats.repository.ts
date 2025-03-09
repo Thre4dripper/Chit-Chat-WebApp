@@ -29,7 +29,7 @@ class AddChatsRepository {
 
         ChatUtils.checkIfUserChatExists(
             firestore,
-            currentUser?.uid,
+            currentUser.uid,
             newChatUser.uid,
             (existingChatId) => {
                 if (existingChatId) {

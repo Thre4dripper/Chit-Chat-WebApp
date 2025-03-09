@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar'
 import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
 import useLocalStore from '../../store/local.store.ts'
-import AddChatsStore from '../../store/add.chats.store.ts'
+import useHomeChatsStore from '../../store/home.chats.store.ts'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -19,13 +19,13 @@ const ChatsFragment: React.FC<{
     const { logout } = useAuthStore()
     const { user } = useHomeStore()
     const setUsername = useLocalStore((state) => state.setUsername)
+    const homeChats = useHomeChatsStore((state) => state.homeChats)
 
     const logoutUser = async () => {
         await logout()
         setUsername(null)
     }
 
-    const chats = AddChatsStore((state) => state.UserChats)
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
@@ -121,7 +121,7 @@ const ChatsFragment: React.FC<{
                 )}
 
                 {/*Chats list*/}
-                {chats.length > 0 ? (
+                {homeChats.length > 0 ? (
                     <div>
                         <div className={'flex flex-col m-4'}>
                             <Typography className={'select-none'} color={'white'} variant={'h6'}>
@@ -129,37 +129,48 @@ const ChatsFragment: React.FC<{
                             </Typography>
                         </div>
                         <div className={'flex flex-col'}>
-                            {chats.map((item) => (
-                                <ItemChat
-                                    key={item.chatId}
-                                    chatId={item.chatId}
-                                    image={
-                                        item.dmChatUser2.username == user?.username
-                                            ? item.dmChatUser1.profileImage
-                                            : item.dmChatUser2.profileImage
-                                    }
-                                    primaryText={
-                                        item.dmChatUser2.username == user?.username
-                                            ? item.dmChatUser1.username
-                                            : item.dmChatUser2.username
-                                    }
-                                    secondaryText={item.chatMessages[0].text ?? 'blank'}
-                                    time={item.chatMessages[0].time
-                                        .toDate()
-                                        .toLocaleTimeString('en-US', {
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            hour12: true,
-                                        })}
-                                    notification={item.chatMessages.length}
-                                />
-                            ))}
+                            {homeChats.map((chat) => {
+                                const unseenMessagesCount = chat.userChat?.chatMessages.filter(
+                                    (msg) => msg.seenBy.length === 1
+                                ).length
+                                return (
+                                    <ItemChat
+                                        key={chat.id}
+                                        chatId={chat.id}
+                                        image={
+                                            chat.userChat?.dmChatUser1.username === user?.username
+                                                ? (chat.userChat?.dmChatUser2
+                                                      .profileImage as string)
+                                                : (chat.userChat?.dmChatUser1
+                                                      .profileImage as string)
+                                        }
+                                        primaryText={
+                                            chat.userChat?.dmChatUser1.username === user?.username
+                                                ? (chat.userChat?.dmChatUser2.username as string)
+                                                : (chat.userChat?.dmChatUser1.username as string)
+                                        }
+                                        secondaryText={
+                                            chat.userChat?.chatMessages[0].text as string
+                                        } // dummy message
+                                        time={
+                                            chat.userChat?.chatMessages[0].time
+                                                .toDate()
+                                                .toLocaleTimeString('en-US', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true,
+                                                }) as string
+                                        } // dummy time
+                                        notification={unseenMessagesCount as number}
+                                    />
+                                )
+                            })}
                         </div>
                     </div>
                 ) : (
-                    <div className={'flex flex-col m-4'}>
-                        <Typography className={'select-none'} color={'white'} variant={'h6'}>
-                            No chats
+                    <div className={'flex justify-center items-center h-3/4'}>
+                        <Typography color={'gray'} variant={'h6'}>
+                            No chats found
                         </Typography>
                     </div>
                 )}

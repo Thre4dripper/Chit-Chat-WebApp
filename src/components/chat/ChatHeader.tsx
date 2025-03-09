@@ -1,14 +1,14 @@
 import CircularImage from '../CircularImage.tsx'
 import { IconButton } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import React, { useEffect } from 'react'
-import AddChatsStore from '../../store/add.chats.store.ts'
-import LocalStore from '../../store/local.store.ts'
+import React from 'react'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useLocalStore from '../../store/local.store.ts'
 
 const ChatHeader: React.FC = () => {
-    const chat = AddChatsStore((state) => state.chatById)
-    const username = LocalStore.getState().username
-    useEffect(() => {}, [chat])
+    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
+    const username = useLocalStore((state) => state.username)
+    if (!CurrentChats) return <></>
     return (
         <div
             className={
@@ -16,18 +16,18 @@ const ChatHeader: React.FC = () => {
             }>
             <CircularImage
                 image={
-                    chat
-                        ? chat.dmChatUser1.username === username
-                            ? chat.dmChatUser2.profileImage
-                            : chat.dmChatUser1.profileImage
-                        : 'https://i.pravatar.cc/300'
+                    CurrentChats?.dmChatUser2.username === username
+                        ? CurrentChats?.dmChatUser1.profileImage
+                        : (CurrentChats?.dmChatUser2.profileImage as string)
                 }
                 size={48}
             />
             <div className={'mx-4 flex flex-col flex-auto justify-center'}>
                 <div className={'flex flex-row justify-between'}>
                     <span className={'text-black text-lg font-bold'}>
-                        {chat?.dmChatUser2.username}
+                        {CurrentChats?.dmChatUser2.username === username
+                            ? CurrentChats?.dmChatUser1.username
+                            : CurrentChats?.dmChatUser2.username}
                     </span>
                 </div>
                 <div className={'flex flex-row justify-between'}>

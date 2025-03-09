@@ -1,16 +1,22 @@
-import { collection, doc, Firestore, query, or, where, getDocs, getDoc } from 'firebase/firestore'
+import {
+    collection,
+    doc,
+    Firestore,
+    query,
+    or,
+    where,
+    getDoc,
+    onSnapshot,
+} from 'firebase/firestore'
 import ChatModel from '../../models/user.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 
 class GetChats {
     static getAllUserChats(
         firestore: Firestore,
-        username: string | null,
+        username: string,
         onSuccess: (chatList: ChatModel[]) => void
     ) {
-        if (!username) {
-            onSuccess([])
-        }
         const ChatCollection = collection(firestore, FirestoreCollections.CHATS_COLLECTION)
 
         const chatQuery = query(
@@ -20,19 +26,19 @@ class GetChats {
                 where('dmChatUser2.username', '==', username)
             )
         )
-        getDocs(chatQuery)
-            .then((chatQuerySnapshot) => {
-                const ChatList: ChatModel[] = []
-                for (const doc of chatQuerySnapshot.docs) {
-                    const chat = doc.data() as ChatModel
-                    ChatList.push(chat)
-                }
+        onSnapshot(
+            chatQuery,
+            (chatQuerySnapshot) => {
+                const ChatList: ChatModel[] = chatQuerySnapshot.docs.map(
+                    (doc) => doc.data() as ChatModel
+                )
                 onSuccess(ChatList)
-            })
-            .catch((error) => {
-                console.log('Issue in getting a Chats', error)
+            },
+            (error) => {
+                console.error('Issue in getting chats', error)
                 onSuccess([])
-            })
+            }
+        )
     }
 
     static getUserChatById(
@@ -45,7 +51,6 @@ class GetChats {
         getDoc(ChatRef)
             .then((doc) => {
                 if (doc.exists()) {
-                    console.log(doc)
                     onSuccess(doc.data() as ChatModel)
                 } else {
                     onSuccess(null)
@@ -55,6 +60,29 @@ class GetChats {
                 console.error('Error getting document:', error)
                 onSuccess(null)
             })
+    }
+
+    static getLiveUserChatById(
+        firestore: Firestore,
+        chatId: string,
+        onSuccess: (chat: ChatModel | null) => void
+    ) {
+        const ChatRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatId)
+
+        onSnapshot(
+            ChatRef,
+            (doc) => {
+                if (doc.exists()) {
+                    onSuccess(doc.data() as ChatModel)
+                } else {
+                    onSuccess(null)
+                }
+            },
+            (error) => {
+                console.error('Error getting real-time document:', error)
+                onSuccess(null)
+            }
+        )
     }
 }
 
