@@ -6,6 +6,7 @@ import useLocalStore from '../store/local.store.ts'
 import { ChatType } from '../enums/ChatType.ts'
 import ChatModel from '../models/user.chat.model.ts'
 import HomeChatModel from '../models/home.chat.model.ts'
+import SendChat from '../firebase/chats/SendChat.ts'
 
 class UserChatsRepository {
     static getAllUserChats() {
@@ -34,8 +35,6 @@ class UserChatsRepository {
                 ),
             ]
 
-            //   tell me Here I have Done A sort in descending order as in android
-            //   if You need to use reverse can I change it to increasing order here Just asking
             newList.sort((a, b) => {
                 return b.lastMessageTimestamp.toMillis() - a.lastMessageTimestamp.toMillis()
             })
@@ -51,6 +50,16 @@ class UserChatsRepository {
     static getLiveUserChatById(chatId: string, chatModel: (chatModel: ChatModel | null) => void) {
         const firestore = getFirestore(firebaseApp)
         return GetChats.getLiveUserChatById(firestore, chatId, chatModel)
+    }
+    static sendTextMessage(
+            chatModel: ChatModel,
+            text: string,
+            from: string,
+            to: string,
+            chatMessageId: (id: string | null) => void
+    ) {
+        const firestore = getFirestore(firebaseApp)
+        SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)
     }
 }
 

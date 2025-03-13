@@ -24,12 +24,12 @@ const ItemChat: React.FC<ItemChatProps> = ({
         primaryText = primaryText.substring(0, 24) + '...'
     }
     const currentChat = useChatDetailsStore((state) => state._chatDetails)
-    const setCurrentChat = useChatDetailsStore((state) => state.setChatDetails)
-
+    // const setCurrentChat = useChatDetailsStore((state) => state.setChatDetails)
+    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
     return (
         <div>
             <button
-                onClick={() => setCurrentChat(chatId)}
+                onClick={() => setCurrentChatId(chatId)}
                 className={`${currentChat?.chatId === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
                 <CircularImage image={image} size={48} />
                 <div className={'flex flex-col flex-auto justify-center'}>
