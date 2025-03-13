@@ -18,9 +18,7 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, messa
     return (
         <>
             <div>
-
-                    <CircularImage image={profileImage} size={28} alt={'Profile image'} />
-
+                <CircularImage image={profileImage} size={28} alt={'Profile image'} />
             </div>
             <div>
                 <div
