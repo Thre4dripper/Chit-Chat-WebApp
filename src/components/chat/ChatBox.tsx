@@ -34,7 +34,9 @@ const ChatBox: React.FC = () => {
                             <>
                                 {chat.type === ChatMessageType.TypeText && (
                                     <ItemChatTextLeft
-                                        profileImage={chat.seenBy}
+                                        profileImage={CurrentChats.dmChatUser2.username === username
+                                            ? CurrentChats.dmChatUser1.profileImage
+                                            : CurrentChats.dmChatUser2.profileImage}
                                         message={chat.text as string}
                                         time={chat.time}
                                     />
@@ -70,11 +72,7 @@ const ChatBox: React.FC = () => {
                             <>
                                 {chat.type === ChatMessageType.TypeText && (
                                     <ItemChatTextRight
-                                        seen={chat.seenBy.map((item) =>
-                                            item === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        )}
+                                        seen={chat.seenBy.map((item) => CurrentChats.dmChatUser1.username===item?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage)}
                                         message={chat.text as string}
                                         time={chat.time}
                                     />
@@ -82,11 +80,7 @@ const ChatBox: React.FC = () => {
 
                                 {chat.type === ChatMessageType.TypeImage && chat.image && (
                                     <ItemChatImageRight
-                                        seen={chat.seenBy.map((item) =>
-                                            item === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        )}
+                                        seen={chat.seenBy.map((item) => CurrentChats.dmChatUser1.username===item?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage)}
                                         image={chat.image}
                                         time={chat.time}
                                     />
@@ -96,11 +90,7 @@ const ChatBox: React.FC = () => {
                                     chat.sticker !== null &&
                                     chat.sticker !== undefined && (
                                         <ItemChatStickerRight
-                                            seen={chat.seenBy.map((item) =>
-                                                item === username
-                                                    ? CurrentChats.dmChatUser1.profileImage
-                                                    : CurrentChats.dmChatUser2.profileImage
-                                            )}
+                                            seen={chat.seenBy.map((item) => CurrentChats.dmChatUser1.username===item?CurrentChats.dmChatUser1.profileImage:CurrentChats.dmChatUser2.profileImage)}
                                             sticker={chat.sticker}
                                             time={chat.time}
                                         />
