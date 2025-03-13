@@ -18,18 +18,11 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, messa
     return (
         <>
             <div>
-
-                      <div className={'flex gap-2'}>
-                            {
-                                profileImage.map((image, index) => (
-                                    <CircularImage key={index} image={image} size={28} alt={'Profile image'} />
-                                ))
-                            }
-                        </div>
-
-
-
-
+                <div className={'flex gap-2'}>
+                    {profileImage.map((image, index) => (
+                        <CircularImage key={index} image={image} size={28} alt={'Profile image'} />
+                    ))}
+                </div>
             </div>
             <div>
                 <div
