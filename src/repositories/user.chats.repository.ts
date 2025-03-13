@@ -52,11 +52,11 @@ class UserChatsRepository {
         return GetChats.getLiveUserChatById(firestore, chatId, chatModel)
     }
     static sendTextMessage(
-            chatModel: ChatModel,
-            text: string,
-            from: string,
-            to: string,
-            chatMessageId: (id: string | null) => void
+        chatModel: ChatModel,
+        text: string,
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)

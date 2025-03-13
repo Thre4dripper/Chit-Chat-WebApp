@@ -3,8 +3,7 @@ import ChatMessageModel from '../../models/chat.message.model.ts'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import { v4 as uuidv4 } from 'uuid'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
-import { doc, Firestore, setDoc,Timestamp } from 'firebase/firestore'
-
+import { doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
 
 class SendChat {
     static async sendTextMessage(
@@ -35,7 +34,6 @@ class SendChat {
 
         // Update chat model
         const updatedChatModel = { ...chatModel, chatMessages: newMessagesList }
-
 
         const docRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatModel.chatId)
 
