@@ -20,6 +20,10 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
             currentChatId: null,
             _chatDetails: null,
             setChatDetails: (chatId) => {
+                const currentChatId = useChatDetailsStore.getState().currentChatId;
+
+                // Only update chat details if the chat is currently open
+                if (currentChatId === chatId)
                 UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
                     set({ _chatDetails: chat })
                 })

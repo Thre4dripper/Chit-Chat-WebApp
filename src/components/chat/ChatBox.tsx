@@ -34,11 +34,7 @@ const ChatBox: React.FC = () => {
                             <>
                                 {chat.type === ChatMessageType.TypeText && (
                                     <ItemChatTextLeft
-                                        profileImage={
-                                            CurrentChats.dmChatUser2.username === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        }
+                                        profileImage={chat.seenBy}
                                         message={chat.text as string}
                                         time={chat.time}
                                     />

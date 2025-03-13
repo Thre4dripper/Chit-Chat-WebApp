@@ -4,7 +4,7 @@ import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 
 interface ItemChatTextLeftProps {
-    profileImage: string
+    profileImage: string[]
     message: string
     time: Timestamp
 }
@@ -18,7 +18,18 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, messa
     return (
         <>
             <div>
-                <CircularImage image={profileImage} size={28} alt={'Profile image'} />
+
+                      <div className={'flex gap-2'}>
+                            {
+                                profileImage.map((image, index) => (
+                                    <CircularImage key={index} image={image} size={28} alt={'Profile image'} />
+                                ))
+                            }
+                        </div>
+
+
+
+
             </div>
             <div>
                 <div
