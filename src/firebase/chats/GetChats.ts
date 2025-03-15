@@ -69,20 +69,23 @@ class GetChats {
     ) {
         const ChatRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatId)
 
-        onSnapshot(
+        const unsubscribe = onSnapshot(
             ChatRef,
             (doc) => {
                 if (doc.exists()) {
-                    onSuccess(doc.data() as ChatModel)
+                    onSuccess(doc.data() as ChatModel);
                 } else {
-                    onSuccess(null)
+                    onSuccess(null);
                 }
             },
             (error) => {
-                console.error('Error getting real-time document:', error)
-                onSuccess(null)
+                console.error("Error getting real-time document:", error);
+                onSuccess(null);
             }
-        )
+        );
+
+        return unsubscribe; // Return the function to stop listening when needed
+
     }
 }
 
