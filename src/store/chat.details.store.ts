@@ -20,14 +20,14 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
             currentChatId: null,
             _chatDetails: null,
             setChatDetails: (chatId) => {
-                    UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
-                        set((state) => {
-                            // Ensure that updates only happen for the active chat
-                            if (state.currentChatId === chatId) {
-                                state._chatDetails = chat;
-                            }
-                        });
+                UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
+                    set((state) => {
+                        // Ensure that updates only happen for the active chat
+                        if (state.currentChatId === chatId) {
+                            state._chatDetails = chat
+                        }
                     })
+                })
             },
             setCurrentChatId: (chatId) => {
                 set({ currentChatId: chatId })

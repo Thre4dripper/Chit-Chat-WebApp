@@ -27,7 +27,6 @@ const ItemChat: React.FC<ItemChatProps> = ({
     // const setCurrentChat = useChatDetailsStore((state) => state.setChatDetails)
     const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
 
-
     return (
         <div>
             <button
@@ -46,7 +45,9 @@ const ItemChat: React.FC<ItemChatProps> = ({
                     </div>
                     <div className={'flex flex-row justify-between'}>
                         <Typography variant={'subtitle2'} color={'gray'}>
-                            {secondaryText.length>=30?secondaryText.slice(0,20)+'...':secondaryText}
+                            {secondaryText.length >= 30
+                                ? secondaryText.slice(0, 20) + '...'
+                                : secondaryText}
                         </Typography>
                         <div className={'flex flex-row justify-center items-center'}>
                             <div
