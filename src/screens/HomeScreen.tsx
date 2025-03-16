@@ -31,12 +31,8 @@ const HomeScreen: React.FC = () => {
             } else {
                 // TODO Get chats
                 useHomeChatsStore.getState().setHomeChats()
-
-
             }
         })
-
-
     }, [checkUserRegistration, navigate])
 
     useEffect(() => {

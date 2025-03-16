@@ -21,7 +21,7 @@ class UpdateSeen {
         })
         const DocRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatModel.chatId)
 
-        setDoc(DocRef,{ chatMessages: newMessagesList }, { merge: true })
+        setDoc(DocRef, { chatMessages: newMessagesList }, { merge: true })
             .then(() => {
                 onSuccess(true)
             })

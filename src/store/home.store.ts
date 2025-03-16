@@ -51,7 +51,6 @@ const useHomeStore = create<HomeState & HomeActions>()(
                 set({ isLoading: true })
                 set({ isSuccess: null })
 
-
                 HomeRepository.checkCompleteRegistration(() => {
                     //init user details everytime even if the user is not completely registered
                     //it will handle it inside the function

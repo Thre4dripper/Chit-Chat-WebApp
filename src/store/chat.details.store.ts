@@ -9,7 +9,7 @@ type chatDetailsState = {
     chatDetails: ChatModel | null
 }
 type chatDetailsActions = {
-    updateSeen: (chat:ChatModel|null) =>void
+    updateSeen: (chat: ChatModel | null) => void
     setChatDetails: (chatId: string) => void
     sendTextMessage: (chatModel: ChatModel, text: string, from: string, to: string) => void
     setCurrentChatId: (chatId: string) => void

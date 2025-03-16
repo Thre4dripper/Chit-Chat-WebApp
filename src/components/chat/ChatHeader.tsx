@@ -18,7 +18,7 @@ const ChatHeader: React.FC = () => {
                 image={
                     currentChat?.dmChatUser2.username === username
                         ? currentChat?.dmChatUser1.profileImage
-                        : (currentChat?.dmChatUser2.profileImage)
+                        : currentChat?.dmChatUser2.profileImage
                 }
                 size={48}
             />
