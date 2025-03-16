@@ -1,6 +1,7 @@
 import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
+import ChatIcon from '@mui/icons-material/Chat'
 import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
@@ -9,20 +10,23 @@ import Avatar from '@mui/material/Avatar'
 import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
 import useLocalStore from '../../store/local.store.ts'
+import useHomeChatsStore from '../../store/home.chats.store.ts'
 
-const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boolean>> }> = ({
-    openProfile,
-}) => {
+const ChatsFragment: React.FC<{
+    openProfile: React.Dispatch<SetStateAction<boolean>>
+    setDialogState: React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState }) => {
     const { logout } = useAuthStore()
     const { user } = useHomeStore()
     const setUsername = useLocalStore((state) => state.setUsername)
+    const homeChats = useHomeChatsStore((state) => state.homeChats)
 
     const logoutUser = async () => {
         await logout()
         setUsername(null)
+        useHomeChatsStore.setState({ homeChats: [] })
     }
 
-    const chats: number[] = []
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
@@ -32,7 +36,13 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                         {GlobalConstants.APP_NAME}
                     </Typography>
                 </div>
+
                 <div className={'flex-1'} />
+                <div className={'flex flex-col justify-center'}>
+                    <IconButton onClick={() => setDialogState(true)}>
+                        <ChatIcon className={'text-white'} />
+                    </IconButton>
+                </div>
                 <div className={'flex flex-col justify-center rounded-full'}>
                     <IconButton
                         onClick={() => {
@@ -112,7 +122,7 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                 )}
 
                 {/*Chats list*/}
-                {chats.length > 0 ? (
+                {homeChats.length > 0 ? (
                     <div>
                         <div className={'flex flex-col m-4'}>
                             <Typography className={'select-none'} color={'white'} variant={'h6'}>
@@ -120,22 +130,50 @@ const ChatsFragment: React.FC<{ openProfile: React.Dispatch<SetStateAction<boole
                             </Typography>
                         </div>
                         <div className={'flex flex-col'}>
-                            {chats.map((item) => (
-                                <ItemChat
-                                    key={item}
-                                    image={'https://i.pravatar.cc/300'}
-                                    primaryText={`Item ${item}`}
-                                    secondaryText={`Item ${item}`}
-                                    time={'10:00'}
-                                    notification={1}
-                                />
-                            ))}
+                            {homeChats.map((chat) => {
+                                const unseenMessagesCount = chat.userChat?.chatMessages.filter(
+                                    (msg) =>
+                                        msg.seenBy.filter((username) => username === user?.username)
+                                            .length === 0
+                                ).length
+                                return (
+                                    <ItemChat
+                                        key={chat.id}
+                                        chatId={chat.id}
+                                        image={
+                                            chat.userChat?.dmChatUser1.username === user?.username
+                                                ? (chat.userChat?.dmChatUser2
+                                                      .profileImage as string)
+                                                : (chat.userChat?.dmChatUser1
+                                                      .profileImage as string)
+                                        }
+                                        primaryText={
+                                            chat.userChat?.dmChatUser1.username === user?.username
+                                                ? (chat.userChat?.dmChatUser2.username as string)
+                                                : (chat.userChat?.dmChatUser1.username as string)
+                                        }
+                                        secondaryText={
+                                            chat.userChat?.chatMessages[0].text as string
+                                        } // dummy message
+                                        time={
+                                            chat.userChat?.chatMessages[0].time
+                                                .toDate()
+                                                .toLocaleTimeString('en-US', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true,
+                                                }) as string
+                                        } // dummy time
+                                        unseenMessageCount={unseenMessagesCount as number}
+                                    />
+                                )
+                            })}
                         </div>
                     </div>
                 ) : (
-                    <div className={'flex flex-col m-4'}>
-                        <Typography className={'select-none'} color={'white'} variant={'h6'}>
-                            No chats
+                    <div className={'flex justify-center items-center h-3/4'}>
+                        <Typography color={'gray'} variant={'h6'}>
+                            No chats found
                         </Typography>
                     </div>
                 )}

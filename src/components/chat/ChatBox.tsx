@@ -1,72 +1,137 @@
-import React, { useEffect, useRef } from 'react'
-import LeftChatMessage from '../chatMessages/LeftChatMessage.tsx'
+import React from 'react'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
-import stickerData from '../../assets/stickers/sticker_ghost_1.json'
-import RightChatMessage from '../chatMessages/RightChatMessage.tsx'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useLocalStore from '../../store/local.store.ts'
+import ItemChatTextLeft from '../listItems/ItemChatTextLeft.tsx'
+import ItemChatImageLeft from '../listItems/ItemChatImageLeft.tsx'
+import ItemChatStickerLeft from '../listItems/ItemChatStickerLeft.tsx'
+import ItemChatTextRight from '../listItems/ItemChatTextRight.tsx'
+import ItemChatImageRight from '../listItems/ItemChatImageRight.tsx'
+import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
+import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
+import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
+import ChatMessageModel from '../../models/chat.message.model.ts'
 
 const ChatBox: React.FC = () => {
-    // for scrolling to bottom
-    const bottomRef = useRef<HTMLDivElement>(null)
+    const currentChat = useChatDetailsStore((state) => state.chatDetails)
+    const username = useLocalStore((state) => state.username)
 
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [])
+    if (currentChat === null) {
+        return <EmptyChatFragment />
+    }
+
+    const TextMessage = ({ message }: { message: ChatMessageModel }) => {
+        if (message.from !== username) {
+            return (
+                <ItemChatTextLeft
+                    profileImage={
+                        currentChat.dmChatUser2.username === username
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    }
+                    message={message.text as string}
+                    time={message.time}
+                />
+            )
+        } else {
+            return (
+                <ItemChatTextRight
+                    seen={message.seenBy.map((item) =>
+                        currentChat.dmChatUser1.username === item
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    )}
+                    message={message.text as string}
+                    time={message.time}
+                />
+            )
+        }
+    }
+
+    const ImageMessage = ({ message }: { message: ChatMessageModel }) => {
+        if (message.image === null || message.image === undefined) {
+            return null
+        }
+        if (message.from !== username) {
+            return (
+                <ItemChatImageLeft
+                    profileImage={
+                        currentChat.dmChatUser2.username === username
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    }
+                    image={message.image}
+                    time={message.time}
+                />
+            )
+        } else {
+            return (
+                <ItemChatImageRight
+                    seen={message.seenBy.map((item) =>
+                        currentChat.dmChatUser1.username === item
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    )}
+                    image={message.image}
+                    time={message.time}
+                />
+            )
+        }
+    }
+
+    const StickerMessage = ({ message }: { message: ChatMessageModel }) => {
+        if (message.sticker === null || message.sticker === undefined) {
+            return null
+        }
+        if (message.from !== username) {
+            return (
+                <ItemChatStickerLeft
+                    profileImage={
+                        currentChat.dmChatUser2.username === username
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    }
+                    sticker={message.sticker}
+                    time={message.time}
+                />
+            )
+        } else {
+            return (
+                <ItemChatStickerRight
+                    seen={message.seenBy.map((item) =>
+                        currentChat.dmChatUser1.username === item
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    )}
+                    sticker={message.sticker}
+                    time={message.time}
+                />
+            )
+        }
+    }
+
     return (
         <div
             className={
-                'z-0 flex-1 bg-white overflow-y-scroll ' +
+                'z-0 flex-1 bg-white overflow-y-scroll flex flex-col-reverse ' +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
             }>
-            {/*Chatting list*/}
-            <div className={'flex flex-col gap-2'}>
-                <LeftChatMessage
-                    type={ChatMessageType.TEXT}
-                    profileImage={'https://i.pravatar.cc/300'}
-                    message={'Hello world'}
-                    time={'10:00'}
-                />
-
-                <LeftChatMessage
-                    type={ChatMessageType.IMAGE}
-                    profileImage={'https://i.pravatar.cc/300'}
-                    image={
-                        'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'
-                    }
-                    time={'10:00'}
-                />
-
-                <LeftChatMessage
-                    type={ChatMessageType.STICKER}
-                    profileImage={'https://i.pravatar.cc/300'}
-                    sticker={stickerData}
-                    time={'10:00'}
-                />
-
-                <RightChatMessage
-                    type={ChatMessageType.TEXT}
-                    seen={['https://i.pravatar.cc/300']}
-                    message={'Hello world'}
-                    time={'10:00'}
-                />
-
-                <RightChatMessage
-                    type={ChatMessageType.IMAGE}
-                    seen={['https://i.pravatar.cc/300']}
-                    image={
-                        'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D'
-                    }
-                    time={'10:00'}
-                />
-
-                <RightChatMessage
-                    type={ChatMessageType.STICKER}
-                    seen={['https://i.pravatar.cc/300']}
-                    sticker={stickerData}
-                    time={'10:00'}
-                />
-
-                <div ref={bottomRef} />
-            </div>
+            {currentChat.chatMessages.map((message) => (
+                <div className={'flex gap-2'} key={message.id}>
+                    ]{/*First Message*/}
+                    {message.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
+                    {/*text Message*/}
+                    {message.type === ChatMessageType.TypeText && <TextMessage message={message} />}
+                    {/*Image Message*/}
+                    {message.type === ChatMessageType.TypeImage && (
+                        <ImageMessage message={message} />
+                    )}
+                    {/*Sticker Message*/}
+                    {message.type === ChatMessageType.TypeSticker && (
+                        <StickerMessage message={message} />
+                    )}
+                </div>
+            ))}
         </div>
     )
 }

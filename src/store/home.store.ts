@@ -21,13 +21,14 @@ type HomeActions = {
     setProfilePicture: (profilePicture: string) => void
 }
 
-const initUserDetails = () => {
+const initUserDetails = (onSuccess: () => void) => {
     // TODO fetch fcm token here like android
     const setUsername = useLocalStore.getState().setUsername
 
     HomeRepository.getUsername((username) => {
         // save username to local store even if it is null
         setUsername(username)
+        onSuccess()
 
         // when username is null, then user details will be fetched from uid doc
         UserRepository.getUserDetails(() => {})
@@ -50,6 +51,7 @@ const useHomeStore = create<HomeState & HomeActions>()(
             checkUserRegistration: (onSuccess) => {
                 set({ isLoading: true })
                 set({ isSuccess: null })
+
                 HomeRepository.checkInitialRegistration((isInitial) => {
                     set({ isLoading: false })
                     set({ isSuccess: true })
@@ -59,7 +61,10 @@ const useHomeStore = create<HomeState & HomeActions>()(
                 HomeRepository.checkCompleteRegistration(() => {
                     //init user details everytime even if the user is not completely registered
                     //it will handle it inside the function
-                    initUserDetails()
+                    initUserDetails(() => {
+                        // called after username is set
+                        onSuccess(false)
+                    })
                 })
             },
             setUser: (user) => {

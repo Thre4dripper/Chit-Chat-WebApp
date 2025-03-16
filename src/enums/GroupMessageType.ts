@@ -1,5 +1,6 @@
-export enum ChatMessageType {
-    TypeFirstMessage = 'TypeFirstMessage',
+export enum GroupMessageType {
+    TypeCreatedGroup = 'TypeCreatedGroup',
+    TypeLeavedMember = 'TypeLeavedMember',
     TypeText = 'TypeText',
     TypeImage = 'TypeImage',
     TypeSticker = 'TypeSticker',

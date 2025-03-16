@@ -8,18 +8,20 @@ import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragmen
 import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
 import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
+import AddChatDialog from '../components/dialogs/AddChatDialog.tsx'
+import useHomeChatsStore from '../store/home.chats.store.ts'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
     const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
     const [browsedImage, setBrowseImage] = React.useState<string | null>(null)
-
+    const [dialogState, setDialogState] = React.useState<boolean>(false)
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
-    //  dummy state chat we will create store soon for chats
-    const chats = []
+    const chats = useHomeChatsStore((state) => state.homeChats)
+
     useEffect(() => {
         checkUserRegistration((isInitial) => {
             if (isInitial) {
@@ -27,7 +29,7 @@ const HomeScreen: React.FC = () => {
                 setShowCompleteProfile(true)
                 console.log('User is registered')
             } else {
-                // TODO Get chats
+                useHomeChatsStore.getState().setHomeChats()
             }
         })
     }, [checkUserRegistration, navigate])
@@ -66,18 +68,19 @@ const HomeScreen: React.FC = () => {
                         )}
                     </>
                 ) : (
-                    <ChatsFragment openProfile={setProfileOpen} />
+                    <ChatsFragment openProfile={setProfileOpen} setDialogState={setDialogState} />
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 {showCompleteProfile ? (
                     <CompleteProfileFragment />
-                ) : chats.length == 0 ? (
-                    <AddChatsFragment />
+                ) : chats.length === 0 ? (
+                    <AddChatsFragment dialogState={dialogState} setDialogState={setDialogState} />
                 ) : (
                     <ChattingFragment />
                 )}
             </div>
+            <AddChatDialog dialogState={dialogState} setDialogState={setDialogState} />
         </div>
     )
 }
