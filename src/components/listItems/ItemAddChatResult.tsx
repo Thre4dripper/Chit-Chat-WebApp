@@ -9,9 +9,9 @@ interface ItemAddChatResultProps {
 }
 
 const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, setDialogueState }) => {
-    const dmChat = useHomeChatsStore((state) => state.dmChat)
+    const startChat = useHomeChatsStore((state) => state.startChat)
     const handleNewChat = () => {
-        dmChat(user)
+        startChat(user)
         setDialogueState(false)
     }
     return (

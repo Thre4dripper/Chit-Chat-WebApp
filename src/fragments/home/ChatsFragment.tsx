@@ -24,6 +24,7 @@ const ChatsFragment: React.FC<{
     const logoutUser = async () => {
         await logout()
         setUsername(null)
+        useHomeChatsStore.setState({ homeChats: [] })
     }
 
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
@@ -131,7 +132,9 @@ const ChatsFragment: React.FC<{
                         <div className={'flex flex-col'}>
                             {homeChats.map((chat) => {
                                 const unseenMessagesCount = chat.userChat?.chatMessages.filter(
-                                    (msg) => msg.seenBy.length === 1
+                                    (msg) =>
+                                        msg.seenBy.filter((username) => username === user?.username)
+                                            .length === 0
                                 ).length
                                 return (
                                     <ItemChat
@@ -161,7 +164,7 @@ const ChatsFragment: React.FC<{
                                                     hour12: true,
                                                 }) as string
                                         } // dummy time
-                                        notification={unseenMessagesCount as number}
+                                        unseenMessageCount={unseenMessagesCount as number}
                                     />
                                 )
                             })}

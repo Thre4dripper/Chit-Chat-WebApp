@@ -6,9 +6,9 @@ import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 
 const ChatHeader: React.FC = () => {
-    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
+    const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
-    if (!CurrentChats) return <></>
+    if (!currentChat) return <></>
     return (
         <div
             className={
@@ -16,18 +16,18 @@ const ChatHeader: React.FC = () => {
             }>
             <CircularImage
                 image={
-                    CurrentChats?.dmChatUser2.username === username
-                        ? CurrentChats?.dmChatUser1.profileImage
-                        : (CurrentChats?.dmChatUser2.profileImage as string)
+                    currentChat?.dmChatUser2.username === username
+                        ? currentChat?.dmChatUser1.profileImage
+                        : currentChat?.dmChatUser2.profileImage
                 }
                 size={48}
             />
             <div className={'mx-4 flex flex-col flex-auto justify-center'}>
                 <div className={'flex flex-row justify-between'}>
                     <span className={'text-black text-lg font-bold'}>
-                        {CurrentChats?.dmChatUser2.username === username
-                            ? CurrentChats?.dmChatUser1.username
-                            : CurrentChats?.dmChatUser2.username}
+                        {currentChat?.dmChatUser2.username === username
+                            ? currentChat?.dmChatUser1.username
+                            : currentChat?.dmChatUser2.username}
                     </span>
                 </div>
                 <div className={'flex flex-row justify-between'}>

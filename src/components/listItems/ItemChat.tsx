@@ -2,6 +2,7 @@ import { Divider, Typography } from '@mui/material'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
+import PhotoIcon from '@mui/icons-material/Photo'
 
 interface ItemChatProps {
     chatId: string
@@ -9,7 +10,7 @@ interface ItemChatProps {
     primaryText: string
     secondaryText: string
     time: string
-    notification: number
+    unseenMessageCount: number
 }
 
 const ItemChat: React.FC<ItemChatProps> = ({
@@ -18,18 +19,18 @@ const ItemChat: React.FC<ItemChatProps> = ({
     primaryText,
     secondaryText,
     time,
-    notification,
+    unseenMessageCount,
 }) => {
-    if (primaryText.length > 20) {
+    if (primaryText && primaryText.length > 20) {
         primaryText = primaryText.substring(0, 24) + '...'
     }
-    const currentChat = useChatDetailsStore((state) => state._chatDetails)
-    const setCurrentChat = useChatDetailsStore((state) => state.setChatDetails)
+    const currentChat = useChatDetailsStore((state) => state.chatDetails)
+    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
 
     return (
         <div>
             <button
-                onClick={() => setCurrentChat(chatId)}
+                onClick={() => setCurrentChatId(chatId)}
                 className={`${currentChat?.chatId === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
                 <CircularImage image={image} size={48} />
                 <div className={'flex flex-col flex-auto justify-center'}>
@@ -43,16 +44,26 @@ const ItemChat: React.FC<ItemChatProps> = ({
                         </Typography>
                     </div>
                     <div className={'flex flex-row justify-between'}>
-                        <Typography variant={'subtitle2'} color={'gray'}>
-                            {secondaryText}
-                        </Typography>
+                        {secondaryText ? (
+                            <Typography variant={'subtitle2'} color={'gray'}>
+                                {secondaryText.length >= 30
+                                    ? secondaryText.slice(0, 20) + '...'
+                                    : secondaryText}
+                            </Typography>
+                        ) : (
+                            <Typography variant={'subtitle2'} color={'gray'}>
+                                <PhotoIcon /> Photo/sticker
+                            </Typography>
+                        )}
                         <div className={'flex flex-row justify-center items-center'}>
-                            <div
-                                className={
-                                    'w-auto min-w-[1.2rem] px-1 h-5 bg-blue-300/50 rounded-full text-white text-xs flex justify-center items-center'
-                                }>
-                                {notification}
-                            </div>
+                            {unseenMessageCount != 0 && (
+                                <div
+                                    className={
+                                        'w-auto min-w-[1.2rem] px-1 h-5 bg-blue-300/50 rounded-full text-white text-xs flex justify-center items-center'
+                                    }>
+                                    {unseenMessageCount}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

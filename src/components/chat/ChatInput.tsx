@@ -3,19 +3,37 @@ import { IconButton, TextareaAutosize } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SendIcon from '@mui/icons-material/Send'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useLocalStore from '../../store/local.store.ts'
 
 const ChatInput: React.FC = () => {
     const [message, setMessage] = useState('')
+    const sendMessage = useChatDetailsStore((state) => state.sendTextMessage)
+    const chatDetails = useChatDetailsStore((state) => state.chatDetails)
+    const username = useLocalStore((state) => state.username)
+    if (!chatDetails) return <></>
+
+    const handleSendMessage = () => {
+        if (message.trim() === '') return
+        if (!username) return
+        
+        const from = username
+        const to =
+            chatDetails.dmChatUser1.username === username
+                ? chatDetails.dmChatUser2.username
+                : chatDetails.dmChatUser1.username
+
+        sendMessage(chatDetails, message, from, to)
+    }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault()
             // Handle sending the message here, e.g., sendMessage(inputValue);
+            handleSendMessage()
             setMessage('')
         }
     }
-    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
-    if (!CurrentChats) return <></>
+
     return (
         <div
             className={
@@ -38,7 +56,7 @@ const ChatInput: React.FC = () => {
                     maxRows={4}
                 />
             </div>
-            <IconButton>
+            <IconButton onClick={handleSendMessage}>
                 <SendIcon className={'text-gray-700'} />
             </IconButton>
         </div>
