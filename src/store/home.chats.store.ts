@@ -28,6 +28,7 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
                         console.log('AddChat Repository', set)
                         return
                     }
+                    useChatDetailsStore.getState().setCurrentChatId(chatId)
                     useChatDetailsStore.getState().setChatDetails(chatId)
                 })
             },
