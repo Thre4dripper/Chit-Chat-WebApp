@@ -6,13 +6,13 @@ import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 class GetProfile {
     static getProfile(
         firestore: Firestore,
-        user: User | null,
-        username: string | null,
+        user: User,
+        username: string,
         profile: (userModel: UserModel | null) => void
     ) {
         this.getProfileFromUsernameDoc(firestore, username, (userModel) => {
             if (userModel === null) {
-                this.getProfileFromUidDoc(firestore, user!.uid, (uidDocProfile) => {
+                this.getProfileFromUidDoc(firestore, user.uid, (uidDocProfile) => {
                     profile(uidDocProfile)
                 })
             } else {
@@ -23,10 +23,10 @@ class GetProfile {
 
     private static getProfileFromUidDoc(
         firestore: Firestore,
-        uid: string | null,
+        uid: string,
         profile: (userModel: UserModel | null) => void
     ) {
-        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, uid!)
+        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, uid)
         getDoc(docRef)
             .then((doc) => {
                 if (doc.exists()) {
@@ -43,13 +43,9 @@ class GetProfile {
 
     private static getProfileFromUsernameDoc(
         firestore: Firestore,
-        username: string | null,
+        username: string,
         profile: (userModel: UserModel | null) => void
     ) {
-        if (username === null) {
-            profile(null)
-            return
-        }
         const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, username)
         getDoc(docRef)
             .then((doc) => {
