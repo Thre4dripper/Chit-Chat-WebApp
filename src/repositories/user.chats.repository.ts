@@ -14,6 +14,11 @@ class UserChatsRepository {
         const firestore = getFirestore(firebaseApp)
         const loggedInUser = useLocalStore.getState().username
 
+        // looks like we have to put this here to save an api call and also to avoid indet  erministic behavior
+        if (!loggedInUser) {
+            return
+        }
+
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
             const oldList = useHomeChatsStore
                 .getState()
@@ -35,7 +40,6 @@ class UserChatsRepository {
                 return b.lastMessageTimestamp.toMillis() - a.lastMessageTimestamp.toMillis()
             })
             useHomeChatsStore.setState({ homeChats: newList })
-            console.log('User Chats', userChats)
         })
     }
 

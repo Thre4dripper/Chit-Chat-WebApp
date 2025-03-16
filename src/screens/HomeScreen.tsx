@@ -29,7 +29,6 @@ const HomeScreen: React.FC = () => {
                 setShowCompleteProfile(true)
                 console.log('User is registered')
             } else {
-                // TODO Get chats
                 useHomeChatsStore.getState().setHomeChats()
             }
         })
