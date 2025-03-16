@@ -8,7 +8,7 @@ import useLocalStore from '../../store/local.store.ts'
 const ChatInput: React.FC = () => {
     const [message, setMessage] = useState('')
     const sendMessage = useChatDetailsStore((state) => state.sendTextMessage)
-    const chatDetails = useChatDetailsStore((state) => state._chatDetails)
+    const chatDetails = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -30,8 +30,8 @@ const ChatInput: React.FC = () => {
                     : chatDetails?.dmChatUser2.username
             )
     }
-    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
-    if (!CurrentChats) return <></>
+    const currentChat = useChatDetailsStore((state) => state.chatDetails)
+    if (!currentChat) return <></>
     return (
         <div
             className={

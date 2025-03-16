@@ -50,16 +50,17 @@ const useHomeStore = create<HomeState & HomeActions>()(
             checkUserRegistration: (onSuccess) => {
                 set({ isLoading: true })
                 set({ isSuccess: null })
-                HomeRepository.checkInitialRegistration((isInitial) => {
-                    set({ isLoading: false })
-                    set({ isSuccess: true })
-                    onSuccess(isInitial)
-                })
+
 
                 HomeRepository.checkCompleteRegistration(() => {
                     //init user details everytime even if the user is not completely registered
                     //it will handle it inside the function
                     initUserDetails()
+                    HomeRepository.checkInitialRegistration((isInitial) => {
+                        set({ isLoading: false })
+                        set({ isSuccess: true })
+                        onSuccess(isInitial)
+                    })
                 })
             },
             setUser: (user) => {

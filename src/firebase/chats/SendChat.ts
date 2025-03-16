@@ -6,7 +6,7 @@ import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 import { doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
 
 class SendChat {
-    static async sendTextMessage(
+    static sendTextMessage(
         chatModel: ChatModel,
         firestore: Firestore,
         text: string,

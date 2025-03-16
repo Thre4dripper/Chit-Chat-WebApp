@@ -30,10 +30,13 @@ const HomeScreen: React.FC = () => {
                 console.log('User is registered')
             } else {
                 // TODO Get chats
-                const callChat = useHomeChatsStore.getState().setHomeChats
-                callChat()
+                useHomeChatsStore.getState().setHomeChats()
+
+
             }
         })
+
+
     }, [checkUserRegistration, navigate])
 
     useEffect(() => {

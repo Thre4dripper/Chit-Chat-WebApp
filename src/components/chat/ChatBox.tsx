@@ -12,10 +12,10 @@ import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 
 const ChatBox: React.FC = () => {
-    const CurrentChats = useChatDetailsStore((state) => state._chatDetails)
+    const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
 
-    if (CurrentChats === null) {
+    if (currentChat === null) {
         return <EmptyChatFragment />
     }
 
@@ -25,92 +25,82 @@ const ChatBox: React.FC = () => {
                 'z-0 flex-1 bg-white overflow-y-scroll flex flex-col-reverse ' +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
             }>
-            {CurrentChats.chatMessages.map((chat) => (
-                <div className={'flex gap-2'} key={chat.id}>
-                    <>
-                        {chat.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
-                        {chat.from !== username ? (
-                            <>
-                                {chat.type === ChatMessageType.TypeText && (
-                                    <ItemChatTextLeft
-                                        profileImage={
-                                            CurrentChats.dmChatUser2.username === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        }
-                                        message={chat.text as string}
-                                        time={chat.time}
-                                    />
-                                )}
-
-                                {chat.type === ChatMessageType.TypeImage && chat.image && (
-                                    <ItemChatImageLeft
-                                        profileImage={
-                                            CurrentChats.dmChatUser2.username === username
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        }
-                                        image={chat.image}
-                                        time={chat.time}
-                                    />
-                                )}
-
-                                {chat.type === ChatMessageType.TypeSticker &&
-                                    chat.sticker !== null &&
-                                    chat.sticker !== undefined && (
-                                        <ItemChatStickerLeft
-                                            profileImage={
-                                                CurrentChats.dmChatUser2.username === username
-                                                    ? CurrentChats.dmChatUser1.profileImage
-                                                    : CurrentChats.dmChatUser2.profileImage
-                                            }
-                                            sticker={chat.sticker}
-                                            time={chat.time}
-                                        />
-                                    )}
-                            </>
+            {currentChat.chatMessages.map((message) => (
+                <div className={'flex gap-2'} key={message.id}>
+                    {/*dm*/}
+                    {message.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
+                    {/*text Message */}
+                    {message.type === ChatMessageType.TypeText &&
+                        (message.from !== username ? (
+                            <ItemChatTextLeft
+                                profileImage={
+                                    currentChat.dmChatUser2.username === username
+                                        ? currentChat.dmChatUser1.profileImage
+                                        : currentChat.dmChatUser2.profileImage
+                                }
+                                message={message.text as string}
+                                time={message.time}
+                            />
                         ) : (
-                            <>
-                                {chat.type === ChatMessageType.TypeText && (
-                                    <ItemChatTextRight
-                                        seen={chat.seenBy.map((item) =>
-                                            CurrentChats.dmChatUser1.username === item
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        )}
-                                        message={chat.text as string}
-                                        time={chat.time}
-                                    />
+                            <ItemChatTextRight
+                                seen={message.seenBy.map((item) =>
+                                    currentChat.dmChatUser1.username === item
+                                        ? currentChat.dmChatUser1.profileImage
+                                        : currentChat.dmChatUser2.profileImage
                                 )}
-
-                                {chat.type === ChatMessageType.TypeImage && chat.image && (
-                                    <ItemChatImageRight
-                                        seen={chat.seenBy.map((item) =>
-                                            CurrentChats.dmChatUser1.username === item
-                                                ? CurrentChats.dmChatUser1.profileImage
-                                                : CurrentChats.dmChatUser2.profileImage
-                                        )}
-                                        image={chat.image}
-                                        time={chat.time}
-                                    />
+                                message={message.text as string}
+                                time={message.time}
+                            />
+                        ))}
+                    {/*Image message*/}
+                    {message.type === ChatMessageType.TypeImage &&
+                        message.image &&
+                        (message.from !== username ? (
+                            <ItemChatImageLeft
+                                profileImage={
+                                    currentChat.dmChatUser2.username === username
+                                        ? currentChat.dmChatUser1.profileImage
+                                        : currentChat.dmChatUser2.profileImage
+                                }
+                                image={message.image}
+                                time={message.time}
+                            />
+                        ) : (
+                            <ItemChatImageRight
+                                seen={message.seenBy.map((item) =>
+                                    currentChat.dmChatUser1.username === item
+                                        ? currentChat.dmChatUser1.profileImage
+                                        : currentChat.dmChatUser2.profileImage
                                 )}
-
-                                {chat.type === ChatMessageType.TypeSticker &&
-                                    chat.sticker !== null &&
-                                    chat.sticker !== undefined && (
-                                        <ItemChatStickerRight
-                                            seen={chat.seenBy.map((item) =>
-                                                CurrentChats.dmChatUser1.username === item
-                                                    ? CurrentChats.dmChatUser1.profileImage
-                                                    : CurrentChats.dmChatUser2.profileImage
-                                            )}
-                                            sticker={chat.sticker}
-                                            time={chat.time}
-                                        />
-                                    )}
-                            </>
-                        )}
-                    </>
+                                image={message.image}
+                                time={message.time}
+                            />
+                        ))}
+                    {/*stickers */}
+                    {message.type === ChatMessageType.TypeSticker &&
+                        message.sticker !== null &&
+                        message.sticker !== undefined &&
+                        (message.from !== username ? (
+                            <ItemChatStickerLeft
+                                profileImage={
+                                    currentChat.dmChatUser2.username === username
+                                        ? currentChat.dmChatUser1.profileImage
+                                        : currentChat.dmChatUser2.profileImage
+                                }
+                                sticker={message.sticker}
+                                time={message.time}
+                            />
+                        ) : (
+                            <ItemChatStickerRight
+                                seen={message.seenBy.map((item) =>
+                                    currentChat.dmChatUser1.username === item
+                                        ? currentChat.dmChatUser1.profileImage
+                                        : currentChat.dmChatUser2.profileImage
+                                )}
+                                sticker={message.sticker}
+                                time={message.time}
+                            />
+                        ))}
                 </div>
             ))}
         </div>

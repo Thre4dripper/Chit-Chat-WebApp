@@ -12,7 +12,7 @@ type homeChatState = {
 }
 type homeChatActions = {
     setHomeChats: () => void
-    dmChat: (dmUser: UserModel) => void
+    startChat: (dmUser: UserModel) => void
 }
 
 const useHomeChatsStore = create<homeChatState & homeChatActions>()(
@@ -22,7 +22,7 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },
-            dmChat: (newChatUser: UserModel) => {
+            startChat: (newChatUser: UserModel) => {
                 addChatsRepository.addChat(newChatUser, (chatId) => {
                     if (!chatId) {
                         console.log('AddChat Repository', set)

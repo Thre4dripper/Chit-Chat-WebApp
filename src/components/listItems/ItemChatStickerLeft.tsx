@@ -30,7 +30,7 @@ const ItemChatStickerLeft: React.FC<ItemChatStickerLeftProps> = ({
                         'max-w-[36rem] w-full ' +
                         'rounded-tl-3xl rounded-bl-lg rounded-br-3xl rounded-tr-3xl'
                     }>
-                    <MsgSticker stickerData={stickerValue(sticker) ?? ''} />
+                    <MsgSticker stickerData={stickerValue(sticker) ?? MsgSticker} />
                 </div>
                 <div className={'flex justify-start my-2'}>
                     <span className={'text-slate-400 font-bold text-xs'}>{FormatedTime}</span>

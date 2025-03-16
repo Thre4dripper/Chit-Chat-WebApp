@@ -7,38 +7,35 @@ import { ChatType } from '../enums/ChatType.ts'
 import ChatModel from '../models/user.chat.model.ts'
 import HomeChatModel from '../models/home.chat.model.ts'
 import SendChat from '../firebase/chats/SendChat.ts'
+import UpdateSeen from '../firebase/chats/UpdateSeen.ts'
 
 class UserChatsRepository {
     static getAllUserChats() {
         const firestore = getFirestore(firebaseApp)
-
         const loggedInUser = useLocalStore.getState().username
-        if (!loggedInUser) {
-            return
-        }
 
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
             const oldList = useHomeChatsStore
                 .getState()
                 .homeChats.filter((item) => item.type !== ChatType.USER)
-            const newList = [
-                ...oldList,
-                ...userChats.map(
-                    (chat) =>
-                        new HomeChatModel(
-                            chat.chatId,
-                            ChatType.USER,
-                            chat,
-                            null,
-                            chat.chatMessages[0]?.time
-                        )
-                ),
-            ]
+
+            const newChats = userChats.map(
+                (chat) =>
+                    new HomeChatModel(
+                        chat.chatId,
+                        ChatType.USER,
+                        chat,
+                        null,
+                        chat.chatMessages[0]?.time
+                    )
+            )
+            const newList = [...oldList, ...newChats]
 
             newList.sort((a, b) => {
                 return b.lastMessageTimestamp.toMillis() - a.lastMessageTimestamp.toMillis()
             })
             useHomeChatsStore.setState({ homeChats: newList })
+            console.log('User Chats', userChats)
         })
     }
 
@@ -51,6 +48,7 @@ class UserChatsRepository {
         const firestore = getFirestore(firebaseApp)
         return GetChats.getLiveUserChatById(firestore, chatId, chatModel)
     }
+
     static sendTextMessage(
         chatModel: ChatModel,
         text: string,
@@ -60,6 +58,18 @@ class UserChatsRepository {
     ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)
+    }
+
+    static updateSeen(chatModel: ChatModel | null) {
+        const firestore = getFirestore(firebaseApp)
+        const loggedInUser = useLocalStore.getState().username
+        if (!loggedInUser || !chatModel) {
+            return
+        }
+        const onSuccess = (check: boolean) => {
+            console.log('seen updated', check)
+        }
+        UpdateSeen.updateSeen(firestore, chatModel, loggedInUser, onSuccess)
     }
 }
 
