@@ -15,7 +15,7 @@ const ChatInput: React.FC = () => {
     const handleSendMessage = () => {
         if (message.trim() === '') return
         if (!username) return
-        
+
         const from = username
         const to =
             chatDetails.dmChatUser1.username === username
