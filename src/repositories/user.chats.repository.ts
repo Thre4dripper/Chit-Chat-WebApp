@@ -50,7 +50,7 @@ class UserChatsRepository {
 
     static getLiveUserChatById(chatId: string, chatModel: (chatModel: ChatModel | null) => void) {
         const firestore = getFirestore(firebaseApp)
-        return GetChats.getLiveUserChatById(firestore, chatId, chatModel)
+        GetChats.getLiveUserChatById(firestore, chatId, chatModel)
     }
 
     static sendTextMessage(

@@ -2,11 +2,11 @@ import {
     collection,
     doc,
     Firestore,
-    query,
-    or,
-    where,
     getDoc,
     onSnapshot,
+    or,
+    query,
+    where,
 } from 'firebase/firestore'
 import ChatModel from '../../models/user.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
@@ -69,7 +69,7 @@ class GetChats {
     ) {
         const ChatRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatId)
 
-        const unsubscribe = onSnapshot(
+        onSnapshot(
             ChatRef,
             (doc) => {
                 if (doc.exists()) {
@@ -83,8 +83,6 @@ class GetChats {
                 onSuccess(null)
             }
         )
-
-        return unsubscribe // Return the function to stop listening when needed
     }
 }
 

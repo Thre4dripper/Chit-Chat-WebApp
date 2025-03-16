@@ -10,6 +10,20 @@ const ChatInput: React.FC = () => {
     const sendMessage = useChatDetailsStore((state) => state.sendTextMessage)
     const chatDetails = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
+    if (!chatDetails) return <></>
+
+    const handleSendMessage = () => {
+        if (message.trim() === '') return
+        if (!username) return
+        
+        const from = username
+        const to =
+            chatDetails.dmChatUser1.username === username
+                ? chatDetails.dmChatUser2.username
+                : chatDetails.dmChatUser1.username
+
+        sendMessage(chatDetails, message, from, to)
+    }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -19,19 +33,7 @@ const ChatInput: React.FC = () => {
             setMessage('')
         }
     }
-    const handleSendMessage = () => {
-        if (chatDetails && message && chatDetails?.chatMessages[0].from && username)
-            sendMessage(
-                chatDetails,
-                message,
-                username,
-                chatDetails?.dmChatUser2.username === username
-                    ? chatDetails?.dmChatUser1.username
-                    : chatDetails?.dmChatUser2.username
-            )
-    }
-    const currentChat = useChatDetailsStore((state) => state.chatDetails)
-    if (!currentChat) return <></>
+
     return (
         <div
             className={
