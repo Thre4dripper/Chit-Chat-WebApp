@@ -10,6 +10,7 @@ import ItemChatImageRight from '../listItems/ItemChatImageRight.tsx'
 import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
 import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
+import ChatMessageModel from '../../models/chat.message.model.ts'
 
 const ChatBox: React.FC = () => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
@@ -17,6 +18,96 @@ const ChatBox: React.FC = () => {
 
     if (currentChat === null) {
         return <EmptyChatFragment />
+    }
+
+    const TextMessage = ({ message }: { message: ChatMessageModel }) => {
+        if (message.from !== username) {
+            return (
+                <ItemChatTextLeft
+                    profileImage={
+                        currentChat.dmChatUser2.username === username
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    }
+                    message={message.text as string}
+                    time={message.time}
+                />
+            )
+        } else {
+            return (
+                <ItemChatTextRight
+                    seen={message.seenBy.map((item) =>
+                        currentChat.dmChatUser1.username === item
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    )}
+                    message={message.text as string}
+                    time={message.time}
+                />
+            )
+        }
+    }
+
+    const ImageMessage = ({ message }: { message: ChatMessageModel }) => {
+        if (message.image === null || message.image === undefined) {
+            return null
+        }
+        if (message.from !== username) {
+            return (
+                <ItemChatImageLeft
+                    profileImage={
+                        currentChat.dmChatUser2.username === username
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    }
+                    image={message.image}
+                    time={message.time}
+                />
+            )
+        } else {
+            return (
+                <ItemChatImageRight
+                    seen={message.seenBy.map((item) =>
+                        currentChat.dmChatUser1.username === item
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    )}
+                    image={message.image}
+                    time={message.time}
+                />
+            )
+        }
+    }
+
+    const StickerMessage = ({ message }: { message: ChatMessageModel }) => {
+        if (message.sticker === null || message.sticker === undefined) {
+            return null
+        }
+        if (message.from !== username) {
+            return (
+                <ItemChatStickerLeft
+                    profileImage={
+                        currentChat.dmChatUser2.username === username
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    }
+                    sticker={message.sticker}
+                    time={message.time}
+                />
+            )
+        } else {
+            return (
+                <ItemChatStickerRight
+                    seen={message.seenBy.map((item) =>
+                        currentChat.dmChatUser1.username === item
+                            ? currentChat.dmChatUser1.profileImage
+                            : currentChat.dmChatUser2.profileImage
+                    )}
+                    sticker={message.sticker}
+                    time={message.time}
+                />
+            )
+        }
     }
 
     return (
@@ -27,80 +118,18 @@ const ChatBox: React.FC = () => {
             }>
             {currentChat.chatMessages.map((message) => (
                 <div className={'flex gap-2'} key={message.id}>
-                    {/*dm*/}
+                    ]{/*First Message*/}
                     {message.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
-                    {/*text Message */}
-                    {message.type === ChatMessageType.TypeText &&
-                        (message.from !== username ? (
-                            <ItemChatTextLeft
-                                profileImage={
-                                    currentChat.dmChatUser2.username === username
-                                        ? currentChat.dmChatUser1.profileImage
-                                        : currentChat.dmChatUser2.profileImage
-                                }
-                                message={message.text as string}
-                                time={message.time}
-                            />
-                        ) : (
-                            <ItemChatTextRight
-                                seen={message.seenBy.map((item) =>
-                                    currentChat.dmChatUser1.username === item
-                                        ? currentChat.dmChatUser1.profileImage
-                                        : currentChat.dmChatUser2.profileImage
-                                )}
-                                message={message.text as string}
-                                time={message.time}
-                            />
-                        ))}
-                    {/*Image message*/}
-                    {message.type === ChatMessageType.TypeImage &&
-                        message.image &&
-                        (message.from !== username ? (
-                            <ItemChatImageLeft
-                                profileImage={
-                                    currentChat.dmChatUser2.username === username
-                                        ? currentChat.dmChatUser1.profileImage
-                                        : currentChat.dmChatUser2.profileImage
-                                }
-                                image={message.image}
-                                time={message.time}
-                            />
-                        ) : (
-                            <ItemChatImageRight
-                                seen={message.seenBy.map((item) =>
-                                    currentChat.dmChatUser1.username === item
-                                        ? currentChat.dmChatUser1.profileImage
-                                        : currentChat.dmChatUser2.profileImage
-                                )}
-                                image={message.image}
-                                time={message.time}
-                            />
-                        ))}
-                    {/*stickers */}
-                    {message.type === ChatMessageType.TypeSticker &&
-                        message.sticker !== null &&
-                        message.sticker !== undefined &&
-                        (message.from !== username ? (
-                            <ItemChatStickerLeft
-                                profileImage={
-                                    currentChat.dmChatUser2.username === username
-                                        ? currentChat.dmChatUser1.profileImage
-                                        : currentChat.dmChatUser2.profileImage
-                                }
-                                sticker={message.sticker}
-                                time={message.time}
-                            />
-                        ) : (
-                            <ItemChatStickerRight
-                                seen={message.seenBy.map((item) =>
-                                    currentChat.dmChatUser1.username === item
-                                        ? currentChat.dmChatUser1.profileImage
-                                        : currentChat.dmChatUser2.profileImage
-                                )}
-                                sticker={message.sticker}
-                                time={message.time}
-                            />
-                        ))}
+                    {/*text Message*/}
+                    {message.type === ChatMessageType.TypeText && <TextMessage message={message} />}
+                    {/*Image Message*/}
+                    {message.type === ChatMessageType.TypeImage && (
+                        <ImageMessage message={message} />
+                    )}
+                    {/*Sticker Message*/}
+                    {message.type === ChatMessageType.TypeSticker && (
+                        <StickerMessage message={message} />
+                    )}
                 </div>
             ))}
         </div>

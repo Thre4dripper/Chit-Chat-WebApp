@@ -25,7 +25,7 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
             startChat: (newChatUser: UserModel) => {
                 addChatsRepository.addChat(newChatUser, (chatId) => {
                     if (!chatId) {
-                        console.log('AddChat Repository', set)
+                        console.log(set)
                         return
                     }
                     useChatDetailsStore.getState().setCurrentChatId(chatId)

@@ -14,7 +14,7 @@ import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 class GetChats {
     static getAllUserChats(
         firestore: Firestore,
-        username: string | null,
+        username: string,
         onSuccess: (chatList: ChatModel[]) => void
     ) {
         const ChatCollection = collection(firestore, FirestoreCollections.CHATS_COLLECTION)
