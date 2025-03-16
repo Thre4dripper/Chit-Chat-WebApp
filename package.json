@@ -12,7 +12,7 @@
         "format:check": "prettier --check ."
     },
     "dependencies": {
-        "@emotion/react": "^11.13.5",
+        "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.13.0",
         "@hookform/resolvers": "^3.9.1",
         "@mui/icons-material": "^6.1.6",
@@ -45,7 +45,7 @@
         "aws-cdk-lib": "^2.175.1",
         "constructs": "^10.4.2",
         "esbuild": "^0.24.0",
-        "eslint": "^9.14.0",
+        "eslint": "^9.20.1",
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-refresh": "^0.4.18",
         "postcss": "^8.4.49",
