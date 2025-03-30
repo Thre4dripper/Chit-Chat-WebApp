@@ -7,62 +7,18 @@ import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
-import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
-import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
-import { enqueueSnackbar } from 'notistack'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
     setDialogState: React.Dispatch<SetStateAction<boolean>>
-}> = ({ openProfile, setDialogState }) => {
-    const { logout } = useAuthStore()
-    const { user } = useHomeStore()
-    const setUsername = useLocalStore((state) => state.setUsername)
-    const homeChats = useHomeChatsStore((state) => state.homeChats)
-    const confirmLogout=()=>{
-        enqueueSnackbar('Are you sure you want to logout?', {
-            variant: 'info',
-            anchorOrigin: { vertical: "top" , horizontal: "center" },
-            autoHideDuration: 3000,
-            action: () => (
-                <div>
-                    <button
-                        onClick={() => {
-                            logoutUser();
-                            enqueueSnackbar('Logged out', {
-                                variant: 'success',
-                                anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
-                                autoHideDuration: 3000,
-                            });
-                        }}
-                        className="text-white mx-2"
-                    >
-                        Yes
-                    </button>
-                    <button
-                        onClick={() => {
-                            enqueueSnackbar('Cancelled', {
-                                variant: 'info',
-                                anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
-                                autoHideDuration: 3000,
-                            });
-                        }}
-                        className="text-white"
-                    >
-                        No
-                    </button>
-                </div>
-            ),
-        });
+    setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState,setLogoutDialogState }) => {
 
-    }
-    const logoutUser = async () => {
-        await logout()
-        setUsername(null)
-        useHomeChatsStore.setState({ homeChats: [] })
-    }
+    const { user } = useHomeStore()
+    const homeChats = useHomeChatsStore((state) => state.homeChats)
+
 
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
@@ -101,7 +57,7 @@ const ChatsFragment: React.FC<{
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={confirmLogout}>
+                    <IconButton onClick={()=>setLogoutDialogState(true)}>
                         <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>

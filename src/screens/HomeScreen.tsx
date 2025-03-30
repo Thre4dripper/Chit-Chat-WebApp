@@ -10,6 +10,7 @@ import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import AddChatDialog from '../components/dialogs/AddChatDialog.tsx'
 import useHomeChatsStore from '../store/home.chats.store.ts'
+import LogoutConfirmation from '../components/dialogs/LogoutConfirmationDialog.tsx'
 
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
@@ -21,6 +22,7 @@ const HomeScreen: React.FC = () => {
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
     const chats = useHomeChatsStore((state) => state.homeChats)
+    const [logoutConfirmOpen, setLogoutConfirmOpen] = React.useState<boolean>(false)
 
     useEffect(() => {
         checkUserRegistration((isInitial) => {
@@ -43,7 +45,6 @@ const HomeScreen: React.FC = () => {
     if (isLoading || user === null) {
         return <LottieLoading fullScreen />
     }
-
     return (
         <div className={'flex flex-row bg-slate-900/90 '}>
             <div className={'w-[25rem]'}>
@@ -68,7 +69,7 @@ const HomeScreen: React.FC = () => {
                         )}
                     </>
                 ) : (
-                    <ChatsFragment openProfile={setProfileOpen} setDialogState={setDialogState} />
+                    <ChatsFragment openProfile={setProfileOpen} setDialogState={setDialogState} setLogoutDialogState={setLogoutConfirmOpen} />
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
@@ -81,6 +82,7 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <AddChatDialog dialogState={dialogState} setDialogState={setDialogState} />
+            <LogoutConfirmation open={logoutConfirmOpen} handleClose={() => setLogoutConfirmOpen(false)} />
         </div>
     )
 }
