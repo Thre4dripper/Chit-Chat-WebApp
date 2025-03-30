@@ -11,7 +11,7 @@ import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
 import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 import ChatMessageModel from '../../models/chat.message.model.ts'
-// import { Button } from '@mui/material'
+import { Button } from '@mui/material'
 // import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 const ChatBox: React.FC = () => {
@@ -167,12 +167,13 @@ const ChatBox: React.FC = () => {
                 </div>
             ))}
             {/*{showScrollButton && (*/}
-            {/*    <Button*/}
-            {/*        onClick={scrollToBottom}*/}
-            {/*        className="fixed top-full right-0 bg-blue-500 text-white px-4 py-2"*/}
-            {/*    >*/}
-            {/*        <KeyboardDoubleArrowDownIcon/>*/}
-            {/*    </Button>*/}
+                <Button
+                    // onClick={scrollToBottom}
+                    className="fixed top-full right-0 bg-blue-500 text-white px-4 py-2"
+                >
+                    {/*<KeyboardDoubleArrowDownIcon/>*/}
+                    How can We Win The Show
+                </Button>
             {/*)}*/}
         </div>
     )
