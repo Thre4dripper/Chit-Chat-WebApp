@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
     Dialog,
     DialogActions,
@@ -14,8 +14,8 @@ import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
 
 interface LogoutConfirmationProps {
-    open: boolean;
-    handleClose: () => void;
+    open: boolean
+    handleClose: () => void
 }
 
 const LogoutConfirmation: React.FC<LogoutConfirmationProps> = ({ open, handleClose }) => {
@@ -33,19 +33,17 @@ const LogoutConfirmation: React.FC<LogoutConfirmationProps> = ({ open, handleClo
             <DialogTitle>Are you sure?</DialogTitle>
             <Divider />
             <DialogContent>
-                <DialogContentText>
-                    Do you really want to log out?
-                </DialogContentText>
+                <DialogContentText>Do you really want to log out?</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClose} color='primary'>
                     No
                 </Button>
-                <Button onClick={logoutUser} color="error" autoFocus>
+                <Button onClick={logoutUser} color='error' autoFocus>
                     Yes
                 </Button>
             </DialogActions>
         </Dialog>
-    );
-};
-export default LogoutConfirmation;
+    )
+}
+export default LogoutConfirmation

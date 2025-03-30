@@ -69,7 +69,11 @@ const HomeScreen: React.FC = () => {
                         )}
                     </>
                 ) : (
-                    <ChatsFragment openProfile={setProfileOpen} setDialogState={setDialogState} setLogoutDialogState={setLogoutConfirmOpen} />
+                    <ChatsFragment
+                        openProfile={setProfileOpen}
+                        setDialogState={setDialogState}
+                        setLogoutDialogState={setLogoutConfirmOpen}
+                    />
                 )}
             </div>
             <div className={'flex-1 w-2/3 rounded-3xl'}>
@@ -82,7 +86,10 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <AddChatDialog dialogState={dialogState} setDialogState={setDialogState} />
-            <LogoutConfirmation open={logoutConfirmOpen} handleClose={() => setLogoutConfirmOpen(false)} />
+            <LogoutConfirmation
+                open={logoutConfirmOpen}
+                handleClose={() => setLogoutConfirmOpen(false)}
+            />
         </div>
     )
 }

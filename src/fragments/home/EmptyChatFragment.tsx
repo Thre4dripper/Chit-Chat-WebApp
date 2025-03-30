@@ -7,7 +7,6 @@ const EmptyChatFragment: React.FC = () => {
     const handleDownload = () => {
         const url = 'https://github.com/Thre4dripper/Chit-Chat-AndroidApp/releases'
 
-
         window.alert(
             "When installing, it may give a warning, but don't worry, it's safe. " +
                 "As it's not from the Play Store, it's not recognized by Google. So your phone might give a warning."
