@@ -29,7 +29,7 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ seen, message, time
                 </div>
                 <div className={'flex justify-end'}>
                     <div className={'flex flex-row-reverse'}>
-                        {seen.map((item) => {
+                        {seen.reverse().map((item) => {
                             return (
                                 <div key={item} className={'-ml-6'}>
                                     <CircularImage image={item} size={20} alt={'Sender Image'} />

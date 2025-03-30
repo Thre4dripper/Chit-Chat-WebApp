@@ -11,6 +11,7 @@ import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
+import { enqueueSnackbar } from 'notistack'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -20,7 +21,43 @@ const ChatsFragment: React.FC<{
     const { user } = useHomeStore()
     const setUsername = useLocalStore((state) => state.setUsername)
     const homeChats = useHomeChatsStore((state) => state.homeChats)
+    const confirmLogout=()=>{
+        enqueueSnackbar('Are you sure you want to logout?', {
+            variant: 'info',
+            anchorOrigin: { vertical: "top" , horizontal: "center" },
+            autoHideDuration: 3000,
+            action: () => (
+                <div>
+                    <button
+                        onClick={() => {
+                            logoutUser();
+                            enqueueSnackbar('Logged out', {
+                                variant: 'success',
+                                anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+                                autoHideDuration: 3000,
+                            });
+                        }}
+                        className="text-white mx-2"
+                    >
+                        Yes
+                    </button>
+                    <button
+                        onClick={() => {
+                            enqueueSnackbar('Cancelled', {
+                                variant: 'info',
+                                anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+                                autoHideDuration: 3000,
+                            });
+                        }}
+                        className="text-white"
+                    >
+                        No
+                    </button>
+                </div>
+            ),
+        });
 
+    }
     const logoutUser = async () => {
         await logout()
         setUsername(null)
@@ -64,7 +101,7 @@ const ChatsFragment: React.FC<{
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={logoutUser}>
+                    <IconButton onClick={confirmLogout}>
                         <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useRef} from 'react'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
@@ -11,15 +11,49 @@ import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
 import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 import ChatMessageModel from '../../models/chat.message.model.ts'
+// import { Button } from '@mui/material'
+// import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 const ChatBox: React.FC = () => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
+    const chatContainerRef = useRef<HTMLDivElement>(null);
+    // const [showScrollButton, setShowScrollButton] = useState(false);
+
+    // Scroll to bottom function
+    // const scrollToBottom = () => {
+    //     if (chatContainerRef.current) {
+    //         chatContainerRef.current.scrollTo({
+    //             top: chatContainerRef.current.scrollHeight,
+    //             behavior: 'smooth',
+    //         });
+    //     }
+    // };
+
+    // Track scrolling
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (chatContainerRef.current) {
+    //             const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+    //             setShowScrollButton(scrollHeight - (scrollTop + clientHeight) > 100);
+    //         }
+    //     };
+    //
+    //     const chatBox = chatContainerRef.current;
+    //     if (chatBox) {
+    //         chatBox.addEventListener('scroll', handleScroll);
+    //     }
+    //
+    //     return () => {
+    //         if (chatBox) {
+    //             chatBox.removeEventListener('scroll', handleScroll);
+    //         }
+    //     };
+    // }, []);
 
     if (currentChat === null) {
-        return <EmptyChatFragment />
+        return <EmptyChatFragment />;
     }
-
     const TextMessage = ({ message }: { message: ChatMessageModel }) => {
         if (message.from !== username) {
             return (
@@ -115,10 +149,10 @@ const ChatBox: React.FC = () => {
             className={
                 'z-0 flex-1 bg-white overflow-y-scroll flex flex-col-reverse ' +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
-            }>
+            } ref={chatContainerRef}>
             {currentChat.chatMessages.map((message) => (
                 <div className={'flex gap-2'} key={message.id}>
-                    ]{/*First Message*/}
+                    {/*First Message*/}
                     {message.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
                     {/*text Message*/}
                     {message.type === ChatMessageType.TypeText && <TextMessage message={message} />}
@@ -132,6 +166,14 @@ const ChatBox: React.FC = () => {
                     )}
                 </div>
             ))}
+            {/*{showScrollButton && (*/}
+            {/*    <Button*/}
+            {/*        onClick={scrollToBottom}*/}
+            {/*        className="fixed top-full right-0 bg-blue-500 text-white px-4 py-2"*/}
+            {/*    >*/}
+            {/*        <KeyboardDoubleArrowDownIcon/>*/}
+            {/*    </Button>*/}
+            {/*)}*/}
         </div>
     )
 }
