@@ -7,25 +7,16 @@ import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
-import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
-import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
     setDialogState: React.Dispatch<SetStateAction<boolean>>
-}> = ({ openProfile, setDialogState }) => {
-    const { logout } = useAuthStore()
+    setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState, setLogoutDialogState }) => {
     const { user } = useHomeStore()
-    const setUsername = useLocalStore((state) => state.setUsername)
     const homeChats = useHomeChatsStore((state) => state.homeChats)
-
-    const logoutUser = async () => {
-        await logout()
-        setUsername(null)
-        useHomeChatsStore.setState({ homeChats: [] })
-    }
 
     const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
@@ -64,7 +55,7 @@ const ChatsFragment: React.FC<{
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={logoutUser}>
+                    <IconButton onClick={() => setLogoutDialogState(true)}>
                         <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>

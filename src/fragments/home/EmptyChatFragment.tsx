@@ -5,7 +5,7 @@ import { NoEncryption } from '@mui/icons-material'
 
 const EmptyChatFragment: React.FC = () => {
     const handleDownload = () => {
-        const url = 'https://github.com/Thre4dripper/Chit-Chat-AndroidApp/releases/tag/publish'
+        const url = 'https://github.com/Thre4dripper/Chit-Chat-AndroidApp/releases'
 
         window.alert(
             "When installing, it may give a warning, but don't worry, it's safe. " +
