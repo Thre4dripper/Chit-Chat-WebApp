@@ -60,6 +60,17 @@ const ChatBox: React.FC = () => {
     if (currentChat === null) {
         return <EmptyChatFragment />
     }
+
+    const getSeenBy = (message: ChatMessageModel) => {
+        // return profile image of users who have seen the message except the sender
+        return message.seenBy
+            .filter((item) => item !== username)
+            .map((item) =>
+                currentChat.dmChatUser1.username === item
+                    ? currentChat.dmChatUser2.profileImage
+                    : currentChat.dmChatUser1.profileImage
+            )
+    }
     const TextMessage = ({ message }: { message: ChatMessageModel }) => {
         if (message.from !== username) {
             return (
@@ -76,11 +87,7 @@ const ChatBox: React.FC = () => {
         } else {
             return (
                 <ItemChatTextRight
-                    seen={message.seenBy.map((item) =>
-                        currentChat.dmChatUser1.username === item
-                            ? currentChat.dmChatUser1.profileImage
-                            : currentChat.dmChatUser2.profileImage
-                    )}
+                    seen={getSeenBy(message)}
                     message={message.text as string}
                     time={message.time}
                 />
@@ -107,11 +114,7 @@ const ChatBox: React.FC = () => {
         } else {
             return (
                 <ItemChatImageRight
-                    seen={message.seenBy.map((item) =>
-                        currentChat.dmChatUser1.username === item
-                            ? currentChat.dmChatUser1.profileImage
-                            : currentChat.dmChatUser2.profileImage
-                    )}
+                    seen={getSeenBy(message)}
                     image={message.image}
                     time={message.time}
                 />
@@ -138,11 +141,7 @@ const ChatBox: React.FC = () => {
         } else {
             return (
                 <ItemChatStickerRight
-                    seen={message.seenBy.map((item) =>
-                        currentChat.dmChatUser1.username === item
-                            ? currentChat.dmChatUser1.profileImage
-                            : currentChat.dmChatUser2.profileImage
-                    )}
+                    seen={getSeenBy(message)}
                     sticker={message.sticker}
                     time={message.time}
                 />
