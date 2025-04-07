@@ -7,7 +7,7 @@ import {
     DialogTitle,
     Button,
     Divider,
-    Box,
+    Avatar,
 } from '@mui/material'
 import useAuthStore from '../../store/auth.store.ts'
 import useLocalStore from '../../store/local.store.ts'
@@ -28,18 +28,22 @@ const LogoutConfirmation: React.FC<LogoutConfirmationProps> = ({ open, handleClo
         handleClose()
     }
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <Box height={6} bgcolor='primary.main' />
-            <DialogTitle>Are you sure?</DialogTitle>
+        <Dialog open={open} onClose={handleClose} fullWidth={true}>
+            <DialogTitle>
+                <div className={'flex flex-row items-center justify-start gap-4'}>
+                    <Avatar src={'/src/assets/logo.png'} />
+                    Logout
+                </div>
+            </DialogTitle>
             <Divider />
             <DialogContent>
-                <DialogContentText>Do you really want to log out?</DialogContentText>
+                <DialogContentText>Are you sure you want to logout?</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color='primary'>
                     No
                 </Button>
-                <Button onClick={logoutUser} color='error' autoFocus>
+                <Button onClick={logoutUser} color='error'>
                     Yes
                 </Button>
             </DialogActions>

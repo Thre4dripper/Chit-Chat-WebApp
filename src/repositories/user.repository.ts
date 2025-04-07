@@ -19,6 +19,11 @@ class UserRepository {
         const user = auth.currentUser
         const username = useLocalStore.getState().username
 
+        if (!user || !username) {
+            onSuccess(false)
+            return
+        }
+
         GetProfile.getProfile(firestore, user, username, (profile) => {
             if (profile) {
                 useHomeStore.getState().setUser(profile)

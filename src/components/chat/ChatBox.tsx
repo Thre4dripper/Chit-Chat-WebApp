@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
@@ -11,59 +11,65 @@ import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
 import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 import ChatMessageModel from '../../models/chat.message.model.ts'
-import { Button } from '@mui/material'
+import { Fab } from '@mui/material'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 
 const ChatBox: React.FC = () => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
-    const chatContainerRef = useRef<HTMLDivElement>(null)
-    const [showScrollButton, setShowScrollButton] = useState(false)
 
-    // Scroll to bottom function
-    const scrollToBottom = () => {
-        if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTo({
-                top: chatContainerRef.current.scrollHeight,
-                behavior: 'smooth',
-            })
-            setShowScrollButton(false)
-        }
-    }
-    const debounce = <T extends (...args: any[]) => void>(
-        func: T,
-        delay: number
-    ): ((...args: Parameters<T>) => void) => {
-        let timeoutId: ReturnType<typeof setTimeout> | undefined
+    const [showGotoBottomButton, setShowGotoBottomButton] = useState(false)
+    const observerTarget = useRef(null)
 
-        return (...args: Parameters<T>) => {
-            if (timeoutId) {
-                clearTimeout(timeoutId)
-            }
-            timeoutId = setTimeout(() => func(...args), delay)
-        }
-    }
-
-    // Track scrolling
     useEffect(() => {
-        const chatContainer = chatContainerRef.current
-        if (!chatContainer) return
+        // Create an IntersectionObserver to observe the last chat message
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0]
+                if (entry.isIntersecting) {
+                    setShowGotoBottomButton(false)
+                } else {
+                    setShowGotoBottomButton(true)
+                }
+            },
+            { threshold: 0.1 }
+        )
 
-        const handleScroll = debounce(() => {
-            setShowScrollButton(
-                chatContainer.scrollTop + chatContainer.clientHeight <
-                    chatContainer.scrollHeight - 50
-            )
-        }, 100)
+        const target = observerTarget.current
 
-        chatContainer.addEventListener('scroll', handleScroll)
+        if (target) {
+            observer.observe(target)
+        }
 
         return () => {
-            chatContainer.removeEventListener('scroll', handleScroll)
+            if (target) {
+                observer.unobserve(target)
+            }
         }
-    }, [])
+
+        // reset the observer when the chat messages change
+    }, [currentChat?.chatMessages])
+
+    const scrollToBottom = () => {
+        if (observerTarget.current) {
+            const target = observerTarget.current as HTMLDivElement
+            target.scrollIntoView({ behavior: 'smooth' })
+        }
+    }
+
     if (currentChat === null) {
         return <EmptyChatFragment />
+    }
+
+    const getSeenBy = (message: ChatMessageModel) => {
+        // return profile image of users who have seen the message except the sender
+        return message.seenBy
+            .filter((item) => item !== username)
+            .map((item) =>
+                currentChat.dmChatUser1.username === item
+                    ? currentChat.dmChatUser2.profileImage
+                    : currentChat.dmChatUser1.profileImage
+            )
     }
     const TextMessage = ({ message }: { message: ChatMessageModel }) => {
         if (message.from !== username) {
@@ -81,11 +87,7 @@ const ChatBox: React.FC = () => {
         } else {
             return (
                 <ItemChatTextRight
-                    seen={message.seenBy.map((item) =>
-                        currentChat.dmChatUser1.username === item
-                            ? currentChat.dmChatUser1.profileImage
-                            : currentChat.dmChatUser2.profileImage
-                    )}
+                    seen={getSeenBy(message)}
                     message={message.text as string}
                     time={message.time}
                 />
@@ -112,11 +114,7 @@ const ChatBox: React.FC = () => {
         } else {
             return (
                 <ItemChatImageRight
-                    seen={message.seenBy.map((item) =>
-                        currentChat.dmChatUser1.username === item
-                            ? currentChat.dmChatUser1.profileImage
-                            : currentChat.dmChatUser2.profileImage
-                    )}
+                    seen={getSeenBy(message)}
                     image={message.image}
                     time={message.time}
                 />
@@ -143,11 +141,7 @@ const ChatBox: React.FC = () => {
         } else {
             return (
                 <ItemChatStickerRight
-                    seen={message.seenBy.map((item) =>
-                        currentChat.dmChatUser1.username === item
-                            ? currentChat.dmChatUser1.profileImage
-                            : currentChat.dmChatUser2.profileImage
-                    )}
+                    seen={getSeenBy(message)}
                     sticker={message.sticker}
                     time={message.time}
                 />
@@ -158,12 +152,14 @@ const ChatBox: React.FC = () => {
     return (
         <div
             className={
-                'z-0 flex-1 bg-white overflow-y-scroll flex flex-col-reverse relative' +
-                'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full'
-            }
-            ref={chatContainerRef}>
-            {currentChat.chatMessages.map((message) => (
-                <div className={'flex gap-2'} key={message.id}>
+                'z-0 flex-1 bg-white overflow-y-scroll flex flex-col-reverse relative ' +
+                'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full h-full'
+            }>
+            {currentChat.chatMessages.map((message, index) => (
+                <div
+                    className={'flex gap-2'}
+                    key={message.id}
+                    ref={index === 0 ? observerTarget : null}>
                     {/*First Message*/}
                     {message.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
                     {/*text Message*/}
@@ -178,21 +174,24 @@ const ChatBox: React.FC = () => {
                     )}
                 </div>
             ))}
-            {showScrollButton && (
-                <Button
-                    onClick={scrollToBottom}
-                    sx={{
-                        position: 'absolute',
-                        right: '50px',
-                        bottom: '100px',
-                        backgroundColor: 'skyblue',
-                        borderRadius: '100%',
-                        color: 'white',
-                    }}
-                    className='w-12 h-12'>
-                    <KeyboardDoubleArrowDownIcon />
-                </Button>
-            )}
+            <Fab
+                sx={{
+                    'position': 'fixed',
+                    'backgroundColor': '#334155',
+                    'bottom': 80,
+                    'right': 20,
+                    'zIndex': 100,
+                    'color': 'white',
+                    '&:hover': {
+                        backgroundColor: '#475569',
+                    },
+                    'width': 50,
+                    'height': 50,
+                    'display': showGotoBottomButton ? 'flex' : 'none',
+                }}
+                onClick={scrollToBottom}>
+                <KeyboardDoubleArrowDownIcon />
+            </Fab>
         </div>
     )
 }

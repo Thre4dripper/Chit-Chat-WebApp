@@ -1,7 +1,9 @@
 /node_modules
 /.idea
+/.vscode
 .env
 .env.sample
 .gitignore
 yarn.lock
 yarn-error.log
+/dist

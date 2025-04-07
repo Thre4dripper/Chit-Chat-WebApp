@@ -11,10 +11,15 @@ class HomeRepository {
         const auth = getAuth()
         const user = auth.currentUser
 
+        if (!user) {
+            onSuccess(null)
+            return
+        }
+
         CrudUtils.getFirestoreDocument(
             firestore,
             FirestoreCollections.REGISTERED_IDS_COLLECTION,
-            user!.uid,
+            user.uid,
             (data) => {
                 if (data) {
                     onSuccess(data[UserConstants.USERNAME] as string)

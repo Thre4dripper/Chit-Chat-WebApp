@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography'
 import { CropRotate, Save } from '@mui/icons-material'
 import CustomSmoothSlider from '../../components/CustomSmoothSlider.tsx'
 import StorageUtils from '../../utils/StorageUtils.ts'
-import { LoadingButton } from '@mui/lab'
 import useUserDetailsStore from '../../store/user.details.store.ts'
 import { enqueueSnackbar } from 'notistack'
 import { SuccessMessages } from '../../constants/SuccessMessages.ts'
@@ -253,7 +252,7 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                         <Button variant='outlined' color='error' onClick={onCancel}>
                             Cancel
                         </Button>
-                        <LoadingButton
+                        <Button
                             variant='contained'
                             color='primary'
                             onClick={() => {
@@ -263,7 +262,7 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                             loadingPosition={'start'}
                             startIcon={<Save />}>
                             Confirm
-                        </LoadingButton>
+                        </Button>
                     </div>
                 </Paper>
             </div>

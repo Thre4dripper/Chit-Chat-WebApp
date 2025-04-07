@@ -13,7 +13,6 @@ import {
     Stack,
     Box,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import { enqueueSnackbar } from 'notistack'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -198,7 +197,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                     color='error'>
                     Cancel
                 </Button>
-                <LoadingButton
+                <Button
                     onClick={handleSubmit(handleSave)}
                     loading={loading}
                     disabled={errors.inputValue !== undefined}
@@ -207,7 +206,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                     variant='contained'
                     color='primary'>
                     Save
-                </LoadingButton>
+                </Button>
             </DialogActions>
         </Dialog>
     )
