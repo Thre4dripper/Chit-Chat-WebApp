@@ -41,7 +41,7 @@ import assets39 from '../assets/stickers/sticker_yoda_2.json'
 import assets40 from '../assets/stickers/sticker_yoda_3.json'
 import assets41 from '../assets/stickers/sticker_yoda_4.json'
 
-const stickerMap: Record<number, any> = {
+export const stickerMap: Record<number, any> = {
     0: assets0,
     1: assets1,
     2: assets2,

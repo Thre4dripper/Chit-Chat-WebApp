@@ -12,6 +12,7 @@ type chatDetailsActions = {
     updateSeen: (chat: ChatModel | null) => void
     setChatDetails: (chatId: string) => void
     sendTextMessage: (chatModel: ChatModel, text: string, from: string, to: string) => void
+    sendStickerMessage:(chatModel:ChatModel,stickerIndex:number,from:string,to:string)=>void
     setCurrentChatId: (chatId: string) => void
 }
 
@@ -40,9 +41,14 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
             },
             sendTextMessage: (chatModel, text, from, to) => {
                 UserChatsRepository.sendTextMessage(chatModel, text, from, to, (id) => {
-                    console.log('message sent', id)
+                    console.log('message sent', id);
                 })
             },
+            sendStickerMessage:(chatModel, stickerIndex, from, to)=>{
+                UserChatsRepository.sendSticker(chatModel,stickerIndex,from,to,(id)=>{
+                    console.log('sticker send',id);
+                })
+            }
         }))
     )
 )

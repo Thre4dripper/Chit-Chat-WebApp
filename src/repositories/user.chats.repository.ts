@@ -64,6 +64,17 @@ class UserChatsRepository {
         SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)
     }
 
+    static sendSticker(
+        chatModel: ChatModel,
+        stickerIndex: number,
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
+    ) {
+        const firestore = getFirestore(firebaseApp)
+        SendChat.SendSticker(firestore,chatModel,stickerIndex,from, to, chatMessageId)
+    }
+
     static updateSeen(chatModel: ChatModel | null) {
         const firestore = getFirestore(firebaseApp)
         const loggedInUser = useLocalStore.getState().username

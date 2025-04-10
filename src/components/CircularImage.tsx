@@ -7,12 +7,12 @@ interface CircularImageProps {
     alt?: string
 }
 
-const CircularImage: React.FC<CircularImageProps> = ({ image, size, alt }) => {
+const CircularImage: React.FC<CircularImageProps> = ({ image, size }) => {
     return (
         <div className={'flex flex-col justify-center'}>
             <IconButton>
                 <div className={'rounded-full p-0.5 bg-white'}>
-                    <Avatar src={image} sx={{ width: size, height: size }} alt={alt} />
+                    <Avatar src={image} sx={{ width: size, height: size }} />
                 </div>
             </IconButton>
         </div>
