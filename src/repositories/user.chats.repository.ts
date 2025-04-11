@@ -63,6 +63,16 @@ class UserChatsRepository {
         const firestore = getFirestore(firebaseApp)
         SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)
     }
+    static sendImage(
+        chatModel: ChatModel,
+        imageUri: string,
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
+    ){
+        const firestore = getFirestore(firebaseApp)
+        SendChat.SendImage(firestore, chatModel, imageUri, from, to, chatMessageId)
+    }
 
     static sendSticker(
         chatModel: ChatModel,
