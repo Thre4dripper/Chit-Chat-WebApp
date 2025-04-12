@@ -15,6 +15,7 @@ type chatDetailsActions = {
     sendStickerMessage:(chatModel:ChatModel,stickerIndex:number,from:string,to:string)=>void
     sendImageMessage:(ChatModel:ChatModel,image:string,from:string,to:string) => void
     setCurrentChatId: (chatId: string) => void
+    deleteChat:(chatModel: ChatModel,success:(check:boolean)=>void)=>void
 }
 
 const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
@@ -54,6 +55,9 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
                 UserChatsRepository.sendImage(chatModel,image,from,to,(id)=>{
                     console.log('message sent', id);
                 })
+            },
+            deleteChat(chatModel,onSuccess) {
+                UserChatsRepository.deleteChat(chatModel,onSuccess)
             }
         }))
     )
