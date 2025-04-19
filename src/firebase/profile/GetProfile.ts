@@ -21,7 +21,7 @@ class GetProfile {
         })
     }
 
-    private static getProfileFromUidDoc(
+    static getProfileFromUidDoc(
         firestore: Firestore,
         uid: string,
         profile: (userModel: UserModel | null) => void

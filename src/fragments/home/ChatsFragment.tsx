@@ -2,13 +2,14 @@ import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ChatIcon from '@mui/icons-material/Chat'
-import React, { SetStateAction } from 'react'
+import React, {SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+// import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
 import useHomeStore from '../../store/home.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
+import UserModel from '../../models/user.model.ts'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
@@ -17,8 +18,9 @@ const ChatsFragment: React.FC<{
 }> = ({ openProfile, setDialogState, setLogoutDialogState }) => {
     const { user } = useHomeStore()
     const homeChats = useHomeChatsStore((state) => state.homeChats)
+    const favouriteProfiles:UserModel[]=[]
 
-    const favChats: number[] = [] // this Will Changed Soon based on User Data current
+
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -81,7 +83,7 @@ const ChatsFragment: React.FC<{
                     'overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-800/10 scrollbar-thumb-rounded-full'
                 }>
                 {/*Fav chats list*/}
-                {favChats.length > 0 && (
+                {favouriteProfiles.length>0 && (
                     <div>
                         <div className={'flex flex-col'}>
                             <div className={'flex flex-row m-4'}>
@@ -94,19 +96,19 @@ const ChatsFragment: React.FC<{
                             </div>
                             <div className='flex overflow-hidden'>
                                 <div className={'flex flex-row gap-4'}>
-                                    {favChats.map((item) => (
+                                    {favouriteProfiles.map((item) => (
                                         <ItemFavChat
-                                            key={item}
-                                            image={'https://i.pravatar.cc/300'}
-                                            name={`Item ${item}`}
+                                            key={item.uid}
+                                            image={item.profileImage}
+                                            name={item.name}
                                         />
                                     ))}
                                 </div>
-                                <div className={'flex-auto flex justify-center'}>
-                                    <IconButton>
-                                        <ArrowForwardIosIcon className={'text-white/50'} />
-                                    </IconButton>
-                                </div>
+                                {/*<div className={'flex-auto flex justify-center'}>*/}
+                                {/*    <IconButton>*/}
+                                {/*        <ArrowForwardIosIcon className={'text-white/50'} />*/}
+                                {/*    </IconButton>*/}
+                                {/*</div>*/}
                             </div>
                         </div>
                     </div>
