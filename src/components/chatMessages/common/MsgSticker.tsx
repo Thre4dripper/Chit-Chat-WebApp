@@ -6,6 +6,7 @@ interface LeftStickerProps {
     stickerData: LottieOptions['animationData']
 }
 
+
 const MsgSticker: React.FC<LeftStickerProps> = ({ stickerData }) => {
     return (
         <div className={'rounded-2xl w-fit overflow-hidden'}>

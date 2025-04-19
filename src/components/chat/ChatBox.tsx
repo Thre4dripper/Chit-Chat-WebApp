@@ -67,8 +67,8 @@ const ChatBox: React.FC = () => {
             .filter((item) => item !== username)
             .map((item) =>
                 currentChat.dmChatUser1.username === item
-                    ? currentChat.dmChatUser2.profileImage
-                    : currentChat.dmChatUser1.profileImage
+                    ? currentChat.dmChatUser1.profileImage
+                    : currentChat.dmChatUser2.profileImage
             )
     }
     const TextMessage = ({ message }: { message: ChatMessageModel }) => {

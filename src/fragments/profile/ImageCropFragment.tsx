@@ -8,8 +8,12 @@ import { CropRotate, Save } from '@mui/icons-material'
 import CustomSmoothSlider from '../../components/CustomSmoothSlider.tsx'
 import StorageUtils from '../../utils/StorageUtils.ts'
 import useUserDetailsStore from '../../store/user.details.store.ts'
+import useChatDetailsStore from '../../store/chat.details.store.ts'
 import { enqueueSnackbar } from 'notistack'
 import { SuccessMessages } from '../../constants/SuccessMessages.ts'
+import useLocalStore from '../../store/local.store.ts'
+import { getStorage } from 'firebase/storage'
+import { StorageFolders } from '../../constants/StorageFolders.ts'
 
 interface OutputSize {
     width: number
@@ -23,6 +27,8 @@ interface ImageCropFragmentProps {
     image: string | null
     onCancel: () => void
     onConfirmed: (image: File) => void
+    Profile?:boolean
+
 }
 
 const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
@@ -32,12 +38,19 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
     image,
     onCancel,
     onConfirmed,
+    Profile=true
 }) => {
     const [crop, setCrop] = React.useState<Crop>()
     const imageRef = useRef<HTMLImageElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     const [rotation, setRotation] = React.useState(0)
+
+     // send image info here
+    const sendImageMessage= useChatDetailsStore((state) => state.sendImageMessage)
+    const username=useLocalStore((state) => state.username)
+    const chatDetails=useChatDetailsStore((state) => state.chatDetails)
+
 
     const onCropComplete = (crop: Crop) => {
         const { width, height } = imageRef.current!
@@ -155,19 +168,48 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                         const base64data = reader.result
                         if (typeof base64data === 'string') {
                             setLoading(true)
-                            updateProfilePicture(file, (message) => {
-                                enqueueSnackbar(message, {
-                                    variant: 'success',
+                            if (Profile) {
+                                updateProfilePicture(file, (message) => {
+                                    enqueueSnackbar(message, {
+                                        variant: 'success',
+                                        autoHideDuration: 3000,
+                                    })
+                                    if (
+                                        message === SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY
+                                    ) {
+                                        onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                                    }
+                                    setLoading(false)
+                                })
+                            }
+                         else {
+                            //   image message sending here
+
+                            console.log('Normal Image Message is Send Successfully');
+                            if(!username || !chatDetails){
+                                enqueueSnackbar("wrong something", {
+                                    variant: 'error',
                                     autoHideDuration: 3000,
                                 })
-                                if (
-                                    message === SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY
-                                ) {
-                                    onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
-                                }
+                                onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
                                 setLoading(false)
-                            })
+                                return;
+                            }
+                                const storage = getStorage()
+                                const from = username
+                                const to = chatDetails.dmChatUser1.username === username ? chatDetails.dmChatUser2.username : chatDetails.dmChatUser1.username
+
+                                StorageUtils.getUrlFromStorage(storage,`${StorageFolders.CHAT_IMAGES_FOLDER}/${from}-${to}-${Date.now().toString()}`,file,(url)=>{
+                                    if(!url){
+                                        return;
+                                    }
+                                    sendImageMessage(chatDetails,url,from,to);
+                                })
+
+                            onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                            setLoading(false)
                         }
+                    }
                     }
                 },
                 'image/jpeg',
@@ -175,6 +217,8 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
             )
         }
     }
+
+
 
     return (
         <div className={'w-full h-full'}>
@@ -263,6 +307,7 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                             startIcon={<Save />}>
                             Confirm
                         </Button>
+
                     </div>
                 </Paper>
             </div>

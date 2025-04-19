@@ -8,6 +8,10 @@ import ChatModel from '../models/user.chat.model.ts'
 import HomeChatModel from '../models/home.chat.model.ts'
 import SendChat from '../firebase/chats/SendChat.ts'
 import UpdateSeen from '../firebase/chats/UpdateSeen.ts'
+import { getStorage } from 'firebase/storage'
+import DeleteChat from '../firebase/chats/DeleteChat.ts'
+import { ChatMessageType } from '../enums/ChatMessageType.ts'
+import ClearChat from '../firebase/chats/ClearChat.ts'
 
 class UserChatsRepository {
     static getAllUserChats() {
@@ -63,6 +67,27 @@ class UserChatsRepository {
         const firestore = getFirestore(firebaseApp)
         SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)
     }
+    static sendImage(
+        chatModel: ChatModel,
+        imageUri: string,
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
+    ){
+        const firestore = getFirestore(firebaseApp)
+        SendChat.SendImage(firestore, chatModel, imageUri, from, to, chatMessageId)
+    }
+
+    static sendSticker(
+        chatModel: ChatModel,
+        stickerIndex: number,
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
+    ) {
+        const firestore = getFirestore(firebaseApp)
+        SendChat.SendSticker(firestore,chatModel,stickerIndex,from, to, chatMessageId)
+    }
 
     static updateSeen(chatModel: ChatModel | null) {
         const firestore = getFirestore(firebaseApp)
@@ -74,6 +99,26 @@ class UserChatsRepository {
             console.log('seen updated', check)
         }
         UpdateSeen.updateSeen(firestore, chatModel, loggedInUser, onSuccess)
+    }
+    static deleteChat(chatModel:ChatModel,onSuccess: (done:boolean) => void) {
+        const firestore = getFirestore(firebaseApp)
+        const storage=getStorage()
+        DeleteChat.deleteUserChat(firestore,chatModel,(success)=>{
+               if(!success){
+                   onSuccess(false)
+                   return
+               }
+               const hasImages=chatModel.chatMessages.filter((chatMessage) => {
+                   return chatMessage.type ===ChatMessageType.TypeImage
+               })
+               if(!hasImages){
+                   onSuccess(true)
+                   return
+               }
+               ClearChat.clearChatImages(storage,chatModel,(isImagesDeleted)=>{
+                     onSuccess(isImagesDeleted)
+               })
+        })
     }
 }
 
