@@ -1,37 +1,35 @@
-import React, { useState ,useRef} from 'react'
-import { IconButton, TextareaAutosize, Box,  Popper, Paper, ClickAwayListener } from '@mui/material'
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import ImageIcon from '@mui/icons-material/Image';
+import React, { useState, useRef } from 'react'
+import { IconButton, TextareaAutosize, Box, Popper, Paper, ClickAwayListener } from '@mui/material'
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'
+import ImageIcon from '@mui/icons-material/Image'
 import SendIcon from '@mui/icons-material/Send'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import VirtualizedStickerGrid from '../listItems/ItemSticker.tsx'
-import ImageCropFragment from '../../fragments/profile/ImageCropFragment.tsx'
-
-
+import ImageSendFragment from '../../fragments/home/ImageSendFragement.tsx'
 
 const ChatInput: React.FC = () => {
     const [message, setMessage] = useState('')
     const sendMessage = useChatDetailsStore((state) => state.sendTextMessage)
     const chatDetails = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
-    const DrawerRef = useRef<HTMLButtonElement | null>(null);
+    const DrawerRef = useRef<HTMLButtonElement | null>(null)
     const [stickerOpen, setStickerOpen] = React.useState(false)
-    const [imageOpen,setImageOpen]=React.useState(false)
-    const [imagesrc,setImageSrc]=useState<string |null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [imageOpen, setImageOpen] = React.useState(false)
+    const [imagesrc, setImageSrc] = useState<string | null>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const toggleStickerDrawer = (newOpen: boolean) => {
         setStickerOpen(newOpen)
     }
-    const toggleImageDrawer=(newOpen:boolean)=>{
+    const toggleImageDrawer = (newOpen: boolean) => {
         setImageOpen(newOpen)
-        setImageSrc(null);
+        setImageSrc(null)
     }
     const handleImageClick = () => {
-        fileInputRef.current?.click();
-         toggleImageDrawer(!imageOpen);
-    };
+        fileInputRef.current?.click()
+        toggleImageDrawer(!imageOpen)
+    }
 
     if (!chatDetails) return <></>
 
@@ -48,20 +46,18 @@ const ChatInput: React.FC = () => {
         setMessage('')
     }
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+        const file = event.target.files?.[0]
         if (file) {
-            setImageSrc(URL.createObjectURL(file));
-            setImageOpen(true);
+            setImageSrc(URL.createObjectURL(file))
+            setImageOpen(true)
         }
-    };
-
+    }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault()
             handleSendMessage()
         }
-
     }
     const PasteImage = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
         const items = event.clipboardData.items
@@ -77,18 +73,52 @@ const ChatInput: React.FC = () => {
                 }
 
                 if (file) {
-
                     reader.readAsDataURL(file)
                 }
                 break
             }
         }
-
     }
 
     return (
         <div className='relative'>
             <Box className='bg-slate-300 rounded-bl-3xl rounded-br-3xl flex flex-row gap-2 items-center px-4 py-2 relative'>
+                {imagesrc && imageOpen && (
+
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            zIndex: 10,
+                            position: 'absolute',
+                            minWidth: 300,
+                            width:'100%',
+                            height:'90vh',
+                            display: 'flex',
+                            bottom:0,
+                            right:0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            overflow: 'hidden',
+                            borderRadius: 2,
+                        }}>
+                        <ImageSendFragment
+                            image={imagesrc}
+                            cropShape='rect'
+                            aspect={1}
+                            outputSize={{ width: 300, height: 300 }}
+                            onCancel={() => {
+                                setImageOpen(false)
+                                setImageSrc(null)
+                            }}
+                            onConfirmed={()=>{
+                                setImageOpen(false)
+                                setImageSrc(null)
+                        }}
+                        />
+                    </Paper>
+
+                )}
                 <input
                     type='file'
                     accept='image/*'
@@ -98,9 +128,7 @@ const ChatInput: React.FC = () => {
                 />
 
                 <IconButton onClick={handleImageClick}>
-                    <ImageIcon
-                        className={`active:bg-slate-400 rounded-full text-gray-700`}
-                    />
+                    <ImageIcon className={`active:bg-slate-400 rounded-full text-gray-700`} />
                 </IconButton>
                 <IconButton ref={DrawerRef} onClick={() => toggleStickerDrawer(!stickerOpen)}>
                     <EmojiEmotionsIcon
@@ -128,63 +156,7 @@ const ChatInput: React.FC = () => {
                     <SendIcon className='text-gray-700' />
                 </IconButton>
             </Box>
-            {imagesrc && (
-                <Popper
-                    open={imageOpen}
-                    anchorEl={DrawerRef.current}
-                    placement='top-start'
-                    disablePortal>
-                    <ClickAwayListener
-                        onClickAway={() => {
-                            setImageOpen(false)
-                            setImageSrc(null)
-                        }}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    zIndex: 10,
-                                    position: 'relative',
-                                    minWidth:300,
-                                    maxWidth:500,
-                                    // TODO height co fix rakha filhal dekho if sahi nahi lagta to isko remove karduga
-                                    maxHeight:800,
-                                    p: 1,
-                                    margin: '30px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'column',
-                                    overflow: 'hidden',
-                                    borderRadius: 2,
-                                }}>
-                                <ImageCropFragment
-                                    image={imagesrc}
-                                    cropShape="round"
-                                    aspect={1}
-                                    outputSize={{ width: 300, height: 300 }}
-                                    onCancel={() =>{setImageOpen(false);setImageSrc(null)}}
-                                    onConfirmed={() =>{setImageOpen(false)}}
-                                    Profile={false}
-                                    />
-                                {/*<Box*/}
-                                {/*    component="img"*/}
-                                {/*    src={imagesrc}*/}
-                                {/*    alt="preview"*/}
-                                {/*    sx={{*/}
-                                {/*        zIndex:20,*/}
-                                {/*        width: '100%',*/}
-                                {/*        height: '90%',*/}
-                                {/*        objectFit: 'contain',*/}
-                                {/*        borderRadius: 2,*/}
-                                {/*        flexGrow: 1,*/}
-                                {/*    }}*/}
-                                {/*/>*/}
 
-
-                        </Paper>
-                    </ClickAwayListener>
-                </Popper>
-            )}
             <Popper
                 open={stickerOpen}
                 anchorEl={DrawerRef.current}
@@ -198,6 +170,6 @@ const ChatInput: React.FC = () => {
             </Popper>
         </div>
     )
-            }
+}
 
-            export default ChatInput
+export default ChatInput
