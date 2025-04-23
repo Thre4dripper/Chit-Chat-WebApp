@@ -14,7 +14,6 @@ import { ChatMessageType } from '../enums/ChatMessageType.ts'
 import ClearChat from '../firebase/chats/ClearChat.ts'
 import UserModel from '../models/user.model.ts'
 import MarkFavourite from '../firebase/chats/MarkFavourite.ts'
-// import GetProfile from '../firebase/profile/GetProfile.ts'
 
 class UserChatsRepository {
     static getAllUserChats() {
@@ -125,7 +124,7 @@ class UserChatsRepository {
     //     });
     //
     // }
-    static favouriteChat(userModel:UserModel,favourite:string,onSuccess:(done: boolean) => void) {
+    static favouriteChat(userModel:UserModel,favourite:string,onSuccess:(done:boolean) => void) {
         const firestore = getFirestore(firebaseApp)
         MarkFavourite.markAsFavourite(firestore,userModel,favourite,onSuccess)
     }

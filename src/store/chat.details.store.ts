@@ -4,6 +4,7 @@ import { immer } from 'zustand/middleware/immer'
 import ChatModel from '../models/user.chat.model.ts'
 import UserChatsRepository from '../repositories/user.chats.repository.ts'
 import userModel from '../models/user.model.ts'
+// import UserModel from '../models/user.model.ts'
 
 type chatDetailsState = {
     currentChatId: string | null

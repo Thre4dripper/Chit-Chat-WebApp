@@ -1,116 +1,121 @@
-import React, { useRef, useState } from 'react'
-import { Button } from '@mui/material'
-import { ReactCrop, Crop, centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
-import StorageUtils from '../../utils/StorageUtils.ts'
-import useChatDetailsStore from '../../store/chat.details.store.ts'
-import useLocalStore from '../../store/local.store.ts'
-import { getStorage } from 'firebase/storage'
-import { StorageFolders } from '../../constants/StorageFolders.ts'
-
-interface OutputSize {
-    width: number
-    height: number
-}
+import React, { useRef, useState, useEffect } from 'react';
+import {
+    ReactCrop,
+    Crop,
+} from 'react-image-crop';
+import Button from '@mui/material/Button';
+import 'react-image-crop/dist/ReactCrop.css';
+import SendIcon from '@mui/icons-material/Send';
+import useChatDetailsStore from '../../store/chat.details.store';
+import useLocalStore from '../../store/local.store';
 
 interface ImageSendFragmentProps {
-    cropShape: 'rect' | 'round'
-    aspect: number
-    outputSize: OutputSize
-    image: string | null
-    onCancel: () => void
-    onConfirmed:()=> void
+    image: string | null;
+    cropShape: 'rect' | 'round';
+    aspect: number;
+    onConfirmed: () => void;
 }
 
 const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
+                                                                 image,
                                                                  cropShape,
                                                                  aspect,
-                                                                 image,
-                                                                 onCancel,
                                                                  onConfirmed,
                                                              }) => {
-    const [crop, setCrop] = useState<Crop>()
-    const imageRef = useRef<HTMLImageElement>(null)
-    const sendImageMessage= useChatDetailsStore((state) => state.sendImageMessage)
-    const username=useLocalStore((state) => state.username)
-    const chatDetails=useChatDetailsStore((state) => state.chatDetails)
+    const imgRef = useRef<HTMLImageElement | null>(null);
+    const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [crop, setCrop] = useState<Crop>({unit: '%', // can be 'px' or '%'
+        x: 25,
+        y: 25,
+        width: 50,
+        height: 50});
 
-    const onImageLoaded = (e: React.SyntheticEvent<HTMLImageElement>) => {
-        const { width, height } = e.currentTarget
-        const crop = makeAspectCrop({ unit: '%', width: 100 }, aspect, width, height)
-        setCrop(centerCrop(crop, width, height))
-    }
+    const chatDetails = useChatDetailsStore((state) => state.chatDetails);
+    const username = useLocalStore((state) => state.username);
+    const sendImageMessage = useChatDetailsStore((state) => state.sendImageMessage);
 
-    const handleConfirm = () => {
-        const imageEl = imageRef.current
-        if (!imageEl || !crop) return
+    useEffect(() => {
+        if (!crop || !imgRef.current || !previewCanvasRef.current) return;
 
-        const canvas = document.createElement('canvas')
-        const scaleX = imageEl.naturalWidth / imageEl.width
-        const scaleY = imageEl.naturalHeight / imageEl.height
-        const pixelCrop = convertToPixelCrop(crop, imageEl.width, imageEl.height)
+        const canvas = previewCanvasRef.current;
+        const image = imgRef.current;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-        canvas.width = pixelCrop.width * scaleX
-        canvas.height = pixelCrop.height * scaleY
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
 
-        const ctx = canvas.getContext('2d')
-        if (!ctx) return
+        const pixelRatio = window.devicePixelRatio;
+
+        canvas.width = crop.width * pixelRatio;
+        canvas.height = crop.height * pixelRatio;
+
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        ctx.imageSmoothingQuality = 'high';
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.drawImage(
-            imageEl,
-            pixelCrop.x * scaleX,
-            pixelCrop.y * scaleY,
-            pixelCrop.width * scaleX,
-            pixelCrop.height * scaleY,
+            image,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
             0,
             0,
-            canvas.width,
-            canvas.height
-        )
+            crop.width,
+            crop.height
+        );
+    }, [crop]);
 
-        canvas.toBlob((blob) => {
+    const handleConfirm = async () => {
+        if (!chatDetails || !username || !previewCanvasRef.current) return;
+
+        const to =
+            chatDetails.dmChatUser1.username === username
+                ? chatDetails.dmChatUser2.username
+                : chatDetails.dmChatUser1.username;
+
+        previewCanvasRef.current.toBlob((blob) => {
             if (blob) {
-                const file = new File([blob], 'cropped.jpeg', { type: 'image/jpeg' })
-                const storage = getStorage()
-                const from = username
-                if(!username || !chatDetails){
-                    alert("wrong something ")
-                    return;
-                }
-                const to = chatDetails.dmChatUser1.username === username ? chatDetails.dmChatUser2.username : chatDetails.dmChatUser1.username
-
-                StorageUtils.getUrlFromStorage(storage,`${StorageFolders.CHAT_IMAGES_FOLDER}/${chatDetails.chatId}-${Date.now().toString()}`,file,(url)=>{
-                    if(!url || !from){
-                        return;
-                    }
-                    sendImageMessage(chatDetails,url,from,to);
-                })
-                onConfirmed()
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64data = reader.result as string;
+                    sendImageMessage(chatDetails, base64data, username, to); // now sending a string
+                    onConfirmed();
+                };
+                reader.readAsDataURL(blob); // convert blob to base64 string
             }
-        }, 'image/jpeg')
-    }
+        }, 'image/jpeg');
+    };
 
     return (
-        <div className={``}>
-            <ReactCrop
-                crop={crop}
-                onChange={(_, percentCrop) => setCrop(percentCrop)}
-                circularCrop={cropShape === 'round'}
-                aspect={aspect}
-            >
-                <img ref={imageRef} className="w-full h-full object-contain object-top" src={image ?? ''} onLoad={onImageLoaded} alt="To crop" />
-            </ReactCrop>
+        <div className='flex flex-col items-center gap-4'>
+            {image && (
+                <>
+                    <ReactCrop
+                        crop={crop}
+                        onChange={(c) => setCrop(c)}
+                        aspect={undefined}
+                        circularCrop={cropShape === 'round'}>
+                        <img
+                            ref={imgRef}
+                            src={image}
+                            alt='To Crop'
+                            className='max-w-full max-h-64'
+                        />
+                    </ReactCrop>
+                    <canvas ref={previewCanvasRef} style={{ display: 'none' }} />
 
-            <div className="flex justify-end gap-4 mt-4">
-                <Button variant="outlined" color="error" onClick={onCancel}>
-                    Cancel
-                </Button>
-                <Button variant="contained" color="primary" onClick={handleConfirm}>
-                     Send
-                </Button>
-            </div>
-       </div>
+                    <Button
+                        sx={{ float: 'right', position: 'absolute', bottom: '10px', right: '5px' }}
+                        color='success'
+                        onClick={handleConfirm}
+                        endIcon={<SendIcon />}></Button>
+                </>
+            )}
+        </div>
     )
-}
+};
 
-export default ImageSendFragment
+export default ImageSendFragment;

@@ -13,6 +13,7 @@ const ChatHeader: React.FC = () => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
     const userModel= useHomeStore((state)=>state.user)
+    // const setUser=useHomeStore((state)=>state.setUser)
     const currentChatId=useChatDetailsStore((state)=>state.currentChatId)
     const [openPopper, setOpenPopper] = useState(false)
     const deleteChat = useChatDetailsStore((state) => state.deleteChat)
@@ -61,9 +62,14 @@ const ChatHeader: React.FC = () => {
                  console.log("Something wrong in chatId in Favourite")
                  return
              }
-             markFavourite(userModel,currentChatId,(sucess)=>{
-                 if(!sucess) alert("any issue in this")
-             })
+             markFavourite(userModel,currentChatId,((done)=> {
+                 if (!done) {
+                     alert('f**')
+                     return
+                 }
+                 console.log("wtf you did this omg")
+             }))
+
         } else if (actionDetails === 3) {
             clearChat(currentChat, (sucesss) => {
                 if (!sucesss) alert('nothing breaks')
