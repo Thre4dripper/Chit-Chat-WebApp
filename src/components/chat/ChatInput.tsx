@@ -139,7 +139,6 @@ const ChatInput: React.FC = () => {
                     <ImageSendFragment
                         image={imagesrc}
                         cropShape="rect"
-                        aspect={1}
                         onConfirmed={() => {
                             setImageOpen(false);
                             setImageSrc(null);

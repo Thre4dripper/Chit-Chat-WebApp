@@ -12,14 +12,12 @@ import useLocalStore from '../../store/local.store';
 interface ImageSendFragmentProps {
     image: string | null;
     cropShape: 'rect' | 'round';
-    aspect: number;
     onConfirmed: () => void;
 }
 
 const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
                                                                  image,
                                                                  cropShape,
-                                                                 aspect,
                                                                  onConfirmed,
                                                              }) => {
     const imgRef = useRef<HTMLImageElement | null>(null);
