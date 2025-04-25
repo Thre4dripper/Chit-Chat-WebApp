@@ -5,24 +5,26 @@ import {
     Box,
     Popper,
     Paper,
-    ClickAwayListener,
-    Modal,
+    ClickAwayListener
 } from '@mui/material';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import ImageIcon from '@mui/icons-material/Image';
 import SendIcon from '@mui/icons-material/Send';
-import CloseIcon from '@mui/icons-material/Close';
 import useChatDetailsStore from '../../store/chat.details.store.ts';
 import useLocalStore from '../../store/local.store.ts';
 import VirtualizedStickerGrid from '../listItems/ItemSticker.tsx';
-import ImageSendFragment from '../../fragments/home/ImageSendFragement.tsx';
 
-const ChatInput: React.FC = () => {
+interface ChatInputProps {
+    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handlePaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void;
+    fileInputRef:React.RefObject<HTMLInputElement>
+}
+
+
+const ChatInput: React.FC<ChatInputProps> = ({handlePaste,fileInputRef,handleFileChange}) => {
     const [message, setMessage] = useState('');
     const [stickerOpen, setStickerOpen] = useState(false);
-    const [imageOpen, setImageOpen] = useState(false);
-    const [imagesrc, setImageSrc] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const DrawerRef = useRef<HTMLButtonElement | null>(null);
 
     const sendMessage = useChatDetailsStore((state) => state.sendTextMessage);
@@ -41,31 +43,9 @@ const ChatInput: React.FC = () => {
         setMessage('');
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setImageSrc(URL.createObjectURL(file));
-            setImageOpen(true);
-            e.target.value = '';
-        }
 
-    };
 
-    const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-        const items = e.clipboardData.items;
-        for (const item of items) {
-            if (item.type.startsWith('image/')) {
-                const file = item.getAsFile();
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const result = ev.target?.result;
-                    if (typeof result === 'string') setImageSrc(result);
-                    setImageOpen(true);
-                };
-                if (file) reader.readAsDataURL(file);
-            }
-        }
-    };
+
 
     const toggleStickerDrawer = () => setStickerOpen(!stickerOpen);
 
@@ -124,38 +104,6 @@ const ChatInput: React.FC = () => {
                 </ClickAwayListener>
             </Popper>
 
-            <Modal open={imageOpen} onClose={() => setImageOpen(false)}>
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 600,
-                        backgroundColor: 'background.paper',
-                        p: 6,
-                    }}
-                >
-                    <ImageSendFragment
-                        image={imagesrc}
-                        cropShape="rect"
-                        onConfirmed={() => {
-                            setImageOpen(false);
-                            setImageSrc(null);
-                        }}
-                    />
-                    <IconButton
-                        color="error"
-                        onClick={() => {
-                            setImageOpen(false);
-                            setImageSrc(null);
-                        }}
-                        sx={{ position: 'absolute', top: 1, right: 2 }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </Box>
-            </Modal>
         </div>
     );
 };

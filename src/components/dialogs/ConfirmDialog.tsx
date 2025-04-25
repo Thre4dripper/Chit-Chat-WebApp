@@ -17,13 +17,14 @@ interface ConfirmDialogProps {
     title: string
     message:string
     action:()=>void
+    width?: number
 
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose,title,message,action }) => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose,title,message,action,width }) => {
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth={true}>
+        <Dialog open={open} onClose={handleClose} fullWidth={!width}>
             <DialogTitle>
                 <div className={'flex flex-row items-center justify-start gap-4'}>
                     <Avatar src={'/src/assets/logo.png'} />

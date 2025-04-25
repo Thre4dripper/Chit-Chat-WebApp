@@ -22,16 +22,28 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
                                                              }) => {
     const imgRef = useRef<HTMLImageElement | null>(null);
     const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [crop, setCrop] = useState<Crop>({unit: '%', // can be 'px' or '%'
-        x: 25,
-        y: 25,
-        width: 50,
-        height: 50});
+    const [crop, setCrop] = useState<Crop|undefined>(undefined);
 
     const chatDetails = useChatDetailsStore((state) => state.chatDetails);
     const username = useLocalStore((state) => state.username);
     const sendImageMessage = useChatDetailsStore((state) => state.sendImageMessage);
 
+
+    const handleImageLoad = () => {
+        if (!imgRef.current) return;
+
+        const viewWidth = imgRef.current.clientWidth;
+        const viewHeight = imgRef.current.clientHeight;
+
+        setCrop({
+            unit: 'px',
+            x: 0,
+            y: 0,
+            width: viewWidth,
+            height: viewHeight,
+        });
+
+    };
     useEffect(() => {
         if (!crop || !imgRef.current || !previewCanvasRef.current) return;
 
@@ -64,7 +76,7 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
             crop.width,
             crop.height
         );
-    }, [crop]);
+    }, [crop,image]);
 
     const handleConfirm = async () => {
         if (!chatDetails || !username || !previewCanvasRef.current) return;
@@ -100,7 +112,8 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
                             ref={imgRef}
                             src={image}
                             alt='To Crop'
-                            className='max-w-full max-h-64'
+                            className='w-full h-[600px] object-contain mx-auto'
+                            onLoad={handleImageLoad}
                         />
                     </ReactCrop>
                     <canvas ref={previewCanvasRef} style={{ display: 'none' }} />
