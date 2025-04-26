@@ -6,12 +6,17 @@ import ImageSendFragment from './ImageSendFragement.tsx'
 import ConfirmDialog from '../../components/dialogs/ConfirmDialog.tsx'
 import CloseIcon from '@mui/icons-material/Close'
 import { Button } from '@mui/material'
+import ViewProfile from '../../components/listItems/itemViewProfile.tsx'
 
 const ChattingFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [imageOpen, setImageOpen] = useState(false)
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
+
+    //  view profile
+    const [isViewing, setIsViewing] = useState<boolean>(false)
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
@@ -41,7 +46,13 @@ const ChattingFragment: React.FC = () => {
                 'bg-blue-50 h-screen rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl'
             }>
             <div className={'flex flex-col h-screen'}>
-                <ChatHeader />
+                {isViewing ? (
+                    <ViewProfile setIsViewing={setIsViewing}/>
+                ):(<>
+                    <ChatHeader setIsViewing={setIsViewing} />
+
+
+
                 {imageOpen && (
                     <button className="fixed inset-0 bg-black bg-opacity-40 z-40" onClick={() => setSelectedImage(true)}></button>
                 )}
@@ -80,6 +91,7 @@ const ChattingFragment: React.FC = () => {
                         />
                     </>
                 )}
+                </>)}
                 <ConfirmDialog
                     open={selectedImage}
                     handleClose={() => setSelectedImage(false)}
