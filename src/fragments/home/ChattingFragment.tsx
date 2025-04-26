@@ -5,7 +5,7 @@ import ChatBox from '../../components/chat/ChatBox.tsx'
 import ImageSendFragment from './ImageSendFragement.tsx'
 import ConfirmDialog from '../../components/dialogs/ConfirmDialog.tsx'
 import CloseIcon from '@mui/icons-material/Close'
-import { IconButton } from '@mui/material'
+import { Button } from '@mui/material'
 
 const ChattingFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
@@ -56,15 +56,17 @@ const ChattingFragment: React.FC = () => {
                                 setImageSrc(null)
                             }}
                         />
-                        <IconButton
+                        <Button
                             color='error'
                             onClick={() => {
                                 setImageOpen(false)
                                 setImageSrc(null)
                             }}
-                            sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10 }}>
-                            <CloseIcon />
-                        </IconButton>
+                            sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10,width: '50px'}}
+                            endIcon={<CloseIcon sx={{width:'100%',height:'100%'}}/>}
+                           >
+
+                        </Button>
 
                     </div>
                 ) : (

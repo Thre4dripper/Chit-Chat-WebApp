@@ -105,24 +105,34 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
                 <>
                     <ReactCrop
                         crop={crop}
-                        onChange={(c) => setCrop(c)}
+                        onChange={(newCrop) => {
+                            const minWidth = 50;
+                            const minHeight = 90;
+
+                            const constrainedCrop = {
+                                ...newCrop,
+                                width: Math.max(newCrop.width, minWidth),
+                                height: Math.max(newCrop.height, minHeight),
+                            };
+                            setCrop(constrainedCrop);
+                        }}
                         aspect={undefined}
                         circularCrop={cropShape === 'round'}>
                         <img
                             ref={imgRef}
                             src={image}
                             alt='To Crop'
-                            className='w-full h-[600px] object-contain mx-auto'
+                            className='w-full h-[400px] object-contain mx-auto'
                             onLoad={handleImageLoad}
                         />
                     </ReactCrop>
                     <canvas ref={previewCanvasRef} style={{ display: 'none' }} />
 
                     <Button
-                        sx={{ float: 'right', position: 'absolute', bottom: '10px', right: '5px' }}
+                        sx={{ float: 'right', position: 'absolute', bottom: '10px', right: '5px',width: '50px'}}
                         color='success'
                         onClick={handleConfirm}
-                        endIcon={<SendIcon />}></Button>
+                        endIcon={<SendIcon sx={{width:'100%',height:'100%'}}/>}></Button>
                 </>
             )}
         </div>

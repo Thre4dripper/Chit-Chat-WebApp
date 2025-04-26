@@ -7,18 +7,19 @@ interface LeftImageProps {
 
 const MsgImage: React.FC<LeftImageProps> = ({ image }) => {
     return (
-        <ButtonBase>
-            <img
-                src={image}
-                className={'m-1.5 max-h-[250px] max-w-[250px] object-cover w-full rounded-3xl'}
-                onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = 'https://placehold.co/600x400?text=Loading...';
-                }}
-                alt={"not working"}
-
-            />
+        <ButtonBase className="flex items-center justify-center" onClick={() => console.log('hell out of here')}>
+            <div className="m-1.5 max-w-[250px] max-h-[250px] overflow-hidden rounded-3xl">
+                <img
+                    src={image}
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = 'https://placehold.co/600x400?text=Loading...';
+                    }}
+                    alt="not working"
+                />
+            </div>
         </ButtonBase>
     )
 }
