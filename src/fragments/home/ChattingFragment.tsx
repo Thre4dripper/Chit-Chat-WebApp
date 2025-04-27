@@ -14,6 +14,7 @@ const ChattingFragment: React.FC = () => {
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
 
+
     //  view profile
     const [isViewing, setIsViewing] = useState<boolean>(false)
 
@@ -40,6 +41,10 @@ const ChattingFragment: React.FC = () => {
             }
         }
     }
+
+
+
+
     return (
         <div
             className={
@@ -82,7 +87,7 @@ const ChattingFragment: React.FC = () => {
                     </div>
                 ) : (
                     <>
-                        <ChatBox />
+                        <ChatBox setImageOpen={setImageOpen} setImageSrc={setImageSrc} />
 
                         <ChatInput
                             handlePaste={handlePaste}
