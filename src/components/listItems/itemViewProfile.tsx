@@ -30,7 +30,7 @@ const ViewProfile:React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
                     Shaddy
                 </Typography>
             </div>
-            <div className={'bg-white rounded-t-3xl'}>
+            <div className={'bg-white rounded-3xl mt-2'}>
 
             {/* Medias Section */}
             <div className="p-4">

@@ -108,13 +108,30 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
                         onChange={(newCrop) => {
                             const minWidth = 50;
                             const minHeight = 90;
+                            let x = newCrop.x;
+                            let y = newCrop.y;
 
-                            const constrainedCrop = {
+                            const viewWidth = imgRef.current?.clientWidth || 0;
+                            const viewHeight = imgRef.current?.clientHeight || 0;
+
+                            const width = Math.max(newCrop.width, minWidth);
+                            const height = Math.max(newCrop.height, minHeight);
+
+                            if (x + width > viewWidth) {
+                                x = Math.max(0, viewWidth - width);
+                            }
+
+                            // Adjust y if height goes beyond view
+                            if (y + height > viewHeight) {
+                                y = Math.max(0, viewHeight - height);
+                            }
+                            setCrop({
                                 ...newCrop,
-                                width: Math.max(newCrop.width, minWidth),
-                                height: Math.max(newCrop.height, minHeight),
-                            };
-                            setCrop(constrainedCrop);
+                                width,
+                                height,
+                                x,
+                                y,
+                            });
                         }}
                         aspect={undefined}
                         circularCrop={cropShape === 'round'}>

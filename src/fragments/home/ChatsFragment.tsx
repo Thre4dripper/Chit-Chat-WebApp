@@ -45,7 +45,7 @@ const ChatsFragment: React.FC<{
                                 vertical: 'bottom',
                                 horizontal: 'right',
                             }}
-                            badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
+                            badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full z-0'} />}>
                             <Avatar
                                 src={user?.profileImage}
                                 sx={{ width: 48, height: 48, fontSize: 28 }}
