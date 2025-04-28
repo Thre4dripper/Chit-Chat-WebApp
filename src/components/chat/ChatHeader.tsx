@@ -12,7 +12,8 @@ const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
     //  zustand states
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
-    const userModel= useHomeStore((state)=>state.user)
+    const user= useHomeStore((state)=>state.user)
+    const setUser=useHomeStore((state)=>state.setUser)
     const currentChatId=useChatDetailsStore((state)=>state.currentChatId)
     const deleteChat = useChatDetailsStore((state) => state.deleteChat)
     const clearChat = useChatDetailsStore((state) => state.clearChat)
@@ -62,15 +63,16 @@ const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
         if (actionDetails === 1) {
             console.log('working on view model')
         } else if (actionDetails === 2) {
-             if(!userModel|| !currentChatId){
+             if(!user|| !currentChatId){
                  console.log("Something wrong in chatId in Favourite")
                  return
              }
-             markFavourite(userModel,currentChatId,((done)=> {
+             markFavourite(user,currentChatId,((done)=> {
                  if (!done) {
                      alert('f**')
                      return
                  }
+                 setUser(done);
                  console.log("wtf you did this omg")
              }))
 

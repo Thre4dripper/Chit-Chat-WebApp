@@ -16,7 +16,11 @@ const ChatsFragment: React.FC<{
 }> = ({ openProfile, setDialogState, setLogoutDialogState }) => {
     const { user } = useHomeStore()
     const homeChats = useHomeChatsStore((state) => state.homeChats)
-    const favouriteChats=useHomeChatsStore((state)=> state.homeChats)
+    const favouriteList=useHomeStore((state)=>state.user)?.favourites
+
+    const favouriteChats=useHomeChatsStore((state)=> state.homeChats).filter((chat)=>{
+        return favouriteList && chat.userChat ? favouriteList.includes(chat.userChat?.chatId) : false;
+    })
 
 
     return (

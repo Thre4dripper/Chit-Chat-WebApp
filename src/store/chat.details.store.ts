@@ -17,7 +17,7 @@ type chatDetailsActions = {
     sendStickerMessage:(chatModel:ChatModel,stickerIndex:number,from:string,to:string)=>void
     sendImageMessage:(ChatModel:ChatModel,image:string,from:string,to:string) => void
     setCurrentChatId: (chatId: string) => void
-    favouriteChat:(userModel:userModel,favourite:string,onSuccess:(done:boolean)=>void) => void
+    favouriteChat:(userModel:userModel,favourite:string,onSuccess:(newModel:userModel|null)=>void) => void
     clearChat:(chatModel:ChatModel,success:(check:boolean)=>void) => void
     deleteChat:(chatModel: ChatModel,success:(check:boolean)=>void)=>void
 
@@ -61,7 +61,7 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
                     console.log('message sent', id);
                 })
             },
-            favouriteChat(userModel:userModel,favourite:string,onSuccess:(done:boolean)=>void){
+            favouriteChat(userModel:userModel,favourite:string,onSuccess:(newModel:userModel|null)=>void){
                 UserChatsRepository.favouriteChat(userModel,favourite,onSuccess)
 
             },
