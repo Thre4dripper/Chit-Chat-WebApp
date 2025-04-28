@@ -6,19 +6,22 @@ import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 import useHomeStore from '../../store/home.store.ts'
+import {enqueueSnackbar} from 'notistack'
+
 type FeatureType = { id: number; content: string; action: () => void }
 
-const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>}> = ({setIsViewing}) => {
+const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean>> }> = ({
+    setIsViewing,
+}) => {
     //  zustand states
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
-    const user= useHomeStore((state)=>state.user)
-    const setUser=useHomeStore((state)=>state.setUser)
-    const currentChatId=useChatDetailsStore((state)=>state.currentChatId)
+    const user = useHomeStore((state) => state.user)
+    const setUser = useHomeStore((state) => state.setUser)
+    const currentChatId = useChatDetailsStore((state) => state.currentChatId)
     const deleteChat = useChatDetailsStore((state) => state.deleteChat)
     const clearChat = useChatDetailsStore((state) => state.clearChat)
-    const markFavourite=useChatDetailsStore((state)=>state.favouriteChat)
-
+    const markFavourite = useChatDetailsStore((state) => state.favouriteChat)
 
     const [openPopper, setOpenPopper] = useState(false)
     const popperRef = useRef(null)
@@ -60,29 +63,35 @@ const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
     const action = () => {
         setOpenDialog(false)
 
+        //  view contact
         if (actionDetails === 1) {
             console.log('working on view model')
-        } else if (actionDetails === 2) {
-             if(!user|| !currentChatId){
-                 console.log("Something wrong in chatId in Favourite")
-                 return
-             }
-             markFavourite(user,currentChatId,((done)=> {
-                 if (!done) {
-                     alert('f**')
-                     return
-                 }
-                 setUser(done);
-                 console.log("wtf you did this omg")
-             }))
-
-        } else if (actionDetails === 3) {
-            clearChat(currentChat, (sucesss) => {
-                if (!sucesss) alert('nothing breaks')
+        }
+        //  favourite add remove
+        else if (actionDetails === 2) {
+            if (!user || !currentChatId) {
+                enqueueSnackbar('Something wrong in chatId in Favourite',{variant:'error',autoHideDuration:3000})
+                return
+            }
+            markFavourite(user, currentChatId, (done) => {
+                if (!done) {
+                    enqueueSnackbar('Something wrong in chatId in Favourite',{variant:'error',autoHideDuration:3000})
+                    return
+                }
+                setUser(done)
+                console.log('wtf you did this omg')
             })
-        } else if (actionDetails === 4) {
+        }
+        //  clear Chats
+        else if (actionDetails === 3) {
+            clearChat(currentChat, (sucesss) => {
+                if (!sucesss) enqueueSnackbar('Something wrong in Clear Chat',{variant:'error',autoHideDuration:3000})
+            })
+        }
+        //  delete chats
+        else if (actionDetails === 4) {
             deleteChat(currentChat, (sucesss) => {
-                if (!sucesss) alert('nothing breaks')
+                if (!sucesss) enqueueSnackbar('Something wrong in Delete Chat',{variant:'error',autoHideDuration:3000})
             })
         }
     }
@@ -116,15 +125,18 @@ const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
                 className={
                     'z-50 bg-slate-300 rounded-3xl shadow-slate-950/20 shadow-md flex flex-row px-4 pt-4 pb-2 relative'
                 }>
-                <IconButton onClick={()=>{setIsViewing(true)}}>
-                <CircularImage
-                    image={
-                        currentChat?.dmChatUser2.username === username
-                            ? currentChat?.dmChatUser1.profileImage
-                            : currentChat?.dmChatUser2.profileImage
-                    }
-                    size={48}
-                />
+                <IconButton
+                    onClick={() => {
+                        setIsViewing(true)
+                    }}>
+                    <CircularImage
+                        image={
+                            currentChat?.dmChatUser2.username === username
+                                ? currentChat?.dmChatUser1.profileImage
+                                : currentChat?.dmChatUser2.profileImage
+                        }
+                        size={48}
+                    />
                 </IconButton>
                 <div className={'mx-4 flex flex-col flex-auto justify-center'}>
                     <div className={'flex flex-row justify-between'}>
