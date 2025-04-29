@@ -2,7 +2,9 @@ import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ChatIcon from '@mui/icons-material/Chat'
-import React, {SetStateAction } from 'react'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
+import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import Avatar from '@mui/material/Avatar'
@@ -15,13 +17,17 @@ const ChatsFragment: React.FC<{
     setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
 }> = ({ openProfile, setDialogState, setLogoutDialogState }) => {
     const { user } = useHomeStore()
+    const [opened, setOpened] = React.useState(false)
     const homeChats = useHomeChatsStore((state) => state.homeChats)
-    const favouriteList=useHomeStore((state)=>state.user)?.favourites
+    const favouriteList = useHomeStore((state) => state.user)?.favourites
 
-    const favouriteChats=useHomeChatsStore((state)=> state.homeChats).filter((chat)=>{
-        return favouriteList && chat.userChat ? favouriteList.includes(chat.userChat?.chatId) : false;
+    const favouriteChats = useHomeChatsStore((state) => state.homeChats).filter((chat) => {
+        return favouriteList && chat.userChat
+            ? favouriteList.includes(chat.userChat?.chatId)
+            : false
     })
 
+    console.log("home Chats", homeChats)
 
     return (
         <div className={'h-screen flex flex-col'}>
@@ -34,9 +40,28 @@ const ChatsFragment: React.FC<{
 
                 <div className={'flex-1'} />
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={() => setDialogState(true)}>
-                        <ChatIcon className={'text-white'} />
-                    </IconButton>
+                    {!opened ? (
+                        <IconButton onClick={() => setOpened(true)}>
+                            <AddCircleIcon className={'text-white'} />
+                        </IconButton>
+                    ) : (
+                        <div className={'flex'}>
+                            <IconButton
+                                onClick={() => {
+                                    setDialogState(true)
+                                    setOpened(false)
+                                }}>
+                                <ChatIcon className={'text-white'} />
+                            </IconButton>
+                            <IconButton
+                                onClick={() => {
+                                    setDialogState(true)
+                                    setOpened(false)
+                                }}>
+                                <GroupAddIcon className={'text-white'} />
+                            </IconButton>
+                        </div>
+                    )}
                 </div>
                 <div className={'flex flex-col justify-center rounded-full'}>
                     <IconButton
@@ -49,7 +74,9 @@ const ChatsFragment: React.FC<{
                                 vertical: 'bottom',
                                 horizontal: 'right',
                             }}
-                            badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full z-0'} />}>
+                            badgeContent={
+                                <div className={'w-3 h-3 bg-green-500 rounded-full z-0'} />
+                            }>
                             <Avatar
                                 src={user?.profileImage}
                                 sx={{ width: 48, height: 48, fontSize: 28 }}
@@ -85,7 +112,7 @@ const ChatsFragment: React.FC<{
                     'overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-800/10 scrollbar-thumb-rounded-full'
                 }>
                 {/*Fav chats list*/}
-                {favouriteChats.length>0 && (
+                {favouriteChats.length > 0 && (
                     <div>
                         <div className={'flex flex-col'}>
                             <div className={'flex flex-row m-4'}>
@@ -97,28 +124,33 @@ const ChatsFragment: React.FC<{
                                 </Typography>
                             </div>
                             <div className={'flex'}>
-                                <div className={'flex flex-row gap-4 overflow-x-scroll scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent'}>
+                                <div
+                                    className={
+                                        'flex flex-row gap-4 overflow-x-scroll scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent'
+                                    }>
                                     {favouriteChats.map((chat) => (
                                         <ItemFavChat
                                             key={chat.id}
                                             chatId={chat.id}
-                                            image={chat.userChat?.dmChatUser1.username === user?.username
-                                                ? (chat.userChat?.dmChatUser2
-                                                    .profileImage as string)
-                                                : (chat.userChat?.dmChatUser1
-                                                    .profileImage as string)}
-                                            name={chat.userChat?.dmChatUser1.username === user?.username
-                                                ? (chat.userChat?.dmChatUser2.username as string)
-                                                : (chat.userChat?.dmChatUser1.username as string)
+                                            image={
+                                                chat.userChat?.dmChatUser1.username ===
+                                                user?.username
+                                                    ? (chat.userChat?.dmChatUser2
+                                                          .profileImage as string)
+                                                    : (chat.userChat?.dmChatUser1
+                                                          .profileImage as string)
+                                            }
+                                            name={
+                                                chat.userChat?.dmChatUser1.username ===
+                                                user?.username
+                                                    ? (chat.userChat?.dmChatUser2
+                                                          .username as string)
+                                                    : (chat.userChat?.dmChatUser1
+                                                          .username as string)
                                             }
                                         />
                                     ))}
                                 </div>
-                                {/*<div className={'flex-auto flex justify-center'}>*/}
-                                {/*    <IconButton>*/}
-                                {/*        <ArrowForwardIosIcon className={'text-white/50'} />*/}
-                                {/*    </IconButton>*/}
-                                {/*</div>*/}
                             </div>
                         </div>
                     </div>
@@ -139,36 +171,73 @@ const ChatsFragment: React.FC<{
                                         msg.seenBy.filter((username) => username === user?.username)
                                             .length === 0
                                 ).length
+
                                 return (
-                                    <ItemChat
-                                        key={chat.id}
-                                        chatId={chat.id}
-                                        image={
-                                            chat.userChat?.dmChatUser1.username === user?.username
-                                                ? (chat.userChat?.dmChatUser2
-                                                      .profileImage as string)
-                                                : (chat.userChat?.dmChatUser1
-                                                      .profileImage as string)
-                                        }
-                                        primaryText={
-                                            chat.userChat?.dmChatUser1.username === user?.username
-                                                ? (chat.userChat?.dmChatUser2.username as string)
-                                                : (chat.userChat?.dmChatUser1.username as string)
-                                        }
-                                        secondaryText={
-                                            chat.userChat?.chatMessages[0].text as string
-                                        } // dummy message
-                                        time={
-                                            chat.userChat?.chatMessages[0].time
-                                                .toDate()
-                                                .toLocaleTimeString('en-US', {
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                    hour12: true,
-                                                }) as string
-                                        } // dummy time
-                                        unseenMessageCount={unseenMessagesCount as number}
-                                    />
+                                    <>
+                                        {chat.userChat ? (
+                                            <ItemChat
+                                                key={chat.id}
+                                                chatId={chat.id}
+                                                image={
+                                                    chat.userChat?.dmChatUser1.username ===
+                                                    user?.username
+                                                        ? (chat.userChat?.dmChatUser2
+                                                              .profileImage as string)
+                                                        : (chat.userChat?.dmChatUser1
+                                                              .profileImage as string)
+                                                }
+                                                primaryText={
+                                                    chat.userChat?.dmChatUser1.username ===
+                                                    user?.username
+                                                        ? (chat.userChat?.dmChatUser2
+                                                              .username as string)
+                                                        : (chat.userChat?.dmChatUser1
+                                                              .username as string)
+                                                }
+                                                secondaryText={
+                                                    chat.userChat?.chatMessages[0].text as string
+                                                } // dummy message
+                                                time={
+                                                    chat.userChat?.chatMessages[0].time
+                                                        .toDate()
+                                                        .toLocaleTimeString('en-US', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true,
+                                                        }) as string
+                                                } // dummy time
+                                                unseenMessageCount={unseenMessagesCount as number}
+                                            />
+                                        ) : (
+                                            <ItemChat
+                                                key={chat.id}
+                                                chatId={chat.id}
+                                                image={
+                                                    chat.groupChat
+                                                        ? chat.groupChat.image
+                                                            ? chat.groupChat.image
+                                                            : ''
+                                                        : ''
+                                                }
+                                                primaryText={
+                                                    chat.groupChat ? chat.groupChat.name : 'f**'
+                                                }
+                                                secondaryText={
+                                                    chat.groupChat?.messages[0].text as string
+                                                } // dummy message
+                                                time={
+                                                    chat.groupChat?.messages[0].time
+                                                        .toDate()
+                                                        .toLocaleTimeString('en-US', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true,
+                                                        }) as string
+                                                } // dummy time
+                                                unseenMessageCount={unseenMessagesCount as number}
+                                            />
+                                        )}
+                                    </>
                                 )
                             })}
                         </div>
