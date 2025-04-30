@@ -16,7 +16,7 @@ class CreateGroup {
         groupImageUrl: string | null,
         loggedInUsername: string,
         selectedUsers: GroupChatUserModel[],
-        onSuccess: (done: boolean) => void
+        onSuccess: (done: string|null) => void
     ) {
         const group = new GroupChatModel(
             groupChatId,
@@ -42,9 +42,11 @@ class CreateGroup {
 
         const docRef = doc(firestore, FirestoreCollections.GROUPS_COLLECTION, groupChatId)
         setDoc(docRef, group.toObject())
-            .then(() => {})
+            .then(() => {
+
+            })
             .catch(() => {
-                onSuccess(false)
+                onSuccess(null)
             })
 
         //add in users collection
@@ -62,10 +64,10 @@ class CreateGroup {
                         { merge: true }
                     )
                         .then(() => {
-                            onSuccess(true)
+                            onSuccess(groupChatId)
                         })
                         .catch(() => {
-                            onSuccess(false)
+                            onSuccess(null)
                         })
                 }
             })

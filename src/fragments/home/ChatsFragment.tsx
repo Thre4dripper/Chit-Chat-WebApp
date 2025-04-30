@@ -7,6 +7,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
+import ItemGroup from '../../components/listItems/ItemGroup.tsx'
 import Avatar from '@mui/material/Avatar'
 import useHomeStore from '../../store/home.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
@@ -27,7 +28,6 @@ const ChatsFragment: React.FC<{
             : false
     })
 
-    console.log("home Chats", homeChats)
 
     return (
         <div className={'h-screen flex flex-col'}>
@@ -166,12 +166,6 @@ const ChatsFragment: React.FC<{
                         </div>
                         <div className={'flex flex-col'}>
                             {homeChats.map((chat) => {
-                                const unseenMessagesCount = chat.userChat?.chatMessages.filter(
-                                    (msg) =>
-                                        msg.seenBy.filter((username) => username === user?.username)
-                                            .length === 0
-                                ).length
-
                                 return (
                                     <>
                                         {chat.userChat ? (
@@ -206,10 +200,18 @@ const ChatsFragment: React.FC<{
                                                             hour12: true,
                                                         }) as string
                                                 } // dummy time
-                                                unseenMessageCount={unseenMessagesCount as number}
+                                                unseenMessageCount={
+                                                    chat.userChat?.chatMessages.filter(
+                                                        (msg) =>
+                                                            msg.seenBy.filter(
+                                                                (username) =>
+                                                                    username === user?.username
+                                                            ).length === 0
+                                                    ).length as number
+                                                }
                                             />
                                         ) : (
-                                            <ItemChat
+                                            <ItemGroup
                                                 key={chat.id}
                                                 chatId={chat.id}
                                                 image={
@@ -234,7 +236,13 @@ const ChatsFragment: React.FC<{
                                                             hour12: true,
                                                         }) as string
                                                 } // dummy time
-                                                unseenMessageCount={unseenMessagesCount as number}
+                                                unseenMessageCount={chat.groupChat?.messages.filter(
+                                                    (msg) =>
+                                                        msg.seenBy.filter(
+                                                            (username) =>
+                                                                username === user?.username
+                                                        ).length === 0
+                                                ).length as number}
                                             />
                                         )}
                                     </>

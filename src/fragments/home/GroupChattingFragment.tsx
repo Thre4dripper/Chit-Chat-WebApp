@@ -1,22 +1,18 @@
 import React, { useRef, useState } from 'react'
-import ChatInput from '../../components/chat/ChatInput.tsx'
-import ChatHeader from '../../components/chat/ChatHeader.tsx'
-import ChatBox from '../../components/chat/ChatBox.tsx'
 import ImageSendFragment from './ImageSendFragement.tsx'
 import ConfirmDialog from '../../components/dialogs/ConfirmDialog.tsx'
 import CloseIcon from '@mui/icons-material/Close'
 import { Button } from '@mui/material'
 import ViewProfile from '../../components/listItems/itemViewProfile.tsx'
-import useChatDetailsStore from '../../store/chat.details.store.ts'
-import GroupChattingFragment from './GroupChattingFragment.tsx'
+import GroupChatInput from '../../components/group/GroupChatInput.tsx'
+import GroupChatBox from '../../components/group/GroupChatBox.tsx'
+import GroupChatHeader from '../../components/group/GroupChatHeader.tsx'
 
 const ChattingFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const currentChatId = useChatDetailsStore((state) => state.currentChatId)
     const [imageOpen, setImageOpen] = useState(false)
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
-
 
     //  view profile
     const [isViewing, setIsViewing] = useState<boolean>(false)
@@ -45,10 +41,6 @@ const ChattingFragment: React.FC = () => {
         }
     }
 
-    if(!currentChatId?.includes('-')){
-        return <GroupChattingFragment/>
-    }
-
 
 
 
@@ -61,48 +53,48 @@ const ChattingFragment: React.FC = () => {
                 {isViewing ? (
                     <ViewProfile setIsViewing={setIsViewing}/>
                 ):(<>
-                    <ChatHeader setIsViewing={setIsViewing} />
+                    <GroupChatHeader/>
 
 
 
-                {imageOpen && (
-                    <button className="fixed inset-0 bg-black bg-opacity-40 z-40" onClick={() => setSelectedImage(true)}></button>
-                )}
+                    {imageOpen && (
+                        <button className="fixed inset-0 bg-black bg-opacity-40 z-40" onClick={() => setSelectedImage(true)}></button>
+                    )}
 
-                {imageOpen ? (
-                    <div className='relative  overflow-hidden w-full h-full bg-slate-400 flex justify-center items-center z-50'>
-                        <ImageSendFragment
-                            image={imageSrc}
-                            cropShape='rect'
-                            onConfirmed={() => {
-                                setImageOpen(false)
-                                setImageSrc(null)
-                            }}
-                        />
-                        <Button
-                            color='error'
-                            onClick={() => {
-                                setImageOpen(false)
-                                setImageSrc(null)
-                            }}
-                            sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10,width: '50px'}}
-                            endIcon={<CloseIcon sx={{width:'100%',height:'100%'}}/>}
-                           >
+                    {imageOpen ? (
+                        <div className='relative  overflow-hidden w-full h-full bg-slate-400 flex justify-center items-center z-50'>
+                            <ImageSendFragment
+                                image={imageSrc}
+                                cropShape='rect'
+                                onConfirmed={() => {
+                                    setImageOpen(false)
+                                    setImageSrc(null)
+                                }}
+                            />
+                            <Button
+                                color='error'
+                                onClick={() => {
+                                    setImageOpen(false)
+                                    setImageSrc(null)
+                                }}
+                                sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10,width: '50px'}}
+                                endIcon={<CloseIcon sx={{width:'100%',height:'100%'}}/>}
+                            >
 
-                        </Button>
+                            </Button>
 
-                    </div>
-                ) : (
-                    <>
-                        <ChatBox setImageOpen={setImageOpen} setImageSrc={setImageSrc} />
+                        </div>
+                    ) : (
+                        <>
+                            <GroupChatBox setImageOpen={setImageOpen} setImageSrc={setImageSrc} />
 
-                        <ChatInput
-                            handlePaste={handlePaste}
-                            fileInputRef={fileInputRef}
-                            handleFileChange={handleFileChange}
-                        />
-                    </>
-                )}
+                            <GroupChatInput
+                                handlePaste={handlePaste}
+                                fileInputRef={fileInputRef}
+                                handleFileChange={handleFileChange}
+                            />
+                        </>
+                    )}
                 </>)}
                 <ConfirmDialog
                     open={selectedImage}

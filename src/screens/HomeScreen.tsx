@@ -12,6 +12,7 @@ import AddChatDialog from '../components/dialogs/AddChatDialog.tsx'
 import useHomeChatsStore from '../store/home.chats.store.ts'
 import LogoutConfirmation from '../components/dialogs/LogoutConfirmationDialog.tsx'
 
+
 const HomeScreen: React.FC = () => {
     const navigate = useNavigate()
     const [profileOpen, setProfileOpen] = React.useState<boolean>(false)
@@ -79,7 +80,7 @@ const HomeScreen: React.FC = () => {
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 {showCompleteProfile ? (
                     <CompleteProfileFragment />
-                ) : chats.length === 0 ? (
+                ) : (chats.length === 0) ? (
                     <AddChatsFragment dialogState={dialogState} setDialogState={setDialogState} />
                 ) : (
                     <ChattingFragment />

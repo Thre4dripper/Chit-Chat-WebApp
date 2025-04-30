@@ -7,7 +7,6 @@ import addChatsRepository from '../repositories/add.chats.repository.ts'
 import UserModel from '../models/user.model.ts'
 import useChatDetailsStore from './chat.details.store.ts'
 import GroupChatsRepository from '../repositories/group.chats.repository.ts'
-
 type homeChatState = {
     homeChats: HomeChatModel[]
 }
@@ -20,9 +19,11 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
     devtools(
         immer((set) => ({
             homeChats: [],
-            setHomeChats: () => {
-                GroupChatsRepository.getAllGroupChats()
+            setHomeChats:() => {
                 UserChatsRepository.getAllUserChats()
+                setTimeout(()=>{
+                    GroupChatsRepository.getAllGroupChats()
+                },1000)
             },
             startChat: (newChatUser: UserModel) => {
                 addChatsRepository.addChat(newChatUser, (chatId) => {

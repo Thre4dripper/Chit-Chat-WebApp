@@ -4,15 +4,19 @@ import { immer } from 'zustand/middleware/immer'
 import ChatModel from '../models/user.chat.model.ts'
 import UserChatsRepository from '../repositories/user.chats.repository.ts'
 import userModel from '../models/user.model.ts'
-// import UserModel from '../models/user.model.ts'
+import GroupChatsRepository from '../repositories/group.chats.repository.ts'
+import GroupChatModel from '../models/group.chat.model.ts'
+
 
 type chatDetailsState = {
     currentChatId: string | null
     chatDetails: ChatModel | null
+    groupChatDetails: GroupChatModel | null
 }
 type chatDetailsActions = {
     updateSeen: (chat: ChatModel | null) => void
     setChatDetails: (chatId: string) => void
+    setGroupChatDetails: (chatId: string) => void
     sendTextMessage: (chatModel: ChatModel, text: string, from: string, to: string) => void
     sendStickerMessage:(chatModel:ChatModel,stickerIndex:number,from:string,to:string)=>void
     sendImageMessage:(ChatModel:ChatModel,image:string,from:string,to:string) => void
@@ -28,6 +32,7 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
         immer((set) => ({
             currentChatId: null,
             chatDetails: null,
+            groupChatDetails: null,
             updateSeen: (chat) => {
                 UserChatsRepository.updateSeen(chat)
             },
@@ -42,9 +47,24 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
                     })
                 })
             },
+            setGroupChatDetails: (chatId) => {
+                  GroupChatsRepository.getLiveGroupChatById(chatId, (group) => {
+                      set((state) => {
+                          if(group && state.currentChatId === chatId) {
+                              state.groupChatDetails = group
+                          }
+                      })
+                  })
+            },
             setCurrentChatId: (chatId) => {
                 set({ currentChatId: chatId })
-                useChatDetailsStore.getState().setChatDetails(chatId)
+                if (chatId.includes('-')) {
+                    useChatDetailsStore.getState().setChatDetails(chatId);
+                    set({groupChatDetails: null})
+                } else {
+                    useChatDetailsStore.getState().setGroupChatDetails(chatId);
+                    set({chatDetails: null})
+                }
             },
             sendTextMessage: (chatModel, text, from, to) => {
                 UserChatsRepository.sendTextMessage(chatModel, text, from, to, (id) => {

@@ -1,7 +1,7 @@
 import { collection, Firestore, onSnapshot, doc, getDoc ,where ,query } from 'firebase/firestore'
 import GroupChatModel from '../../models/group.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
-// import { GroupConstants } from '../../constants/GroupConstants.ts'
+import { GroupConstants } from '../../constants/GroupConstants.ts'
 
 class GetGroupChats {
     static getAllGroupChats(
@@ -13,7 +13,7 @@ class GetGroupChats {
         const GroupCollection = collection(firestore, FirestoreCollections.GROUPS_COLLECTION);
         const groupQuery = query(
             GroupCollection,
-            where("members", 'array-contains', groupUser)
+            where(GroupConstants.GROUP_MEMBERS, 'array-contains', groupUser)
         );
         onSnapshot(
             groupQuery,
