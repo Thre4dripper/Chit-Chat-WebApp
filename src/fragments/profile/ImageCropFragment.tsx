@@ -27,8 +27,7 @@ interface ImageCropFragmentProps {
     image: string | null
     onCancel: () => void
     onConfirmed: (image: File) => void
-    Profile?:boolean
-
+    Profile?: boolean
 }
 
 const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
@@ -38,7 +37,7 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
     image,
     onCancel,
     onConfirmed,
-    Profile=true
+    Profile = true,
 }) => {
     const [crop, setCrop] = React.useState<Crop>()
     const imageRef = useRef<HTMLImageElement>(null)
@@ -46,11 +45,10 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
 
     const [rotation, setRotation] = React.useState(0)
 
-     // send image info here
-    const sendImageMessage= useChatDetailsStore((state) => state.sendImageMessage)
-    const username=useLocalStore((state) => state.username)
-    const chatDetails=useChatDetailsStore((state) => state.chatDetails)
-
+    // send image info here
+    const sendImageMessage = useChatDetailsStore((state) => state.sendImageMessage)
+    const username = useLocalStore((state) => state.username)
+    const chatDetails = useChatDetailsStore((state) => state.chatDetails)
 
     const onCropComplete = (crop: Crop) => {
         const { width, height } = imageRef.current!
@@ -175,41 +173,51 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                                         autoHideDuration: 3000,
                                     })
                                     if (
-                                        message === SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY
+                                        message ===
+                                        SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY
                                     ) {
-                                        onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                                        onConfirmed(
+                                            StorageUtils.base64ToFile(base64data, 'profilePic')
+                                        )
                                     }
                                     setLoading(false)
                                 })
-                            }
-                         else {
-                            //   image message sending here
+                            } else {
+                                //   image message sending here
 
-                            console.log('Normal Image Message is Send Successfully');
-                            if(!username || !chatDetails){
-                                enqueueSnackbar("wrong something", {
-                                    variant: 'error',
-                                    autoHideDuration: 3000,
-                                })
-                                onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
-                                setLoading(false)
-                                return;
-                            }
+                                console.log('Normal Image Message is Send Successfully')
+                                if (!username || !chatDetails) {
+                                    enqueueSnackbar('wrong something', {
+                                        variant: 'error',
+                                        autoHideDuration: 3000,
+                                    })
+                                    onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                                    setLoading(false)
+                                    return
+                                }
                                 const storage = getStorage()
                                 const from = username
-                                const to = chatDetails.dmChatUser1.username === username ? chatDetails.dmChatUser2.username : chatDetails.dmChatUser1.username
+                                const to =
+                                    chatDetails.dmChatUser1.username === username
+                                        ? chatDetails.dmChatUser2.username
+                                        : chatDetails.dmChatUser1.username
 
-                                StorageUtils.getUrlFromStorage(storage,`${StorageFolders.CHAT_IMAGES_FOLDER}/${from}-${to}-${Date.now().toString()}`,file,(url)=>{
-                                    if(!url){
-                                        return;
+                                StorageUtils.getUrlFromStorage(
+                                    storage,
+                                    `${StorageFolders.CHAT_IMAGES_FOLDER}/${from}-${to}-${Date.now().toString()}`,
+                                    file,
+                                    (url) => {
+                                        if (!url) {
+                                            return
+                                        }
+                                        sendImageMessage(chatDetails, url, from, to)
                                     }
-                                    sendImageMessage(chatDetails,url,from,to);
-                                })
+                                )
 
-                            onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
-                            setLoading(false)
+                                onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
+                                setLoading(false)
+                            }
                         }
-                    }
                     }
                 },
                 'image/jpeg',
@@ -217,8 +225,6 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
             )
         }
     }
-
-
 
     return (
         <div className={'w-full h-full'}>
@@ -307,7 +313,6 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                             startIcon={<Save />}>
                             Confirm
                         </Button>
-
                     </div>
                 </Paper>
             </div>

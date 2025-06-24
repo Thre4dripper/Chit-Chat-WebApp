@@ -73,7 +73,7 @@ class UserChatsRepository {
         from: string,
         to: string,
         chatMessageId: (id: string | null) => void
-    ){
+    ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.SendImage(firestore, chatModel, imageUri, from, to, chatMessageId)
     }
@@ -86,7 +86,7 @@ class UserChatsRepository {
         chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
-        SendChat.SendSticker(firestore,chatModel,stickerIndex,from, to, chatMessageId)
+        SendChat.SendSticker(firestore, chatModel, stickerIndex, from, to, chatMessageId)
     }
 
     static updateSeen(chatModel: ChatModel | null) {
@@ -100,24 +100,24 @@ class UserChatsRepository {
         }
         UpdateSeen.updateSeen(firestore, chatModel, loggedInUser, onSuccess)
     }
-    static deleteChat(chatModel:ChatModel,onSuccess: (done:boolean) => void) {
+    static deleteChat(chatModel: ChatModel, onSuccess: (done: boolean) => void) {
         const firestore = getFirestore(firebaseApp)
-        const storage=getStorage()
-        DeleteChat.deleteUserChat(firestore,chatModel,(success)=>{
-               if(!success){
-                   onSuccess(false)
-                   return
-               }
-               const hasImages=chatModel.chatMessages.filter((chatMessage) => {
-                   return chatMessage.type ===ChatMessageType.TypeImage
-               })
-               if(!hasImages){
-                   onSuccess(true)
-                   return
-               }
-               ClearChat.clearChatImages(storage,chatModel,(isImagesDeleted)=>{
-                     onSuccess(isImagesDeleted)
-               })
+        const storage = getStorage()
+        DeleteChat.deleteUserChat(firestore, chatModel, (success) => {
+            if (!success) {
+                onSuccess(false)
+                return
+            }
+            const hasImages = chatModel.chatMessages.filter((chatMessage) => {
+                return chatMessage.type === ChatMessageType.TypeImage
+            })
+            if (!hasImages) {
+                onSuccess(true)
+                return
+            }
+            ClearChat.clearChatImages(storage, chatModel, (isImagesDeleted) => {
+                onSuccess(isImagesDeleted)
+            })
         })
     }
 }
