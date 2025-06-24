@@ -2,7 +2,7 @@
 #               Qodana analysis is configured by qodana.yaml file               #
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
-version: "1.0"
+version: '1.0'
 #Specify inspection profile for code analysis
 profile:
   name: qodana.starter
@@ -20,9 +20,16 @@ profile:
 #plugins:
 #  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
 #Specify Qodana linter for analysis (Applied in CI/CD pipeline)
-linter: jetbrains/qodana-js:2025.1
+linter: 'jetbrains/qodana-js:2025.1'
 exclude:
   - name: All
     paths:
-      - src
+      - .gitignore
+      - .prettierignore
+      - .prettierrc
+      - eslint.config.mjs
+      - sonar-project.properties
+      - tailwind.config.js
       - package.json
+      - postcss.config.js
+      - vite.config.ts
