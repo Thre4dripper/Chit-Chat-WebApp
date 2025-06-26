@@ -2,7 +2,6 @@ import { Badge, IconButton, Typography } from '@mui/material'
 import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ChatIcon from '@mui/icons-material/Chat'
-import AddCircleIcon from '@mui/icons-material/AddCircle'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
@@ -16,9 +15,9 @@ const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
     setDialogState: React.Dispatch<SetStateAction<boolean>>
     setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
-}> = ({ openProfile, setDialogState, setLogoutDialogState }) => {
+    setGroupDialogOpen:React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState, setLogoutDialogState,setGroupDialogOpen }) => {
     const { user } = useHomeStore()
-    const [opened, setOpened] = React.useState(false)
     const homeChats = useHomeChatsStore((state) => state.homeChats)
     const favouriteList = useHomeStore((state) => state.user)?.favourites
 
@@ -40,28 +39,20 @@ const ChatsFragment: React.FC<{
 
                 <div className={'flex-1'} />
                 <div className={'flex flex-col justify-center'}>
-                    {!opened ? (
-                        <IconButton onClick={() => setOpened(true)}>
-                            <AddCircleIcon className={'text-white'} />
-                        </IconButton>
-                    ) : (
                         <div className={'flex'}>
                             <IconButton
                                 onClick={() => {
                                     setDialogState(true)
-                                    setOpened(false)
                                 }}>
                                 <ChatIcon className={'text-white'} />
                             </IconButton>
                             <IconButton
                                 onClick={() => {
-                                    setDialogState(true)
-                                    setOpened(false)
+                                    setGroupDialogOpen(true)
                                 }}>
                                 <GroupAddIcon className={'text-white'} />
                             </IconButton>
                         </div>
-                    )}
                 </div>
                 <div className={'flex flex-col justify-center rounded-full'}>
                     <IconButton

@@ -22,7 +22,7 @@ class CreateGroup {
             groupChatId,
             groupName,
             groupImageUrl,
-            selectedUsers,
+            selectedUsers.map((user)=>user.toObject()),
             [
                 new GroupMessageModel(
                     uuid(),

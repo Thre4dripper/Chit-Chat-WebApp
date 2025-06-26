@@ -103,28 +103,6 @@ class UserChatsRepository {
         }
         UpdateSeen.updateSeen(firestore, chatModel, loggedInUser, onSuccess)
     }
-    // static getAllFavouriteProfiles=(favUidList: string[],callback: (profiles: UserModel[]) => void)=>{
-    //     const firestore = getFirestore(firebaseApp)
-    //     const favProfiles: UserModel[] = [];
-    //     let completed = 0;
-    //
-    //     favUidList.forEach((uid) => {
-    //         GetProfile.getProfileFromUidDoc(firestore, uid, (profile) => {
-    //             if (profile) {
-    //                 console.log(profile)
-    //                 favProfiles.push(profile);
-    //             }
-    //             completed++;
-    //
-    //             if (completed === favUidList.length) {
-    //                 console.log(favProfiles)
-    //                 callback(favProfiles);
-    //
-    //             }
-    //         });
-    //     });
-    //
-    // }
     static favouriteChat(userModel:UserModel,favourite:string,onSuccess:(newUserModel:userModel|null) => void) {
         const firestore = getFirestore(firebaseApp)
         MarkFavourite.markAsFavourite(firestore,userModel,favourite,onSuccess)
