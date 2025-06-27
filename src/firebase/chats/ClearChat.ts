@@ -1,6 +1,29 @@
 import ChatModel from '../../models/user.chat.model.ts'
 import { getStorage, ref, listAll, deleteObject } from 'firebase/storage'
+import { Firestore, doc, setDoc } from 'firebase/firestore'
+import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 class ClearChat {
+    static clearUserChat(
+        firestore: Firestore,
+        chatModel: ChatModel,
+        onSuccess: (done: boolean) => void
+    ) {
+        const newChatModel = {
+            ...chatModel,
+            chatMessages: [chatModel.chatMessages[chatModel.chatMessages.length - 1]],
+        }
+
+        const docRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatModel.chatId)
+
+        setDoc(docRef, newChatModel)
+            .then(() => {
+                onSuccess(true)
+            })
+            .catch(() => {
+                onSuccess(false)
+            })
+    }
+
     static clearChatImages(
         storage: ReturnType<typeof getStorage>,
         chatModel: ChatModel,
@@ -33,4 +56,5 @@ class ClearChat {
             })
     }
 }
+
 export default ClearChat

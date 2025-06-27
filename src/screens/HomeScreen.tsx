@@ -31,6 +31,7 @@ const HomeScreen: React.FC = () => {
                 setShowCompleteProfile(true)
                 console.log('User is Initially registered')
             } else {
+                // useHomeChatsStore.getState().setFavouriteUsers()
                 useHomeChatsStore.getState().setHomeChats()
             }
         })

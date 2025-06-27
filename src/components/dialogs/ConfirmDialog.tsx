@@ -9,37 +9,22 @@ import {
     Divider,
     Avatar,
 } from '@mui/material'
-import useChatDetailsStore from '../../store/chat.details.store.ts'
 
-interface DeleteChatConfirmDialogProps {
+interface ConfirmDialogProps {
     open: boolean
     handleClose: () => void
-    message: string
+    title: stringmessage: stringaction:()=>void
+    width?: number
 }
 
-const DeleteChatConfirmDialog: React.FC<DeleteChatConfirmDialogProps> = ({
-    open,
-    handleClose,
-    message,
-}) => {
-    const chats = useChatDetailsStore((state) => state.chatDetails)
-    const deleteChat = useChatDetailsStore((state) => state.deleteChat)
-    const DeleteChats = async () => {
-        if (!chats) {
-            alert('No chats found.')
-            return
-        }
-        deleteChat(chats, (success) => {
-            if (!success) alert('not possible to delete')
-        })
-        handleClose()
-    }
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose,title,message,action,width }) => {
+
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth={true}>
+        <Dialog open={open} onClose={handleClose} fullWidth={!width}>
             <DialogTitle>
                 <div className={'flex flex-row items-center justify-start gap-4'}>
                     <Avatar src={'/src/assets/logo.png'} />
-                    Delete Chats
+                    {title}
                 </div>
             </DialogTitle>
             <Divider />
@@ -50,11 +35,11 @@ const DeleteChatConfirmDialog: React.FC<DeleteChatConfirmDialogProps> = ({
                 <Button onClick={handleClose} color='primary'>
                     No
                 </Button>
-                <Button onClick={DeleteChats} color='error'>
+                <Button onClick={action} color='error'>
                     Yes
                 </Button>
             </DialogActions>
         </Dialog>
     )
 }
-export default DeleteChatConfirmDialog
+export default ConfirmDialog

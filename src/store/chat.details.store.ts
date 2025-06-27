@@ -3,6 +3,8 @@ import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import ChatModel from '../models/user.chat.model.ts'
 import UserChatsRepository from '../repositories/user.chats.repository.ts'
+import userModel from '../models/user.model.ts'
+// import UserModel from '../models/user.model.ts'
 
 type chatDetailsState = {
     currentChatId: string | null
@@ -20,6 +22,8 @@ type chatDetailsActions = {
     ) => void
     sendImageMessage: (ChatModel: ChatModel, image: string, from: string, to: string) => void
     setCurrentChatId: (chatId: string) => void
+    favouriteChat:(userModel:userModel,favourite:string,onSuccess:(newModel:userModel|null)=>void) => void
+    clearChat:(chatModel:ChatModel,success:(check:boolean)=>void) => void
     deleteChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
 }
 
@@ -60,6 +64,13 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
                 UserChatsRepository.sendImage(chatModel, image, from, to, (id) => {
                     console.log('message sent', id)
                 })
+            },
+            favouriteChat(userModel:userModel,favourite:string,onSuccess:(newModel:userModel|null)=>void){
+                UserChatsRepository.favouriteChat(userModel,favourite,onSuccess)
+
+            },
+            clearChat(chatModel:ChatModel,onSuccess:(done:boolean) => void) {
+                UserChatsRepository.clearChat(chatModel, onSuccess)
             },
             deleteChat(chatModel, onSuccess) {
                 UserChatsRepository.deleteChat(chatModel, onSuccess)
