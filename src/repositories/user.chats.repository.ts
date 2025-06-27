@@ -28,8 +28,8 @@ class UserChatsRepository {
 
         GetChats.getAllUserChats(firestore, loggedInUser, (userChats) => {
             const oldList = useHomeChatsStore
-            .getState()
-            .homeChats.filter((item) => item.type !== ChatType.USER)
+                .getState()
+                .homeChats.filter((item) => item.type !== ChatType.USER)
 
             const newChats = userChats.map(
                 (chat) =>
@@ -38,8 +38,8 @@ class UserChatsRepository {
                         ChatType.USER,
                         chat,
                         null,
-                        chat.chatMessages[0]?.time,
-                    ),
+                        chat.chatMessages[0]?.time
+                    )
             )
             const newList = [...oldList, ...newChats]
 
@@ -65,7 +65,7 @@ class UserChatsRepository {
         text: string,
         from: string,
         to: string,
-        chatMessageId: (id: string | null) => void,
+        chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.sendTextMessage(chatModel, firestore, text, from, to, chatMessageId)
@@ -76,7 +76,7 @@ class UserChatsRepository {
         imageUri: string,
         from: string,
         to: string,
-        chatMessageId: (id: string | null) => void,
+        chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.SendImage(firestore, chatModel, imageUri, from, to, chatMessageId)
@@ -87,7 +87,7 @@ class UserChatsRepository {
         stickerIndex: number,
         from: string,
         to: string,
-        chatMessageId: (id: string | null) => void,
+        chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.SendSticker(firestore, chatModel, stickerIndex, from, to, chatMessageId)
@@ -127,7 +127,11 @@ class UserChatsRepository {
     //     });
     //
     // }
-    static favouriteChat(userModel: UserModel, favourite: string, onSuccess: (newUserModel: userModel | null) => void) {
+    static favouriteChat(
+        userModel: UserModel,
+        favourite: string,
+        onSuccess: (newUserModel: userModel | null) => void
+    ) {
         const firestore = getFirestore(firebaseApp)
         MarkFavourite.markAsFavourite(firestore, userModel, favourite, onSuccess)
     }
@@ -150,7 +154,6 @@ class UserChatsRepository {
             } else {
                 onSuccess(true)
             }
-
         })
     }
 

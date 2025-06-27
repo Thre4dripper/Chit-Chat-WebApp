@@ -13,14 +13,14 @@ import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 import ChatMessageModel from '../../models/chat.message.model.ts'
 import { Fab } from '@mui/material'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
-import {enqueueSnackbar} from 'notistack'
+import { enqueueSnackbar } from 'notistack'
 
 interface ChatBoxProps {
-    setImageSrc: React.Dispatch<SetStateAction<string|null>>
-    setImageOpen:React.Dispatch<SetStateAction<boolean>>
+    setImageSrc: React.Dispatch<SetStateAction<string | null>>
+    setImageOpen: React.Dispatch<SetStateAction<boolean>>
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({setImageSrc,setImageOpen}) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
 
@@ -34,22 +34,20 @@ const ChatBox: React.FC<ChatBoxProps> = ({setImageSrc,setImageOpen}) => {
         setDragging(true)
     }
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
+        e.preventDefault()
+        const file = e.dataTransfer.files[0]
         if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
+            const reader = new FileReader()
             reader.onload = () => {
-                setImageSrc(reader.result as string);
+                setImageSrc(reader.result as string)
                 setImageOpen(true)
-            };
-            reader.readAsDataURL(file);
-        }else{
+            }
+            reader.readAsDataURL(file)
+        } else {
             setDragging(false)
-            enqueueSnackbar('Only Images allowed ',{ variant: 'error', autoHideDuration: 3000 })
+            enqueueSnackbar('Only Images allowed ', { variant: 'error', autoHideDuration: 3000 })
         }
     }
-
-
 
     useEffect(() => {
         // Create an IntersectionObserver to observe the last chat message
@@ -183,9 +181,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({setImageSrc,setImageOpen}) => {
         <div
             onDragOver={handleDragging}
             onDrop={handleDrop}
-            onDragLeave={()=>setDragging(false)}
+            onDragLeave={() => setDragging(false)}
             className={
-                `z-0 flex-1 ${dragging?"bg-slate-400 border-4 border-dotted border-blue-400 ":"bg-white"} overflow-y-scroll flex flex-col-reverse relative ` +
+                `z-0 flex-1 ${dragging ? 'bg-slate-400 border-4 border-dotted border-blue-400 ' : 'bg-white'} overflow-y-scroll flex flex-col-reverse relative ` +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full h-full'
             }>
             {currentChat.chatMessages.map((message, index) => (

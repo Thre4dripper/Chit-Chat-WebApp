@@ -7,7 +7,7 @@ class MarkFavourite {
         firestore: Firestore,
         userModel: userModel,
         favourite: string,
-        onSuccess: (newModel: userModel|null) => void
+        onSuccess: (newModel: userModel | null) => void
     ) {
         const favouriteList = [...userModel.favourites]
         let updatedFavourites
@@ -21,13 +21,13 @@ class MarkFavourite {
             ...userModel,
             favourites: updatedFavourites,
         }
-        const docRef=  doc(firestore,FirestoreCollections.USERS_COLLECTION,userModel.username)
+        const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, userModel.username)
 
-        setDoc(docRef,newUserModel,{ merge: true })
+        setDoc(docRef, newUserModel, { merge: true })
             .then(() => {
                 onSuccess(newUserModel as userModel)
             })
-            .catch(()=> {
+            .catch(() => {
                 onSuccess(null)
             })
     }

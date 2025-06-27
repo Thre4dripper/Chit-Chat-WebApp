@@ -26,13 +26,13 @@ interface ImageCropFragmentProps {
 }
 
 const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
-                                                                 cropShape,
-                                                                 aspect,
-                                                                 outputSize,
-                                                                 image,
-                                                                 onCancel,
-                                                                 onConfirmed,
-                                                             }) => {
+    cropShape,
+    aspect,
+    outputSize,
+    image,
+    onCancel,
+    onConfirmed,
+}) => {
     const [crop, setCrop] = React.useState<Crop>()
     const imageRef = useRef<HTMLImageElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)

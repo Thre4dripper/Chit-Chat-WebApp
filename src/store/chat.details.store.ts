@@ -18,11 +18,15 @@ type ChatDetailsActions = {
         chatModel: ChatModel,
         stickerIndex: number,
         from: string,
-        to: string,
+        to: string
     ) => void
     sendImageMessage: (chatModel: ChatModel, image: string, from: string, to: string) => void
     setCurrentChatId: (chatId: string) => void
-    favouriteChat: (userModel: UserModel, favourite: string, onSuccess: (newModel: UserModel | null) => void) => void
+    favouriteChat: (
+        userModel: UserModel,
+        favourite: string,
+        onSuccess: (newModel: UserModel | null) => void
+    ) => void
     clearChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
     deleteChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
 }
@@ -75,8 +79,8 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
             deleteChat: (chatModel, onSuccess) => {
                 UserChatsRepository.deleteChat(chatModel, onSuccess)
             },
-        })),
-    ),
+        }))
+    )
 )
 
 export default useChatDetailsStore
