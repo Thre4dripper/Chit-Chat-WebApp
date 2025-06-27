@@ -6,7 +6,7 @@
 version: '1.0'
 #Specify inspection profile for code analysis
 profile:
-    name: qodana.starter
+  name: qodana.starter
 #Enable inspections
 #include:
 #  - name: <SomeEnabledInspectionId>
@@ -23,14 +23,15 @@ profile:
 #Specify Qodana linter for analysis (Applied in CI/CD pipeline)
 linter: 'jetbrains/qodana-js:2025.1'
 exclude:
-    - name: All
-      paths:
-          - .gitignore
-          - .prettierignore
-          - .prettierrc
-          - eslint.config.mjs
-          - sonar-project.properties
-          - tailwind.config.js
-          - package.json
-          - postcss.config.js
-          - vite.config.ts
+  - name: All
+    paths:
+      - .gitignore
+      - .prettierignore
+      - .prettierrc
+      - eslint.config.mjs
+      - sonar-project.properties
+      - tailwind.config.js
+      - package.json
+      - postcss.config.js
+      - vite.config.ts
+
