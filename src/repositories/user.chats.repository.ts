@@ -76,7 +76,7 @@ class UserChatsRepository {
         from: string,
         to: string,
         chatMessageId: (id: string | null) => void
-    ){
+    ) {
         const firestore = getFirestore(firebaseApp)
         SendChat.SendImage(firestore, chatModel, imageUri, from, to, chatMessageId)
     }
@@ -89,7 +89,7 @@ class UserChatsRepository {
         chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
-        SendChat.SendSticker(firestore,chatModel,stickerIndex,from, to, chatMessageId)
+        SendChat.SendSticker(firestore, chatModel, stickerIndex, from, to, chatMessageId)
     }
 
     static updateSeen(chatModel: ChatModel | null) {
@@ -125,49 +125,52 @@ class UserChatsRepository {
     //     });
     //
     // }
-    static favouriteChat(userModel:UserModel,favourite:string,onSuccess:(newUserModel:userModel|null) => void) {
+    static favouriteChat(
+        userModel: UserModel,
+        favourite: string,
+        onSuccess: (newUserModel: userModel | null) => void
+    ) {
         const firestore = getFirestore(firebaseApp)
-        MarkFavourite.markAsFavourite(firestore,userModel,favourite,onSuccess)
+        MarkFavourite.markAsFavourite(firestore, userModel, favourite, onSuccess)
     }
-    static clearChat(chatModel:ChatModel,onSuccess:(done:boolean)=>void){
+    static clearChat(chatModel: ChatModel, onSuccess: (done: boolean) => void) {
         const firestore = getFirestore(firebaseApp)
-        const storage=getStorage()
-        ClearChat.clearUserChat(firestore,chatModel,(success:boolean) => {
-            if(!success){
+        const storage = getStorage()
+        ClearChat.clearUserChat(firestore, chatModel, (success: boolean) => {
+            if (!success) {
                 onSuccess(false)
                 return
             }
-            const hasImages=chatModel.chatMessages.filter((chatMessage) => {
-                return chatMessage.type ===ChatMessageType.TypeImage
+            const hasImages = chatModel.chatMessages.filter((chatMessage) => {
+                return chatMessage.type === ChatMessageType.TypeImage
             })
-            if(hasImages){
-                ClearChat.clearChatImages(storage,chatModel,(isDeleted)=>{
+            if (hasImages) {
+                ClearChat.clearChatImages(storage, chatModel, (isDeleted) => {
                     onSuccess(isDeleted)
                 })
-            }else{
+            } else {
                 onSuccess(true)
             }
-
         })
     }
-    static deleteChat(chatModel:ChatModel,onSuccess: (done:boolean) => void) {
+    static deleteChat(chatModel: ChatModel, onSuccess: (done: boolean) => void) {
         const firestore = getFirestore(firebaseApp)
-        const storage=getStorage()
-        DeleteChat.deleteUserChat(firestore,chatModel,(success)=>{
-               if(!success){
-                   onSuccess(false)
-                   return
-               }
-               const hasImages=chatModel.chatMessages.filter((chatMessage) => {
-                   return chatMessage.type ===ChatMessageType.TypeImage
-               })
-               if(!hasImages){
-                   onSuccess(true)
-                   return
-               }
-               ClearChat.clearChatImages(storage,chatModel,(isImagesDeleted)=>{
-                     onSuccess(isImagesDeleted)
-               })
+        const storage = getStorage()
+        DeleteChat.deleteUserChat(firestore, chatModel, (success) => {
+            if (!success) {
+                onSuccess(false)
+                return
+            }
+            const hasImages = chatModel.chatMessages.filter((chatMessage) => {
+                return chatMessage.type === ChatMessageType.TypeImage
+            })
+            if (!hasImages) {
+                onSuccess(true)
+                return
+            }
+            ClearChat.clearChatImages(storage, chatModel, (isImagesDeleted) => {
+                onSuccess(isImagesDeleted)
+            })
         })
     }
 }

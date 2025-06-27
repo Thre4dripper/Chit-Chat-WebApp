@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { ButtonBase } from '@mui/material'
 import ViewImageDialog from '../../dialogs/ViewImageDialog.tsx'
 
@@ -7,23 +7,25 @@ interface LeftImageProps {
 }
 
 const MsgImage: React.FC<LeftImageProps> = ({ image }) => {
-    const [openView,setOpenView]=useState(false)
+    const [openView, setOpenView] = useState(false)
     return (
         <>
-        <ButtonBase className="flex items-center justify-center" onClick={() => setOpenView(true)}>
-            <div className="m-1.5 w-[250px] h-[250px] overflow-hidden rounded-3xl">
-                <img
-                    src={image}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = 'https://placehold.co/600x400?text=Loading...';
-                    }}
-                    alt="not working"
-                />
-            </div>
-        </ButtonBase>
+            <ButtonBase
+                className='flex items-center justify-center'
+                onClick={() => setOpenView(true)}>
+                <div className='m-1.5 w-[250px] h-[250px] overflow-hidden rounded-3xl'>
+                    <img
+                        src={image}
+                        className='w-full h-full object-cover'
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.onerror = null
+                            target.src = 'https://placehold.co/600x400?text=Loading...'
+                        }}
+                        alt='not working'
+                    />
+                </div>
+            </ButtonBase>
             <ViewImageDialog
                 open={openView}
                 setOpen={setOpenView}
@@ -35,7 +37,6 @@ const MsgImage: React.FC<LeftImageProps> = ({ image }) => {
                 maxZoomLevel={2.5}
             />
         </>
-
     )
 }
 

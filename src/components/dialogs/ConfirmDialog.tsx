@@ -10,19 +10,23 @@ import {
     Avatar,
 } from '@mui/material'
 
-
 interface ConfirmDialogProps {
     open: boolean
     handleClose: () => void
     title: string
-    message:string
-    action:()=>void
+    message: string
+    action: () => void
     width?: number
-
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose,title,message,action,width }) => {
-
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+    open,
+    handleClose,
+    title,
+    message,
+    action,
+    width,
+}) => {
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={!width}>
             <DialogTitle>

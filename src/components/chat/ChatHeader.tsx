@@ -8,17 +8,18 @@ import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 import useHomeStore from '../../store/home.store.ts'
 type FeatureType = { id: number; content: string; action: () => void }
 
-const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>}> = ({setIsViewing}) => {
+const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean>> }> = ({
+    setIsViewing,
+}) => {
     //  zustand states
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
-    const user= useHomeStore((state)=>state.user)
-    const setUser=useHomeStore((state)=>state.setUser)
-    const currentChatId=useChatDetailsStore((state)=>state.currentChatId)
+    const user = useHomeStore((state) => state.user)
+    const setUser = useHomeStore((state) => state.setUser)
+    const currentChatId = useChatDetailsStore((state) => state.currentChatId)
     const deleteChat = useChatDetailsStore((state) => state.deleteChat)
     const clearChat = useChatDetailsStore((state) => state.clearChat)
-    const markFavourite=useChatDetailsStore((state)=>state.favouriteChat)
-
+    const markFavourite = useChatDetailsStore((state) => state.favouriteChat)
 
     const [openPopper, setOpenPopper] = useState(false)
     const popperRef = useRef(null)
@@ -63,19 +64,18 @@ const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
         if (actionDetails === 1) {
             console.log('working on view model')
         } else if (actionDetails === 2) {
-             if(!user|| !currentChatId){
-                 console.log("Something wrong in chatId in Favourite")
-                 return
-             }
-             markFavourite(user,currentChatId,((done)=> {
-                 if (!done) {
-                     alert('f**')
-                     return
-                 }
-                 setUser(done);
-                 console.log("wtf you did this omg")
-             }))
-
+            if (!user || !currentChatId) {
+                console.log('Something wrong in chatId in Favourite')
+                return
+            }
+            markFavourite(user, currentChatId, (done) => {
+                if (!done) {
+                    alert('f**')
+                    return
+                }
+                setUser(done)
+                console.log('wtf you did this omg')
+            })
         } else if (actionDetails === 3) {
             clearChat(currentChat, (sucesss) => {
                 if (!sucesss) alert('nothing breaks')
@@ -116,15 +116,18 @@ const ChatHeader: React.FC<{setIsViewing:React.Dispatch<SetStateAction<boolean>>
                 className={
                     'z-50 bg-slate-300 rounded-3xl shadow-slate-950/20 shadow-md flex flex-row px-4 pt-4 pb-2 relative'
                 }>
-                <IconButton onClick={()=>{setIsViewing(true)}}>
-                <CircularImage
-                    image={
-                        currentChat?.dmChatUser2.username === username
-                            ? currentChat?.dmChatUser1.profileImage
-                            : currentChat?.dmChatUser2.profileImage
-                    }
-                    size={48}
-                />
+                <IconButton
+                    onClick={() => {
+                        setIsViewing(true)
+                    }}>
+                    <CircularImage
+                        image={
+                            currentChat?.dmChatUser2.username === username
+                                ? currentChat?.dmChatUser1.profileImage
+                                : currentChat?.dmChatUser2.profileImage
+                        }
+                        size={48}
+                    />
                 </IconButton>
                 <div className={'mx-4 flex flex-col flex-auto justify-center'}>
                     <div className={'flex flex-row justify-between'}>

@@ -14,13 +14,21 @@ type chatDetailsActions = {
     updateSeen: (chat: ChatModel | null) => void
     setChatDetails: (chatId: string) => void
     sendTextMessage: (chatModel: ChatModel, text: string, from: string, to: string) => void
-    sendStickerMessage:(chatModel:ChatModel,stickerIndex:number,from:string,to:string)=>void
-    sendImageMessage:(ChatModel:ChatModel,image:string,from:string,to:string) => void
+    sendStickerMessage: (
+        chatModel: ChatModel,
+        stickerIndex: number,
+        from: string,
+        to: string
+    ) => void
+    sendImageMessage: (ChatModel: ChatModel, image: string, from: string, to: string) => void
     setCurrentChatId: (chatId: string) => void
-    favouriteChat:(userModel:userModel,favourite:string,onSuccess:(newModel:userModel|null)=>void) => void
-    clearChat:(chatModel:ChatModel,success:(check:boolean)=>void) => void
-    deleteChat:(chatModel: ChatModel,success:(check:boolean)=>void)=>void
-
+    favouriteChat: (
+        userModel: userModel,
+        favourite: string,
+        onSuccess: (newModel: userModel | null) => void
+    ) => void
+    clearChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
+    deleteChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
 }
 
 const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
@@ -48,29 +56,32 @@ const useChatDetailsStore = create<chatDetailsState & chatDetailsActions>()(
             },
             sendTextMessage: (chatModel, text, from, to) => {
                 UserChatsRepository.sendTextMessage(chatModel, text, from, to, (id) => {
-                    console.log('message sent', id);
+                    console.log('message sent', id)
                 })
             },
-            sendStickerMessage:(chatModel, stickerIndex, from, to)=>{
-                UserChatsRepository.sendSticker(chatModel,stickerIndex,from,to,(id)=>{
-                    console.log('sticker send',id);
+            sendStickerMessage: (chatModel, stickerIndex, from, to) => {
+                UserChatsRepository.sendSticker(chatModel, stickerIndex, from, to, (id) => {
+                    console.log('sticker send', id)
                 })
             },
-            sendImageMessage:(chatModel:ChatModel,image:string,from:string,to)=>{
-                UserChatsRepository.sendImage(chatModel,image,from,to,(id)=>{
-                    console.log('message sent', id);
+            sendImageMessage: (chatModel: ChatModel, image: string, from: string, to) => {
+                UserChatsRepository.sendImage(chatModel, image, from, to, (id) => {
+                    console.log('message sent', id)
                 })
             },
-            favouriteChat(userModel:userModel,favourite:string,onSuccess:(newModel:userModel|null)=>void){
-                UserChatsRepository.favouriteChat(userModel,favourite,onSuccess)
-
+            favouriteChat(
+                userModel: userModel,
+                favourite: string,
+                onSuccess: (newModel: userModel | null) => void
+            ) {
+                UserChatsRepository.favouriteChat(userModel, favourite, onSuccess)
             },
-            clearChat(chatModel:ChatModel,onSuccess:(done:boolean) => void) {
+            clearChat(chatModel: ChatModel, onSuccess: (done: boolean) => void) {
                 UserChatsRepository.clearChat(chatModel, onSuccess)
             },
-            deleteChat(chatModel,onSuccess) {
-                UserChatsRepository.deleteChat(chatModel,onSuccess)
-            }
+            deleteChat(chatModel, onSuccess) {
+                UserChatsRepository.deleteChat(chatModel, onSuccess)
+            },
         }))
     )
 )
