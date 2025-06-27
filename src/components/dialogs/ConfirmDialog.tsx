@@ -13,11 +13,13 @@ import {
 interface ConfirmDialogProps {
     open: boolean
     handleClose: () => void
-    title: stringmessage: stringaction:()=>void
+    title: string
+    message: string
+    action: (() => void) | (() => Promise<void>)
     width?: number
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose,title,message,action,width }) => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose, title, message, action, width }) => {
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={!width}>
