@@ -17,7 +17,7 @@
         "@hookform/resolvers": "^3.9.1",
         "@mui/icons-material": "^6.4.7",
         "@mui/material": "^6.4.7",
-        "firebase": "^11.0.1",
+        "firebase": "^11.9.1",
         "immer": "^10.1.1",
         "lottie-react": "^2.4.0",
         "notistack": "^3.0.1",
