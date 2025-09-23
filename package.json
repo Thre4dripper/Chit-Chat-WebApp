@@ -41,7 +41,7 @@
         "@vitejs/plugin-react": "^4.3.4",
         "autoprefixer": "^10.4.20",
         "aws-cdk": "^2.166.0",
-        "aws-cdk-lib": "^2.184.0",
+        "aws-cdk-lib": "^2.215.0",
         "constructs": "^10.4.2",
         "esbuild": "^0.25.0",
         "eslint": "9",
