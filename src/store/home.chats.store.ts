@@ -14,7 +14,7 @@ type homeChatState = {
 }
 type homeChatActions = {
     setHomeChats: () => void
-    startChat: (dmUser: UserModel) => void
+    startChat: (newChatUser: UserModel) => void
     // setFavouriteUsers:()=>void
 }
 
@@ -26,18 +26,6 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },
-            // setFavouriteUsers: () => {
-            //     const userModel=useHomeStore.getState().user
-            //     if(!userModel)return
-            //     const favUidList: string[] = userModel.favourites.map((combinedUid) => {
-            //                     const uids = combinedUid.split('-');
-            //                     return uids.find((uid) => uid !== userModel.uid)!;
-            //                 });
-            //     UserChatsRepository.getAllFavouriteProfiles(favUidList,(profiles)=>{
-            //         console.log(profiles)
-            //         set({ favouriteUsers: profiles })
-            //     })
-            // },
             startChat: (newChatUser: UserModel) => {
                 addChatsRepository.addChat(newChatUser, (chatId) => {
                     if (!chatId) {
