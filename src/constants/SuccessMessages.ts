@@ -7,6 +7,8 @@ export const SuccessMessages = {
 
     //group related success messages
     GROUP_IMAGE_UPDATED_SUCCESSFULLY: 'Group image updated',
+    GROUP_CREATED_SUCCESSFULLY: 'Group created successfully',
+    GROUP_EXITED_SUCCESSFULLY: 'You have left the group',
 
     //chat related success messages
     IMAGE_SENT_SUCCESSFULLY: 'Image sent',

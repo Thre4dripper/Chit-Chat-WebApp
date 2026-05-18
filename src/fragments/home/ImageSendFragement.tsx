@@ -13,9 +13,15 @@ interface ImageSendFragmentProps {
     image: string | null
     cropShape: 'rect' | 'round'
     onConfirmed: () => void
+    onSend?: (file: File, onResult: (id: string | null) => void) => void
 }
 
-const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({ image, cropShape, onConfirmed }) => {
+const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
+    image,
+    cropShape,
+    onConfirmed,
+    onSend,
+}) => {
     const imgRef = useRef<HTMLImageElement | null>(null)
     const previewCanvasRef = useRef<HTMLCanvasElement | null>(null)
     const [crop, setCrop] = useState<Crop | undefined>(undefined)
@@ -74,12 +80,8 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({ image, cropShape,
     }, [crop, image])
 
     const handleConfirm = async () => {
-        if (!chatDetails || !username || !previewCanvasRef.current) return
-
-        const to =
-            chatDetails.dmChatUser1.username === username
-                ? chatDetails.dmChatUser2.username
-                : chatDetails.dmChatUser1.username
+        if (!previewCanvasRef.current) return
+        if (!onSend && (!chatDetails || !username)) return
 
         setLoading(true)
         previewCanvasRef.current.toBlob(
@@ -98,7 +100,21 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({ image, cropShape,
                     lastModified: Date.now(),
                 })
 
-                sendImageMessage(chatDetails, imageFile, username, to, (id) => {
+                const sendFn: (file: File, cb: (id: string | null) => void) => void =
+                    onSend ??
+                    ((file, cb) => {
+                        if (!chatDetails || !username) {
+                            cb(null)
+                            return
+                        }
+                        const to =
+                            chatDetails.dmChatUser1.username === username
+                                ? chatDetails.dmChatUser2.username
+                                : chatDetails.dmChatUser1.username
+                        sendImageMessage(chatDetails, file, username, to, cb)
+                    })
+
+                sendFn(imageFile, (id) => {
                     setLoading(false)
                     if (!id) {
                         enqueueSnackbar(ErrorMessages.ERROR_SENDING_IMAGE, {

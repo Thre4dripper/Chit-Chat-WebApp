@@ -5,7 +5,7 @@ import useChatDetailsStore from '../../store/chat.details.store.ts'
 import PhotoIcon from '@mui/icons-material/Photo'
 import { ChatType } from '../../enums/ChatType.ts'
 
-interface ItemChatProps {
+interface ItemGroupProps {
     chatId: string
     image: string
     primaryText: string
@@ -14,7 +14,7 @@ interface ItemChatProps {
     unseenMessageCount: number
 }
 
-const ItemChat: React.FC<ItemChatProps> = ({
+const ItemGroup: React.FC<ItemGroupProps> = ({
     chatId,
     image,
     primaryText,
@@ -22,23 +22,21 @@ const ItemChat: React.FC<ItemChatProps> = ({
     time,
     unseenMessageCount,
 }) => {
-    if (primaryText && primaryText.length > 20) {
-        primaryText = primaryText.substring(0, 24) + '...'
-    }
-    const currentChat = useChatDetailsStore((state) => state.chatDetails)
+    const displayName =
+        primaryText && primaryText.length > 20 ? primaryText.substring(0, 24) + '...' : primaryText
+    const currentChat = useChatDetailsStore((state) => state.groupChatDetails)
     const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
 
     return (
         <div>
             <button
-                onClick={() => setCurrentChatId(chatId, ChatType.USER)}
-                className={`${currentChat?.chatId === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
-                <CircularImage image={image} size={48} />
+                onClick={() => setCurrentChatId(chatId, ChatType.GROUP)}
+                className={`${currentChat?.id === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
+                <CircularImage isGroup={true} image={image} size={48} />
                 <div className={'flex flex-col flex-auto justify-center'}>
-                    {/*create a primary text container with ellipses effect on longer text and time container at the end*/}
                     <div className={'flex flex-row justify-between'}>
                         <div style={{ textOverflow: 'ellipsis' }} className={'text-white text-lg'}>
-                            {primaryText}
+                            {displayName}
                         </div>
                         <Typography variant={'subtitle2'} color={'gray'}>
                             {time}
@@ -77,4 +75,4 @@ const ItemChat: React.FC<ItemChatProps> = ({
     )
 }
 
-export default ItemChat
+export default ItemGroup

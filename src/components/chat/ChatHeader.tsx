@@ -64,6 +64,7 @@ const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean
     const action = () => {
         setOpenDialog(false)
 
+        //  view contact
         if (actionDetails === 1) {
             console.log('working on view model')
         } else if (actionDetails === 2) {

@@ -8,6 +8,8 @@ export const ErrorMessages = {
 
     //group related errors
     ERROR_UPDATING_GROUP_IMAGE: 'Error updating group image',
+    ERROR_CREATING_GROUP: 'Failed to create group, please try again',
+    ERROR_EXITING_GROUP: 'Failed to exit group, please try again',
 
     //chat related errors
     ERROR_SENDING_IMAGE: 'Error sending image',

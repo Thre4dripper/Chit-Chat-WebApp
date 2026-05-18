@@ -26,7 +26,7 @@ class GroupChatModel extends BaseModel {
     }
 }
 
-class GroupChatUserModel extends BaseModel {
+export class GroupChatUserModel extends BaseModel {
     username: string
     profileImage: string
 

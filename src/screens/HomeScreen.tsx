@@ -9,6 +9,7 @@ import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
 import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
 import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import AddChatDialog from '../components/dialogs/AddChatDialog.tsx'
+import GroupChatDialog from '../components/dialogs/AddGroupDialog.tsx'
 import useHomeChatsStore from '../store/home.chats.store.ts'
 import LogoutConfirmation from '../components/dialogs/LogoutConfirmationDialog.tsx'
 
@@ -18,6 +19,7 @@ const HomeScreen: React.FC = () => {
     const [showCompleteProfile, setShowCompleteProfile] = React.useState<boolean>(false)
     const [browsedImage, setBrowseImage] = React.useState<string | null>(null)
     const [dialogState, setDialogState] = React.useState<boolean>(false)
+    const [groupDialogOpen, setGroupDialogOpen] = React.useState<boolean>(false)
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
@@ -31,7 +33,6 @@ const HomeScreen: React.FC = () => {
                 setShowCompleteProfile(true)
                 console.log('User is Initially registered')
             } else {
-                // useHomeChatsStore.getState().setFavouriteUsers()
                 useHomeChatsStore.getState().setHomeChats()
             }
         })
@@ -74,6 +75,7 @@ const HomeScreen: React.FC = () => {
                         openProfile={setProfileOpen}
                         setDialogState={setDialogState}
                         setLogoutDialogState={setLogoutConfirmOpen}
+                        setGroupDialogOpen={setGroupDialogOpen}
                     />
                 )}
             </div>
@@ -87,6 +89,7 @@ const HomeScreen: React.FC = () => {
                 )}
             </div>
             <AddChatDialog dialogState={dialogState} setDialogState={setDialogState} />
+            <GroupChatDialog dialogState={groupDialogOpen} setDialogState={setGroupDialogOpen} />
             <LogoutConfirmation
                 open={logoutConfirmOpen}
                 handleClose={() => setLogoutConfirmOpen(false)}

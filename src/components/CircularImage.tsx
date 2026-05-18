@@ -1,26 +1,25 @@
-import { IconButton } from '@mui/material'
+import { Avatar, IconButton } from '@mui/material'
 import React from 'react'
-
+import GroupsIcon from '@mui/icons-material/Groups'
 interface CircularImageProps {
     image: string
     size?: number
     alt?: string
+    isGroup?: boolean
 }
 
-const CircularImage: React.FC<CircularImageProps> = ({ image, size, alt = '' }) => {
+const CircularImage: React.FC<CircularImageProps> = ({ image, size, alt = '', isGroup }) => {
     return (
         <div className={'flex flex-col justify-center'}>
             <IconButton>
-                <div className={'rounded-full bg-white overflow-clip'}>
-                    <img
-                        src={image}
-                        alt={alt}
-                        style={{
-                            width: size,
-                            height: size,
-                        }}
-                        className={'rounded-full p-0.5'}
-                    />
+                <div className={'rounded-full p-0.5 bg-white'}>
+                    {isGroup ? (
+                        <Avatar alt={alt} src={image} sx={{ width: size, height: size }}>
+                            <GroupsIcon />
+                        </Avatar>
+                    ) : (
+                        <Avatar alt={alt} src={image} sx={{ width: size, height: size }} />
+                    )}
                 </div>
             </IconButton>
         </div>
