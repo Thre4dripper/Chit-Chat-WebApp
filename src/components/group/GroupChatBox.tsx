@@ -104,7 +104,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         if (message.from !== username) {
             return (
                 <ItemChatTextLeft
-                    profileImage={sendBy(message) as string}
+                    profileImage={sendBy(message) ?? ''}
                     message={message.text as string}
                     time={message.time}
                 />
@@ -112,7 +112,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         } else {
             return (
                 <ItemChatTextRight
-                    seen={getSeenBy(message) as string[]}
+                    seen={getSeenBy(message).filter((s): s is string => s !== undefined)}
                     message={message.text as string}
                     time={message.time}
                 />
@@ -127,7 +127,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         if (message.from !== username) {
             return (
                 <ItemChatImageLeft
-                    profileImage={sendBy(message) as string}
+                    profileImage={sendBy(message) ?? ''}
                     image={message.image}
                     time={message.time}
                 />
@@ -135,7 +135,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         } else {
             return (
                 <ItemChatImageRight
-                    seen={getSeenBy(message) as string[]}
+                    seen={getSeenBy(message).filter((s): s is string => s !== undefined)}
                     image={message.image}
                     time={message.time}
                 />
@@ -150,7 +150,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         if (message.from !== username) {
             return (
                 <ItemChatStickerLeft
-                    profileImage={sendBy(message) as string}
+                    profileImage={sendBy(message) ?? ''}
                     sticker={message.sticker}
                     time={message.time}
                 />
@@ -158,7 +158,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         } else {
             return (
                 <ItemChatStickerRight
-                    seen={getSeenBy(message) as string[]}
+                    seen={getSeenBy(message).filter((s): s is string => s !== undefined)}
                     sticker={message.sticker}
                     time={message.time}
                 />
