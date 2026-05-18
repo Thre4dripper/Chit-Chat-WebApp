@@ -49,7 +49,7 @@ const HomeScreen: React.FC = () => {
     }
     return (
         <div className={'flex flex-row bg-slate-900/90 '}>
-            <div className={'w-[25rem]'}>
+            <div className={'w-100'}>
                 {profileOpen ? (
                     <>
                         {browsedImage ? (

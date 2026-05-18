@@ -119,7 +119,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                     <LottieLoading />
                 ) : searchedUsers.length == 0 ? (
                     <Lottie
-                        className={'max-h-[200px] max-w-[200px]'}
+                        className={'max-h-50 max-w-50'}
                         animationData={NoResult}
                         loop={true}
                         autoPlay={true}

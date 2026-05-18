@@ -147,7 +147,7 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                                 <LottieLoading />
                             ) : searchedUsers.length === 0 ? (
                                 <Lottie
-                                    className='max-h-[200px] max-w-[200px]'
+                                    className='max-h-50 max-w-50'
                                     animationData={NoResult}
                                     loop
                                     autoPlay

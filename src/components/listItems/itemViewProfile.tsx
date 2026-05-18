@@ -63,7 +63,7 @@ const ViewProfile: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolea
                     </Typography>
                     <div className='flex justify-center items-center h-24 bg-blue-gray-100 rounded-md'>
                         <Lottie
-                            className={'max-h-[200px] max-w-[200px]'}
+                            className={'max-h-50 max-w-50'}
                             animationData={emptyImageIconData}
                             loop={true}
                             autoPlay={true}
