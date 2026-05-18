@@ -6,19 +6,23 @@ import UserChatsRepository from '../repositories/user.chats.repository.ts'
 import addChatsRepository from '../repositories/add.chats.repository.ts'
 import UserModel from '../models/user.model.ts'
 import useChatDetailsStore from './chat.details.store.ts'
+// import useHomeStore from './home.store.ts'
 
 type homeChatState = {
     homeChats: HomeChatModel[]
+    // favouriteUsers:UserModel[]
 }
 type homeChatActions = {
     setHomeChats: () => void
-    startChat: (dmUser: UserModel) => void
+    startChat: (newChatUser: UserModel) => void
+    // setFavouriteUsers:()=>void
 }
 
 const useHomeChatsStore = create<homeChatState & homeChatActions>()(
     devtools(
         immer((set) => ({
             homeChats: [],
+            // favouriteUsers: [],
             setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
             },

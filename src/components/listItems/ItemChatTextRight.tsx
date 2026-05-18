@@ -3,13 +3,13 @@ import MsgText from '../chatMessages/common/MsgText.tsx'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 
-interface ItemChatTextLeftProps {
+interface ItemChatTextRightProps {
     seen: string[]
     message: string
     time: Timestamp
 }
 
-const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ seen, message, time }) => {
+const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({ seen, message, time }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -45,4 +45,4 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ seen, message, time
         </div>
     )
 }
-export default ItemChatTextLeft
+export default ItemChatTextRight

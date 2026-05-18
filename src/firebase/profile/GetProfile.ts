@@ -7,7 +7,7 @@ class GetProfile {
     static getProfile(
         firestore: Firestore,
         user: User,
-        username: string,
+        username: string | null,
         profile: (userModel: UserModel | null) => void
     ) {
         this.getProfileFromUsernameDoc(firestore, username, (userModel) => {
@@ -21,7 +21,7 @@ class GetProfile {
         })
     }
 
-    private static getProfileFromUidDoc(
+    static getProfileFromUidDoc(
         firestore: Firestore,
         uid: string,
         profile: (userModel: UserModel | null) => void
@@ -43,9 +43,14 @@ class GetProfile {
 
     private static getProfileFromUsernameDoc(
         firestore: Firestore,
-        username: string,
+        username: string | null,
         profile: (userModel: UserModel | null) => void
     ) {
+        if (!username) {
+            profile(null)
+            return
+        }
+
         const docRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, username)
         getDoc(docRef)
             .then((doc) => {

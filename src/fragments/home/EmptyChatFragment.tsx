@@ -2,14 +2,15 @@ import React from 'react'
 import androidImage from '../../assets/chit_chat_android.png'
 import icon from '../../assets/logo.png'
 import { NoEncryption } from '@mui/icons-material'
+import { enqueueSnackbar } from 'notistack'
 
 const EmptyChatFragment: React.FC = () => {
     const handleDownload = () => {
-        const url = 'https://github.com/Thre4dripper/Chit-Chat-AndroidApp/releases/tag/publish'
+        const url = 'https://github.com/Thre4dripper/Chit-Chat-AndroidApp/releases'
 
-        window.alert(
-            "When installing, it may give a warning, but don't worry, it's safe. " +
-                "As it's not from the Play Store, it's not recognized by Google. So your phone might give a warning."
+        enqueueSnackbar(
+            "Android may show an install warning because this release isn't from the Play Store.",
+            { variant: 'info', autoHideDuration: 5000 }
         )
         window.open(url, '_blank')
     }
@@ -32,14 +33,15 @@ const EmptyChatFragment: React.FC = () => {
                 <span className={'text-slate-400 text-lg '}>
                     Make your conversations more fun and interactive with ChitChat on your Android
                 </span>
-                <div
+                <button
+                    type='button'
                     className={
                         'px-10 py-3 bg-slate-900 rounded-full flex items-center justify-center ' +
                         'cursor-pointer hover:bg-slate-800 transition-all duration-300'
                     }
                     onClick={handleDownload}>
                     <span className={'text-white text-lg select-none'}>Download</span>
-                </div>
+                </button>
             </div>
             <div className={'flex-1'} />
             <div className={'flex flex-row gap-1 items-center justify-center'}>

@@ -5,29 +5,25 @@ import ChatIcon from '@mui/icons-material/Chat'
 import React, { SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import Avatar from '@mui/material/Avatar'
-import useAuthStore from '../../store/auth.store.ts'
 import useHomeStore from '../../store/home.store.ts'
-import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
 
 const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
     setDialogState: React.Dispatch<SetStateAction<boolean>>
-}> = ({ openProfile, setDialogState }) => {
-    const { logout } = useAuthStore()
+    setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState, setLogoutDialogState }) => {
     const { user } = useHomeStore()
-    const setUsername = useLocalStore((state) => state.setUsername)
     const homeChats = useHomeChatsStore((state) => state.homeChats)
+    const favouriteList = useHomeStore((state) => state.user)?.favourites
 
-    const logoutUser = async () => {
-        await logout()
-        setUsername(null)
-        useHomeChatsStore.setState({ homeChats: [] })
-    }
+    const favouriteChats = useHomeChatsStore((state) => state.homeChats).filter((chat) => {
+        return favouriteList && chat.userChat
+            ? favouriteList.includes(chat.userChat?.chatId)
+            : false
+    })
 
-    const favChats: number[] = [] // this Will Changed Soon based on User Data current
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
@@ -54,7 +50,9 @@ const ChatsFragment: React.FC<{
                                 vertical: 'bottom',
                                 horizontal: 'right',
                             }}
-                            badgeContent={<div className={'w-3 h-3 bg-green-500 rounded-full'} />}>
+                            badgeContent={
+                                <div className={'w-3 h-3 bg-green-500 rounded-full z-0'} />
+                            }>
                             <Avatar
                                 src={user?.profileImage}
                                 sx={{ width: 48, height: 48, fontSize: 28 }}
@@ -64,7 +62,7 @@ const ChatsFragment: React.FC<{
                     </IconButton>
                 </div>
                 <div className={'flex flex-col justify-center'}>
-                    <IconButton onClick={logoutUser}>
+                    <IconButton onClick={() => setLogoutDialogState(true)}>
                         <LogoutIcon className={'text-white'} />
                     </IconButton>
                 </div>
@@ -90,7 +88,7 @@ const ChatsFragment: React.FC<{
                     'overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-800/10 scrollbar-thumb-rounded-full'
                 }>
                 {/*Fav chats list*/}
-                {favChats.length > 0 && (
+                {favouriteChats.length > 0 && (
                     <div>
                         <div className={'flex flex-col'}>
                             <div className={'flex flex-row m-4'}>
@@ -101,21 +99,39 @@ const ChatsFragment: React.FC<{
                                     Favourites
                                 </Typography>
                             </div>
-                            <div className='flex overflow-hidden'>
-                                <div className={'flex flex-row gap-4'}>
-                                    {favChats.map((item) => (
+                            <div className={'flex'}>
+                                <div
+                                    className={
+                                        'flex flex-row gap-4 overflow-x-scroll scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent'
+                                    }>
+                                    {favouriteChats.map((chat) => (
                                         <ItemFavChat
-                                            key={item}
-                                            image={'https://i.pravatar.cc/300'}
-                                            name={`Item ${item}`}
+                                            key={chat.id}
+                                            chatId={chat.id}
+                                            image={
+                                                chat.userChat?.dmChatUser1.username ===
+                                                user?.username
+                                                    ? (chat.userChat?.dmChatUser2
+                                                          .profileImage as string)
+                                                    : (chat.userChat?.dmChatUser1
+                                                          .profileImage as string)
+                                            }
+                                            name={
+                                                chat.userChat?.dmChatUser1.username ===
+                                                user?.username
+                                                    ? (chat.userChat?.dmChatUser2
+                                                          .username as string)
+                                                    : (chat.userChat?.dmChatUser1
+                                                          .username as string)
+                                            }
                                         />
                                     ))}
                                 </div>
-                                <div className={'flex-auto flex justify-center'}>
-                                    <IconButton>
-                                        <ArrowForwardIosIcon className={'text-white/50'} />
-                                    </IconButton>
-                                </div>
+                                {/*<div className={'flex-auto flex justify-center'}>*/}
+                                {/*    <IconButton>*/}
+                                {/*        <ArrowForwardIosIcon className={'text-white/50'} />*/}
+                                {/*    </IconButton>*/}
+                                {/*</div>*/}
                             </div>
                         </div>
                     </div>
