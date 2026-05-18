@@ -8,6 +8,7 @@ import useLocalStore from '../../store/local.store.ts'
 
 interface PropType {
     closePopper: (newOpen: boolean) => void
+    onStickerSelect?: (index: number) => void
 }
 
 // One lightweight sticker item
@@ -15,10 +16,12 @@ const StickerItem = ({
     index,
     asset,
     closePopper,
+    onStickerSelect,
 }: {
     index: number
     asset: any
     closePopper: (newOpen: boolean) => void
+    onStickerSelect?: (index: number) => void
 }) => {
     const [showLottie, setShowLottie] = useState(false)
     const sendSticker = useChatDetailsStore((state) => state.sendStickerMessage)
@@ -26,6 +29,11 @@ const StickerItem = ({
     const chatDetails = useChatDetailsStore((state) => state.chatDetails)
 
     const handleSendSticker = () => {
+        if (onStickerSelect) {
+            onStickerSelect(index)
+            closePopper(false)
+            return
+        }
         if (!chatDetails || !username) return
         const from = username
         const to =
@@ -59,7 +67,7 @@ const StickerItem = ({
     )
 }
 
-const VirtualizedStickerGrid: React.FC<PropType> = ({ closePopper }) => {
+const VirtualizedStickerGrid: React.FC<PropType> = ({ closePopper, onStickerSelect }) => {
     return (
         <Box
             sx={{
@@ -73,7 +81,7 @@ const VirtualizedStickerGrid: React.FC<PropType> = ({ closePopper }) => {
                 gap: 1.5,
             }}>
             {Object.entries(stickerMap).map(([id, asset]) => (
-                <StickerItem key={id} index={Number(id)} asset={asset} closePopper={closePopper} />
+                <StickerItem key={id} index={Number(id)} asset={asset} closePopper={closePopper} onStickerSelect={onStickerSelect} />
             ))}
         </Box>
     )

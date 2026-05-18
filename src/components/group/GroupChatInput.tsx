@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react'
 import {
     IconButton,
     TextareaAutosize,
@@ -6,41 +6,45 @@ import {
     Popper,
     Paper,
     ClickAwayListener
-} from '@mui/material';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import ImageIcon from '@mui/icons-material/Image';
-import SendIcon from '@mui/icons-material/Send';
-import useLocalStore from '../../store/local.store.ts';
-import VirtualizedStickerGrid from '../listItems/ItemSticker.tsx';
+} from '@mui/material'
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'
+import ImageIcon from '@mui/icons-material/Image'
+import SendIcon from '@mui/icons-material/Send'
+import useLocalStore from '../../store/local.store.ts'
+import VirtualizedStickerGrid from '../listItems/ItemSticker.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 
 interface ChatInputProps {
-    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handlePaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void;
-    fileInputRef:React.RefObject<HTMLInputElement>
+    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handlePaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
+    fileInputRef: React.RefObject<HTMLInputElement>
 }
 
 
-const ChatInput: React.FC<ChatInputProps> = ({handlePaste,fileInputRef,handleFileChange}) => {
-    const [message, setMessage] = useState('');
-    const [stickerOpen, setStickerOpen] = useState(false);
+const GroupChatInput: React.FC<ChatInputProps> = ({ handlePaste, fileInputRef, handleFileChange }) => {
+    const [message, setMessage] = useState('')
+    const [stickerOpen, setStickerOpen] = useState(false)
 
-    const DrawerRef = useRef<HTMLButtonElement | null>(null);
-    const groupChatMessage=useChatDetailsStore((state)=>state.groupChatDetails)
-    const username = useLocalStore((state) => state.username);
+    const DrawerRef = useRef<HTMLButtonElement | null>(null)
+    const groupChatMessage = useChatDetailsStore((state) => state.groupChatDetails)
+    const sendGroupTextMessage = useChatDetailsStore((state) => state.sendGroupTextMessage)
+    const sendGroupStickerMessage = useChatDetailsStore((state) => state.sendGroupStickerMessage)
+    const username = useLocalStore((state) => state.username)
 
     const handleSendMessage = () => {
-        if (!message.trim() || !username || !groupChatMessage) return;
-        setMessage('');
-    };
+        if (!message.trim() || !username || !groupChatMessage) return
+        sendGroupTextMessage(groupChatMessage, message, username)
+        setMessage('')
+    }
 
+    const handleSendSticker = (stickerIndex: number) => {
+        if (!username || !groupChatMessage) return
+        sendGroupStickerMessage(groupChatMessage, stickerIndex, username)
+    }
 
+    const toggleStickerDrawer = () => setStickerOpen(!stickerOpen)
 
-
-
-    const toggleStickerDrawer = () => setStickerOpen(!stickerOpen);
-
-    if (!groupChatMessage) return null;
+    if (!groupChatMessage) return null
 
     return (
         <div className="relative w-full">
@@ -72,8 +76,8 @@ const ChatInput: React.FC<ChatInputProps> = ({handlePaste,fileInputRef,handleFil
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
-                                e.preventDefault();
-                                handleSendMessage();
+                                e.preventDefault()
+                                handleSendMessage()
                             }
                         }}
                         onPaste={handlePaste}
@@ -90,13 +94,16 @@ const ChatInput: React.FC<ChatInputProps> = ({handlePaste,fileInputRef,handleFil
             <Popper open={stickerOpen} anchorEl={DrawerRef.current} placement="top-start">
                 <ClickAwayListener onClickAway={() => setStickerOpen(false)}>
                     <Paper elevation={3} sx={{ zIndex: 10, margin: '20px' }}>
-                        <VirtualizedStickerGrid closePopper={setStickerOpen} />
+                        <VirtualizedStickerGrid
+                            closePopper={setStickerOpen}
+                            onStickerSelect={handleSendSticker}
+                        />
                     </Paper>
                 </ClickAwayListener>
             </Popper>
 
         </div>
-    );
-};
+    )
+}
 
-export default ChatInput;
+export default GroupChatInput
