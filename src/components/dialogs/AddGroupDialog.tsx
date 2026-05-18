@@ -21,6 +21,8 @@ import useGroupChatStore from '../../store/group.chat.store.ts'
 import ChatModel from '../../models/user.chat.model.ts'
 import { enqueueSnackbar } from 'notistack'
 import useHomeStore from '../../store/home.store.ts'
+import { SuccessMessages } from '../../constants/SuccessMessages.ts'
+import { ErrorMessages } from '../../constants/ErrorMessages.ts'
 
 export interface SetDetailsDialogProps {
     dialogState: boolean
@@ -80,13 +82,13 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
 
         createGroupChat(groupName, groupIcon, selectedUsers, (success) => {
             if (success) {
-                enqueueSnackbar('Successfully Group Created', {
+                enqueueSnackbar(SuccessMessages.GROUP_CREATED_SUCCESSFULLY, {
                     variant: 'success',
                     anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
                 })
                 setDialogState(false)
             } else {
-                enqueueSnackbar('Try Again Not Created group', {
+                enqueueSnackbar(ErrorMessages.ERROR_CREATING_GROUP, {
                     variant: 'error',
                     anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
                 })
