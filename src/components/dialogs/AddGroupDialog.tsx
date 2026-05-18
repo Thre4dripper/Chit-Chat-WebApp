@@ -108,17 +108,17 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                 },
             }}
             onClose={() => setDialogState(false)}>
-            <Box height={6} bgcolor='primary.main' />
+            <Box sx={{ height: 6, bgcolor: 'primary.main' }} />
 
             <DialogTitle>
-                <Stack direction='row' alignItems='center'>
+                <Stack direction='row' sx={{ alignItems: 'center' }}>
                     <Avatar sx={{ bgcolor: 'primary.main', color: 'white' }}>
                         <People />
                     </Avatar>
-                    <Typography variant='h5' fontWeight='bold' ml={2}>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold', ml: 2 }}>
                         {step === 1 ? 'Add Friends to Group' : 'Group Info'}
                     </Typography>
-                    <Box flexGrow={1} />
+                    <Box sx={{ flexGrow: 1 }} />
                     <IconButton onClick={() => setDialogState(false)}>
                         <Close />
                     </IconButton>
@@ -131,7 +131,7 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                 {step === 1 ? (
                     <>
                         <TextField label='Search' fullWidth onChange={handleChange} />
-                        <Typography variant='body2' textAlign='center' color='gray'>
+                        <Typography variant='body2' sx={{ textAlign: 'center', color: 'gray' }}>
                             Select at least 2 people to start a group
                         </Typography>
 
@@ -170,14 +170,14 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                                             }}
                                             onClick={() => toggleSelect(user)}>
                                             <Avatar />
-                                            <Typography ml={2}>
+                                            <Typography sx={{ ml: 2 }}>
                                                 {user.dmChatUser1.username === loggedInUsername
                                                     ? user.dmChatUser2.username
                                                     : user.dmChatUser1.username}
                                             </Typography>
-                                            <Box flexGrow={1} />
+                                            <Box sx={{ flexGrow: 1 }} />
                                             {selected && (
-                                                <Typography fontSize={12} color='primary'>
+                                                <Typography sx={{ fontSize: 12 }} color='primary'>
                                                     Selected
                                                 </Typography>
                                             )}
@@ -215,7 +215,7 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
 
             <Divider />
 
-            <Box display='flex' justifyContent='flex-end' gap={1} p={2}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, p: 2 }}>
                 {step === 2 && (
                     <Button variant='outlined' onClick={() => setStep(1)}>
                         Back

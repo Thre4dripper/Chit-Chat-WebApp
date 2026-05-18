@@ -141,12 +141,12 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                 },
             }}>
             {/* Accent Bar */}
-            <Box height={6} bgcolor='primary.main' />
+            <Box sx={{ height: 6, bgcolor: 'primary.main' }} />
 
             <DialogTitle>
-                <Stack direction='row' alignItems='center' spacing={2}>
+                <Stack direction='row' sx={{ alignItems: 'center' }} spacing={2}>
                     <Avatar sx={{ bgcolor: 'primary.main', color: 'white' }}>{icon}</Avatar>
-                    <Typography variant='h5' fontWeight='bold'>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
                         {title}
                     </Typography>
                 </Stack>
@@ -155,7 +155,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
             <Divider />
 
             <DialogContent>
-                <Box my={2} display='flex' flexDirection='column' gap={3}>
+                <Box sx={{ my: 2, display: 'flex', flexDirection: 'column', gap: 3 }}>
                     {/* Input Section */}
                     <Stack spacing={1}>
                         <form onSubmit={handleSubmit(handleSave)}>
@@ -168,7 +168,7 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                                 error={!!errors.inputValue}
                             />
                         </form>
-                        <Typography variant='body2' color='text.secondary' textAlign='right'>
+                        <Typography variant='body2' color='text.secondary' sx={{ textAlign: 'right' }}>
                             {`${watch('inputValue').length}/${max} characters`}
                         </Typography>
                     </Stack>

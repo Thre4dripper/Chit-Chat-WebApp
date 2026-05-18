@@ -65,15 +65,15 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
                 setDialogState(false)
             }}>
             {/* Accent Bar */}
-            <Box height={6} bgcolor='primary.main' />
+            <Box sx={{ height: 6, bgcolor: 'primary.main' }} />
 
             <DialogTitle>
-                <Stack direction='column' alignItems='center' spacing={2}>
-                    <Box sx={{ display: 'flex', width: '100%' }} alignItems={'center'} gap={2}>
+                <Stack direction='column' sx={{ alignItems: 'center' }} spacing={2}>
+                    <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', gap: 2 }}>
                         <Avatar sx={{ bgcolor: 'primary.main', color: 'white' }}>
                             <People />
                         </Avatar>
-                        <Typography variant='h5' fontWeight='bold'>
+                        <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
                             Search for people
                         </Typography>
                         <div className={'flex-1'} />
@@ -87,7 +87,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
             </DialogTitle>
             <Divider />
             <DialogContent>
-                <Box display='flex' flexDirection='column' gap={3}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <Stack spacing={1}>
                         <TextField
                             fullWidth
@@ -98,9 +98,7 @@ const AddChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDialog
 
                         <Typography
                             variant='body2'
-                            fontWeight='light'
-                            color={'gray'}
-                            textAlign={'center'}>
+                            sx={{ fontWeight: 'light', color: 'gray', textAlign: 'center' }}>
                             Search for people by their username.You can search for Multiple people
                             at the same time.
                         </Typography>

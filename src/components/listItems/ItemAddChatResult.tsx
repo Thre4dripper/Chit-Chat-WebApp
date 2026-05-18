@@ -36,10 +36,10 @@ const ItemAddChatResult: React.FC<ItemAddChatResultProps> = ({ user, setDialogue
                     src={user.profileImage}
                     sx={{ bgcolor: 'primary.main', color: 'white' }}></Avatar>
                 <Box>
-                    <Typography variant='h6' fontWeight='medium'>
+                    <Typography variant='h6' sx={{ fontWeight: 'medium' }}>
                         {user.username}
                     </Typography>
-                    <Typography variant='body2' fontWeight='light' color={'gray'}>
+                    <Typography variant='body2' sx={{ fontWeight: 'light', color: 'gray' }}>
                         {user.name.slice(0, 15).concat('..')}
                     </Typography>
                 </Box>
