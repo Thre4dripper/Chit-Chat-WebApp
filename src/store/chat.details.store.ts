@@ -29,7 +29,7 @@ type ChatDetailsActions = {
     ) => void
     setCurrentChatId: (chatId: string) => void
     favouriteChat: (
-         userModel: UserModel,
+        userModel: UserModel,
         favourite: string,
         onSuccess: (newModel: UserModel | null) => void
     ) => void
