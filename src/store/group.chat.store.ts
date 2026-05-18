@@ -30,7 +30,7 @@ const useGroupChatStore = create<GroupChatState & GroupChatActions>()(
                         groupName,
                         groupImage,
                         selectedUsers,
-                        (status:any) => {
+                        (status: string | null) => {
                             set({ isCreating: false })
                             onSuccess(status)
                         }

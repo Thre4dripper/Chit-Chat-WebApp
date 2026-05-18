@@ -43,13 +43,13 @@ class CreateGroup {
         const docRef = doc(firestore, FirestoreCollections.GROUPS_COLLECTION, groupChatId)
         setDoc(docRef, group.toObject())
             .then(() => {
-
+                onSuccess(groupChatId)
             })
             .catch(() => {
                 onSuccess(null)
             })
 
-        //add in users collection
+        //add in users collection — fire-and-forget, mirrors Android CreateGroup.kt
         selectedUsers.forEach((user) => {
             GetDetails.getUserDetails(firestore, user.username, (find) => {
                 if (find) {
@@ -63,12 +63,6 @@ class CreateGroup {
                         { ...find, groups: [...find.groups, groupChatId] } as UserModel,
                         { merge: true }
                     )
-                        .then(() => {
-                            onSuccess(groupChatId)
-                        })
-                        .catch(() => {
-                            onSuccess(null)
-                        })
                 }
             })
         })

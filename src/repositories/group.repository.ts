@@ -35,7 +35,7 @@ class GroupsRepository{
             return new GroupChatUserModel(username, profileImage)
         })
 
-        selectedGroupUsers.push(new GroupChatUserModel(loggedInUser?.username,loggedInUser?.profileImage))
+        selectedGroupUsers.unshift(new GroupChatUserModel(loggedInUser?.username,loggedInUser?.profileImage))
 
         if (groupImageUri == null) {
             CreateGroup.createNewGroup(
