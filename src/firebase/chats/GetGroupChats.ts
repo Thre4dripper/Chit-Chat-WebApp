@@ -1,36 +1,54 @@
-import { collection, Firestore, onSnapshot, doc, getDoc ,where ,query } from 'firebase/firestore'
+import { collection, Firestore, onSnapshot, doc, getDoc, where, query, documentId } from 'firebase/firestore'
 import GroupChatModel from '../../models/group.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
-import { GroupConstants } from '../../constants/GroupConstants.ts'
 
 class GetGroupChats {
     static getAllGroupChats(
         firestore: Firestore,
-        groupUser: {username: string,profileImage: string},
+        loggedInUsername: string,
         onSuccess: (listOfGroup: GroupChatModel[]) => void
     ) {
+        // Listen to the user document in real-time so that when new groups are added
+        // (e.g. after createGroup), the home list updates automatically.
+        // Both Android and web maintain user.groups, so this is cross-platform compatible.
+        const userRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, loggedInUsername)
+        let innerUnsub: (() => void) | null = null
 
-        const GroupCollection = collection(firestore, FirestoreCollections.GROUPS_COLLECTION);
-        const groupQuery = query(
-            GroupCollection,
-            where(GroupConstants.GROUP_MEMBERS, 'array-contains', groupUser)
-        );
-        onSnapshot(
-            groupQuery,
-            (chatQuerySnapshot) => {
-                const groupChats: GroupChatModel[] = [];
-                chatQuerySnapshot.docs.forEach((doc) => {
-                    const groupChat = doc.data() as GroupChatModel;
-                    groupChats.push(groupChat);
-                });
-                onSuccess(groupChats);
-            },
-            (error) => {
-                console.error("Issue in getting chats", error);
-                onSuccess([]);
+        onSnapshot(userRef, (userSnap) => {
+            // Clean up the previous group-query listener before creating a new one
+            if (innerUnsub) {
+                innerUnsub()
+                innerUnsub = null
             }
-        );
+
+            if (!userSnap.exists()) {
+                onSuccess([])
+                return
+            }
+
+            const groupIds: string[] = userSnap.data()?.groups ?? []
+            if (groupIds.length === 0) {
+                onSuccess([])
+                return
+            }
+
+            const groupCollection = collection(firestore, FirestoreCollections.GROUPS_COLLECTION)
+            innerUnsub = onSnapshot(
+                query(groupCollection, where(documentId(), 'in', groupIds)),
+                (snap) => {
+                    const groupChats: GroupChatModel[] = snap.docs.map(
+                        (d) => d.data() as GroupChatModel
+                    )
+                    onSuccess(groupChats)
+                },
+                (error) => {
+                    console.error('Issue in getting group chats', error)
+                    onSuccess([])
+                }
+            )
+        })
     }
+
     static getGroupChatById(
         firestore: Firestore,
         groupId: string,
