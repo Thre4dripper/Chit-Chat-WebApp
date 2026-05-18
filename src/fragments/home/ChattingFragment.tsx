@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ChatInput from '../../components/chat/ChatInput.tsx'
 import ChatHeader from '../../components/chat/ChatHeader.tsx'
 import ChatBox from '../../components/chat/ChatBox.tsx'
@@ -17,9 +17,28 @@ const ChattingFragment: React.FC = () => {
     //  view profile
     const [isViewing, setIsViewing] = useState<boolean>(false)
 
+    const clearSelectedImage = () => {
+        if (imageSrc?.startsWith('blob:')) {
+            URL.revokeObjectURL(imageSrc)
+        }
+        setImageOpen(false)
+        setImageSrc(null)
+    }
+
+    useEffect(() => {
+        return () => {
+            if (imageSrc?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageSrc)
+            }
+        }
+    }, [imageSrc])
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
+            if (imageSrc?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageSrc)
+            }
             setImageSrc(URL.createObjectURL(file))
             setImageOpen(true)
             e.target.value = ''
@@ -64,17 +83,11 @@ const ChattingFragment: React.FC = () => {
                                 <ImageSendFragment
                                     image={imageSrc}
                                     cropShape='rect'
-                                    onConfirmed={() => {
-                                        setImageOpen(false)
-                                        setImageSrc(null)
-                                    }}
+                                    onConfirmed={clearSelectedImage}
                                 />
                                 <Button
                                     color='error'
-                                    onClick={() => {
-                                        setImageOpen(false)
-                                        setImageSrc(null)
-                                    }}
+                                    onClick={clearSelectedImage}
                                     sx={{
                                         position: 'absolute',
                                         top: 10,
@@ -105,7 +118,7 @@ const ChattingFragment: React.FC = () => {
                     title='Are you sure?'
                     message='Want to unselect Image'
                     action={() => {
-                        setImageOpen(false)
+                        clearSelectedImage()
                         setSelectedImage(false)
                     }}
                 />

@@ -15,6 +15,8 @@ import ClearChat from '../firebase/chats/ClearChat.ts'
 import UserModel from '../models/user.model.ts'
 import MarkFavourite from '../firebase/chats/MarkFavourite.ts'
 import userModel from '../models/user.model.ts'
+import StorageUtils from '../utils/StorageUtils.ts'
+import { StorageFolders } from '../constants/StorageFolders.ts'
 
 class UserChatsRepository {
     static getAllUserChats() {
@@ -73,13 +75,22 @@ class UserChatsRepository {
 
     static sendImage(
         chatModel: ChatModel,
-        imageUri: string,
+        image: File,
         from: string,
         to: string,
         chatMessageId: (id: string | null) => void
     ) {
         const firestore = getFirestore(firebaseApp)
-        SendChat.SendImage(firestore, chatModel, imageUri, from, to, chatMessageId)
+        const storage = getStorage(firebaseApp)
+        const imagePath = `${StorageFolders.CHAT_IMAGES_FOLDER}/${chatModel.chatId}/${image.name}`
+
+        StorageUtils.getUrlFromStorage(storage, imagePath, image, (imageUrl) => {
+            if (!imageUrl) {
+                chatMessageId(null)
+                return
+            }
+            SendChat.SendImage(firestore, chatModel, imageUrl, from, to, chatMessageId)
+        })
     }
 
     static sendSticker(
@@ -144,9 +155,9 @@ class UserChatsRepository {
                 onSuccess(false)
                 return
             }
-            const hasImages = chatModel.chatMessages.filter((chatMessage) => {
-                return chatMessage.type === ChatMessageType.TypeImage
-            })
+            const hasImages = chatModel.chatMessages.some(
+                (chatMessage) => chatMessage.type === ChatMessageType.TypeImage
+            )
             if (hasImages) {
                 ClearChat.clearChatImages(storage, chatModel, (isDeleted) => {
                     onSuccess(isDeleted)
@@ -165,9 +176,9 @@ class UserChatsRepository {
                 onSuccess(false)
                 return
             }
-            const hasImages = chatModel.chatMessages.filter((chatMessage) => {
-                return chatMessage.type === ChatMessageType.TypeImage
-            })
+            const hasImages = chatModel.chatMessages.some(
+                (chatMessage) => chatMessage.type === ChatMessageType.TypeImage
+            )
             if (!hasImages) {
                 onSuccess(true)
                 return

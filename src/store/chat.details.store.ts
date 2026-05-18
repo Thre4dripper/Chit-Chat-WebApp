@@ -20,7 +20,13 @@ type ChatDetailsActions = {
         from: string,
         to: string
     ) => void
-    sendImageMessage: (chatModel: ChatModel, image: string, from: string, to: string) => void
+    sendImageMessage: (
+        chatModel: ChatModel,
+        image: File,
+        from: string,
+        to: string,
+        onSuccess?: (id: string | null) => void
+    ) => void
     setCurrentChatId: (chatId: string) => void
     favouriteChat: (
         userModel: UserModel,
@@ -65,9 +71,10 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
                     console.log('sticker sent', id)
                 })
             },
-            sendImageMessage: (chatModel, image, from, to) => {
+            sendImageMessage: (chatModel, image, from, to, onSuccess) => {
                 UserChatsRepository.sendImage(chatModel, image, from, to, (id) => {
                     console.log('message sent', id)
+                    onSuccess?.(id)
                 })
             },
             favouriteChat: (userModel, favourite, onSuccess) => {
