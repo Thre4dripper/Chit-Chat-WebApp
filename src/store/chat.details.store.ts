@@ -5,6 +5,7 @@ import ChatModel from '../models/user.chat.model'
 import UserChatsRepository from '../repositories/user.chats.repository'
 import GroupChatsRepository from '../repositories/group.chats.repository.ts'
 import GroupChatModel from '../models/group.chat.model'
+import UserModel from '../models/user.model.ts'
 
 type ChatDetailsState = {
     currentChatId: string | null
@@ -62,22 +63,22 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
                 })
             },
             setGroupChatDetails: (chatId) => {
-                  GroupChatsRepository.getLiveGroupChatById(chatId, (group) => {
-                      set((state) => {
-                          if(group && state.currentChatId === chatId) {
-                              state.groupChatDetails = group
-                          }
-                      })
-                  })
+                GroupChatsRepository.getLiveGroupChatById(chatId, (group) => {
+                    set((state) => {
+                        if (group && state.currentChatId === chatId) {
+                            state.groupChatDetails = group
+                        }
+                    })
+                })
             },
             setCurrentChatId: (chatId) => {
                 set({ currentChatId: chatId })
                 if (chatId.includes('-')) {
-                    useChatDetailsStore.getState().setChatDetails(chatId);
-                    set({groupChatDetails: null})
+                    useChatDetailsStore.getState().setChatDetails(chatId)
+                    set({ groupChatDetails: null })
                 } else {
-                    useChatDetailsStore.getState().setGroupChatDetails(chatId);
-                    set({chatDetails: null})
+                    useChatDetailsStore.getState().setGroupChatDetails(chatId)
+                    set({ chatDetails: null })
                 }
             },
             sendTextMessage: (chatModel, text, from, to) => {
