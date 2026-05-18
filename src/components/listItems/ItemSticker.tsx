@@ -81,7 +81,13 @@ const VirtualizedStickerGrid: React.FC<PropType> = ({ closePopper, onStickerSele
                 gap: 1.5,
             }}>
             {Object.entries(stickerMap).map(([id, asset]) => (
-                <StickerItem key={id} index={Number(id)} asset={asset} closePopper={closePopper} onStickerSelect={onStickerSelect} />
+                <StickerItem
+                    key={id}
+                    index={Number(id)}
+                    asset={asset}
+                    closePopper={closePopper}
+                    onStickerSelect={onStickerSelect}
+                />
             ))}
         </Box>
     )

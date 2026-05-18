@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 
-
 const GroupChatHeader: React.FC = () => {
     const groupChat = useChatDetailsStore((state) => state.groupChatDetails)
     const exitGroup = useChatDetailsStore((state) => state.exitGroup)
@@ -27,7 +26,9 @@ const GroupChatHeader: React.FC = () => {
                     <span className={'text-black text-lg font-bold'}>{groupChat.name}</span>
                 </div>
                 <div className={'flex flex-row justify-between'}>
-                    <span className={'text-gray-600 font-medium text-sm truncate'}>{membersText}</span>
+                    <span className={'text-gray-600 font-medium text-sm truncate'}>
+                        {membersText}
+                    </span>
                 </div>
             </div>
             <div>
@@ -52,8 +53,8 @@ const GroupChatHeader: React.FC = () => {
             <ConfirmDialog
                 open={exitConfirmOpen}
                 handleClose={() => setExitConfirmOpen(false)}
-                title="Exit Group"
-                message="Are you sure you want to exit this group?"
+                title='Exit Group'
+                message='Are you sure you want to exit this group?'
                 action={() => {
                     setExitConfirmOpen(false)
                     exitGroup()
@@ -64,4 +65,3 @@ const GroupChatHeader: React.FC = () => {
 }
 
 export default GroupChatHeader
-

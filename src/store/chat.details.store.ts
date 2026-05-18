@@ -153,4 +153,3 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
 )
 
 export default useChatDetailsStore
-

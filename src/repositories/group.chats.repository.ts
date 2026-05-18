@@ -91,11 +91,14 @@ class GroupChatsRepository {
         })
     }
 
-    static exitGroup(groupChatModel: GroupChatModel, username: string, onSuccess: (success: boolean) => void) {
+    static exitGroup(
+        groupChatModel: GroupChatModel,
+        username: string,
+        onSuccess: (success: boolean) => void
+    ) {
         const firestore = getFirestore(firebaseApp)
         ExitGroup.exitGroup(firestore, groupChatModel, username, onSuccess)
     }
 }
 
 export default GroupChatsRepository
-

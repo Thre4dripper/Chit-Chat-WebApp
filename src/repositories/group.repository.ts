@@ -1,5 +1,5 @@
 import ChatModel from '../models/user.chat.model.ts'
-import { getFirestore,doc,collection } from 'firebase/firestore'
+import { getFirestore, doc, collection } from 'firebase/firestore'
 import firebaseApp from '../firebase/FirebaseInit.ts'
 import { getStorage } from 'firebase/storage'
 import { FirestoreCollections } from '../constants/FireStoreCollections.ts'
@@ -10,32 +10,35 @@ import CreateGroup from '../firebase/groups/CreateGroup.ts'
 import StorageUtils from '../utils/StorageUtils.ts'
 import { StorageFolders } from '../constants/StorageFolders.ts'
 
-class GroupsRepository{
+class GroupsRepository {
     static createGroup(
         groupName: string,
-        groupImageUri: File|null,
+        groupImageUri: File | null,
         selectedUsers: ChatModel[],
-        onSuccess: (Success:string|null) =>void){
-        const fireStore=getFirestore(firebaseApp)
-        const storage= getStorage(firebaseApp)
-        const loggedInUser= useHomeStore.getState().user
-        if(!loggedInUser) {
+        onSuccess: (Success: string | null) => void
+    ) {
+        const fireStore = getFirestore(firebaseApp)
+        const storage = getStorage(firebaseApp)
+        const loggedInUser = useHomeStore.getState().user
+        if (!loggedInUser) {
             onSuccess(null)
             return
         }
 
         // following android code
-        const groupRef = doc(collection(fireStore,FirestoreCollections.GROUPS_COLLECTION));
-        const groupId = groupRef.id;
+        const groupRef = doc(collection(fireStore, FirestoreCollections.GROUPS_COLLECTION))
+        const groupId = groupRef.id
 
-        const selectedGroupUsers = selectedUsers.map((chat)=> {
+        const selectedGroupUsers = selectedUsers.map((chat) => {
             const username = ChatUtils.getUserChatUsername(chat, loggedInUser.username)
             const profileImage = ChatUtils.getUserChatProfileImage(chat, loggedInUser.username)
 
             return new GroupChatUserModel(username, profileImage)
         })
 
-        selectedGroupUsers.unshift(new GroupChatUserModel(loggedInUser?.username,loggedInUser?.profileImage))
+        selectedGroupUsers.unshift(
+            new GroupChatUserModel(loggedInUser?.username, loggedInUser?.profileImage)
+        )
 
         if (groupImageUri == null) {
             CreateGroup.createNewGroup(
@@ -45,23 +48,26 @@ class GroupsRepository{
                 null,
                 loggedInUser.username,
                 selectedGroupUsers,
-                onSuccess,
+                onSuccess
             )
             return
         }
-        StorageUtils.getUrlFromStorage(storage,`${StorageFolders.GROUP_IMAGES_FOLDER}/${groupId}`,groupImageUri,(imageUrl)=>{
-            CreateGroup.createNewGroup(
-                fireStore,
-                groupId,
-                groupName,
-                imageUrl,
-                loggedInUser.username,
-                selectedGroupUsers,
-                onSuccess,
-            )
-        })
-
-
+        StorageUtils.getUrlFromStorage(
+            storage,
+            `${StorageFolders.GROUP_IMAGES_FOLDER}/${groupId}`,
+            groupImageUri,
+            (imageUrl) => {
+                CreateGroup.createNewGroup(
+                    fireStore,
+                    groupId,
+                    groupName,
+                    imageUrl,
+                    loggedInUser.username,
+                    selectedGroupUsers,
+                    onSuccess
+                )
+            }
+        )
     }
 }
 

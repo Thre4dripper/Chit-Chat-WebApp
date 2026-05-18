@@ -16,13 +16,13 @@ class CreateGroup {
         groupImageUrl: string | null,
         loggedInUsername: string,
         selectedUsers: GroupChatUserModel[],
-        onSuccess: (done: string|null) => void
+        onSuccess: (done: string | null) => void
     ) {
         const group = new GroupChatModel(
             groupChatId,
             groupName,
             groupImageUrl,
-            selectedUsers.map((user)=>user.toObject()),
+            selectedUsers.map((user) => user.toObject()),
             [
                 new GroupMessageModel(
                     uuid(),

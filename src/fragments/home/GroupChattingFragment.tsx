@@ -82,40 +82,53 @@ const GroupChattingFragment: React.FC = () => {
             }>
             <div className={'flex flex-col h-screen'}>
                 {isViewing ? (
-                    <ViewProfile setIsViewing={setIsViewing}/>
-                ):(<>
-                    <GroupChatHeader/>
+                    <ViewProfile setIsViewing={setIsViewing} />
+                ) : (
+                    <>
+                        <GroupChatHeader />
 
-                    {imageOpen && (
-                        <button className="fixed inset-0 bg-black bg-opacity-40 z-40" onClick={() => setSelectedImage(true)}></button>
-                    )}
+                        {imageOpen && (
+                            <button
+                                className='fixed inset-0 bg-black bg-opacity-40 z-40'
+                                onClick={() => setSelectedImage(true)}></button>
+                        )}
 
-                    {imageOpen ? (
-                        <div className='relative overflow-hidden w-full h-full bg-slate-400 flex justify-center items-center z-50'>
-                            <ImageSendFragment
-                                image={imageSrc}
-                                cropShape='rect'
-                                onConfirmed={clearSelectedImage}
-                                onSend={handleGroupImageSend}
-                            />
-                            <Button
-                                color='error'
-                                onClick={clearSelectedImage}
-                                sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10, width: '50px' }}
-                                endIcon={<CloseIcon sx={{ width: '100%', height: '100%' }} />}
-                            />
-                        </div>
-                    ) : (
-                        <>
-                            <GroupChatBox setImageOpen={setImageOpen} setImageSrc={setImageSrc} />
-                            <GroupChatInput
-                                handlePaste={handlePaste}
-                                fileInputRef={fileInputRef}
-                                handleFileChange={handleFileChange}
-                            />
-                        </>
-                    )}
-                </>)}
+                        {imageOpen ? (
+                            <div className='relative overflow-hidden w-full h-full bg-slate-400 flex justify-center items-center z-50'>
+                                <ImageSendFragment
+                                    image={imageSrc}
+                                    cropShape='rect'
+                                    onConfirmed={clearSelectedImage}
+                                    onSend={handleGroupImageSend}
+                                />
+                                <Button
+                                    color='error'
+                                    onClick={clearSelectedImage}
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        right: 10,
+                                        zIndex: 10,
+                                        width: '50px',
+                                    }}
+                                    endIcon={<CloseIcon sx={{ width: '100%', height: '100%' }} />}
+                                />
+                            </div>
+                        ) : (
+                            <>
+                                <GroupChatBox
+                                    setImageOpen={setImageOpen}
+                                    setImageSrc={setImageSrc}
+                                />
+                                <GroupChatInput
+                                    handlePaste={handlePaste}
+                                    fileInputRef={fileInputRef}
+                                    handleFileChange={handleFileChange}
+                                />
+                            </>
+                        )}
+                    </>
+                )}
                 <ConfirmDialog
                     open={selectedImage}
                     handleClose={() => setSelectedImage(false)}
@@ -132,4 +145,3 @@ const GroupChattingFragment: React.FC = () => {
 }
 
 export default GroupChattingFragment
-

@@ -1,12 +1,5 @@
 import React, { useState, useRef } from 'react'
-import {
-    IconButton,
-    TextareaAutosize,
-    Box,
-    Popper,
-    Paper,
-    ClickAwayListener
-} from '@mui/material'
+import { IconButton, TextareaAutosize, Box, Popper, Paper, ClickAwayListener } from '@mui/material'
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'
 import ImageIcon from '@mui/icons-material/Image'
 import SendIcon from '@mui/icons-material/Send'
@@ -20,8 +13,11 @@ interface ChatInputProps {
     fileInputRef: React.RefObject<HTMLInputElement>
 }
 
-
-const GroupChatInput: React.FC<ChatInputProps> = ({ handlePaste, fileInputRef, handleFileChange }) => {
+const GroupChatInput: React.FC<ChatInputProps> = ({
+    handlePaste,
+    fileInputRef,
+    handleFileChange,
+}) => {
     const [message, setMessage] = useState('')
     const [stickerOpen, setStickerOpen] = useState(false)
 
@@ -47,31 +43,29 @@ const GroupChatInput: React.FC<ChatInputProps> = ({ handlePaste, fileInputRef, h
     if (!groupChatMessage) return null
 
     return (
-        <div className="relative w-full">
-            <Box className="bg-slate-300 rounded-bl-3xl rounded-br-3xl flex items-center px-4 py-2 gap-2">
+        <div className='relative w-full'>
+            <Box className='bg-slate-300 rounded-bl-3xl rounded-br-3xl flex items-center px-4 py-2 gap-2'>
                 <input
-                    type="file"
-                    accept="image/*"
+                    type='file'
+                    accept='image/*'
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                 />
 
                 <IconButton onClick={() => fileInputRef.current?.click()}>
-                    <ImageIcon className="text-gray-700" />
+                    <ImageIcon className='text-gray-700' />
                 </IconButton>
                 <IconButton ref={DrawerRef} onClick={toggleStickerDrawer}>
                     <EmojiEmotionsIcon
-                        className={`text-gray-700 ${
-                            stickerOpen ? 'bg-gray-400 rounded-full' : ''
-                        }`}
+                        className={`text-gray-700 ${stickerOpen ? 'bg-gray-400 rounded-full' : ''}`}
                     />
                 </IconButton>
 
-                <Box className="flex flex-1">
+                <Box className='flex flex-1'>
                     <TextareaAutosize
-                        className="w-full p-3 text-white bg-slate-700 rounded-lg resize-none focus:outline-none scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-slate-700 scrollbar-thumb-rounded-full"
-                        placeholder="Type a message..."
+                        className='w-full p-3 text-white bg-slate-700 rounded-lg resize-none focus:outline-none scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-slate-700 scrollbar-thumb-rounded-full'
+                        placeholder='Type a message...'
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={(e) => {
@@ -87,11 +81,11 @@ const GroupChatInput: React.FC<ChatInputProps> = ({ handlePaste, fileInputRef, h
                 </Box>
 
                 <IconButton onClick={handleSendMessage}>
-                    <SendIcon className="text-gray-700" />
+                    <SendIcon className='text-gray-700' />
                 </IconButton>
             </Box>
 
-            <Popper open={stickerOpen} anchorEl={DrawerRef.current} placement="top-start">
+            <Popper open={stickerOpen} anchorEl={DrawerRef.current} placement='top-start'>
                 <ClickAwayListener onClickAway={() => setStickerOpen(false)}>
                     <Paper elevation={3} sx={{ zIndex: 10, margin: '20px' }}>
                         <VirtualizedStickerGrid
@@ -101,7 +95,6 @@ const GroupChatInput: React.FC<ChatInputProps> = ({ handlePaste, fileInputRef, h
                     </Paper>
                 </ClickAwayListener>
             </Popper>
-
         </div>
     )
 }

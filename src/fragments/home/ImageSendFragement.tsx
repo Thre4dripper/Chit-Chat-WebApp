@@ -16,7 +16,12 @@ interface ImageSendFragmentProps {
     onSend?: (file: File, onResult: (id: string | null) => void) => void
 }
 
-const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({ image, cropShape, onConfirmed, onSend }) => {
+const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
+    image,
+    cropShape,
+    onConfirmed,
+    onSend,
+}) => {
     const imgRef = useRef<HTMLImageElement | null>(null)
     const previewCanvasRef = useRef<HTMLCanvasElement | null>(null)
     const [crop, setCrop] = useState<Crop | undefined>(undefined)

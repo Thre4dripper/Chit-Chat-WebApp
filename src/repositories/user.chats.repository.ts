@@ -115,7 +115,11 @@ class UserChatsRepository {
         }
         UpdateSeen.updateSeen(firestore, chatModel, loggedInUser, onSuccess)
     }
-    static favouriteChat(userModel:UserModel,favourite:string,onSuccess:(newUserModel:userModel|null) => void) {
+    static favouriteChat(
+        userModel: UserModel,
+        favourite: string,
+        onSuccess: (newUserModel: userModel | null) => void
+    ) {
         const firestore = getFirestore(firebaseApp)
         MarkFavourite.markAsFavourite(firestore, userModel, favourite, onSuccess)
     }

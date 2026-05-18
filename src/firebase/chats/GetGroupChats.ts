@@ -1,4 +1,13 @@
-import { collection, Firestore, onSnapshot, doc, getDoc, where, query, documentId } from 'firebase/firestore'
+import {
+    collection,
+    Firestore,
+    onSnapshot,
+    doc,
+    getDoc,
+    where,
+    query,
+    documentId,
+} from 'firebase/firestore'
 import GroupChatModel from '../../models/group.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 

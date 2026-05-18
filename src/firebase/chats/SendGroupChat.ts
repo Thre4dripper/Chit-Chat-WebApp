@@ -11,7 +11,7 @@ class SendGroupChat {
         groupChatModel: GroupChatModel,
         text: string,
         from: string,
-        chatMessageId: (id: string | null) => void,
+        chatMessageId: (id: string | null) => void
     ) {
         const id = uuidv4()
         // Create a new messages list with the new message added at the beginning
@@ -45,12 +45,12 @@ class SendGroupChat {
     }
 
     static sendSticker(
-        firestore:Firestore,
+        firestore: Firestore,
         groupChatModel: GroupChatModel,
         stickerIndex: number,
-        from:string,
-        chatMessageId:(id: string | null)=>void
-    ){
+        from: string,
+        chatMessageId: (id: string | null) => void
+    ) {
         const id = uuidv4()
 
         const newMessagesList = [
@@ -82,16 +82,15 @@ class SendGroupChat {
                 console.error('Error sending message:', error)
                 chatMessageId(null)
             })
-
     }
 
     static sendImage(
-        firestore:Firestore,
+        firestore: Firestore,
         groupChatModel: GroupChatModel,
         imageUrl: string,
-        from:string,
-        chatMessageId:(id: string | null)=>void
-    ){
+        from: string,
+        chatMessageId: (id: string | null) => void
+    ) {
         const id = uuidv4()
 
         const newMessagesList = [
@@ -103,7 +102,7 @@ class SendGroupChat {
                 null,
                 Timestamp.now(),
                 [from],
-                from,
+                from
             ).toObject(),
             ...groupChatModel.messages, // Keeping old messages
         ]
@@ -120,7 +119,6 @@ class SendGroupChat {
                 console.error('Error sending message:', error)
                 chatMessageId(null)
             })
-
     }
 }
 

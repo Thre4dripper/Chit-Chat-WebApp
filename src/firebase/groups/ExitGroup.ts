@@ -16,7 +16,11 @@ class ExitGroup {
         onSuccess: (success: boolean) => void
     ) {
         try {
-            const groupRef = doc(firestore, FirestoreCollections.GROUPS_COLLECTION, groupChatModel.id)
+            const groupRef = doc(
+                firestore,
+                FirestoreCollections.GROUPS_COLLECTION,
+                groupChatModel.id
+            )
 
             // Remove from members (mirrors Android ExitGroup.exitFromGroup)
             const newMembers = groupChatModel.members

@@ -15,8 +15,8 @@ const ChatsFragment: React.FC<{
     openProfile: React.Dispatch<SetStateAction<boolean>>
     setDialogState: React.Dispatch<SetStateAction<boolean>>
     setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
-    setGroupDialogOpen:React.Dispatch<SetStateAction<boolean>>
-}> = ({ openProfile, setDialogState, setLogoutDialogState,setGroupDialogOpen }) => {
+    setGroupDialogOpen: React.Dispatch<SetStateAction<boolean>>
+}> = ({ openProfile, setDialogState, setLogoutDialogState, setGroupDialogOpen }) => {
     const { user } = useHomeStore()
     const homeChats = useHomeChatsStore((state) => state.homeChats)
     const favouriteList = useHomeStore((state) => state.user)?.favourites
@@ -38,20 +38,20 @@ const ChatsFragment: React.FC<{
 
                 <div className={'flex-1'} />
                 <div className={'flex flex-col justify-center'}>
-                        <div className={'flex'}>
-                            <IconButton
-                                onClick={() => {
-                                    setDialogState(true)
-                                }}>
-                                <ChatIcon className={'text-white'} />
-                            </IconButton>
-                            <IconButton
-                                onClick={() => {
-                                    setGroupDialogOpen(true)
-                                }}>
-                                <GroupAddIcon className={'text-white'} />
-                            </IconButton>
-                        </div>
+                    <div className={'flex'}>
+                        <IconButton
+                            onClick={() => {
+                                setDialogState(true)
+                            }}>
+                            <ChatIcon className={'text-white'} />
+                        </IconButton>
+                        <IconButton
+                            onClick={() => {
+                                setGroupDialogOpen(true)
+                            }}>
+                            <GroupAddIcon className={'text-white'} />
+                        </IconButton>
+                    </div>
                 </div>
                 <div className={'flex flex-col justify-center rounded-full'}>
                     <IconButton
@@ -226,13 +226,15 @@ const ChatsFragment: React.FC<{
                                                             hour12: true,
                                                         }) as string
                                                 } // dummy time
-                                                unseenMessageCount={chat.groupChat?.messages.filter(
-                                                    (msg) =>
-                                                        msg.seenBy.filter(
-                                                            (username) =>
-                                                                username === user?.username
-                                                        ).length === 0
-                                                ).length as number}
+                                                unseenMessageCount={
+                                                    chat.groupChat?.messages.filter(
+                                                        (msg) =>
+                                                            msg.seenBy.filter(
+                                                                (username) =>
+                                                                    username === user?.username
+                                                            ).length === 0
+                                                    ).length as number
+                                                }
                                             />
                                         )}
                                     </Fragment>

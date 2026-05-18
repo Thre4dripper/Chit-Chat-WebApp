@@ -20,7 +20,7 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
     devtools(
         immer((set) => ({
             homeChats: [],
-            setHomeChats:() => {
+            setHomeChats: () => {
                 UserChatsRepository.getAllUserChats()
                 GroupChatsRepository.getAllGroupChats()
             },
@@ -30,7 +30,7 @@ const useHomeChatsStore = create<homeChatState & homeChatActions>()(
                         console.log(set)
                         return
                     }
-                useChatDetailsStore.getState().setCurrentChatId(chatId, ChatType.USER)
+                    useChatDetailsStore.getState().setCurrentChatId(chatId, ChatType.USER)
                 })
             },
         }))

@@ -15,17 +15,15 @@ interface ItemGroupProps {
 }
 
 const ItemGroup: React.FC<ItemGroupProps> = ({
-                                               chatId,
-                                               image,
-                                               primaryText,
-                                               secondaryText,
-                                               time,
-                                               unseenMessageCount,
-                                           }) => {
+    chatId,
+    image,
+    primaryText,
+    secondaryText,
+    time,
+    unseenMessageCount,
+}) => {
     const displayName =
-        primaryText && primaryText.length > 20
-            ? primaryText.substring(0, 24) + '...'
-            : primaryText
+        primaryText && primaryText.length > 20 ? primaryText.substring(0, 24) + '...' : primaryText
     const currentChat = useChatDetailsStore((state) => state.groupChatDetails)
     const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
 

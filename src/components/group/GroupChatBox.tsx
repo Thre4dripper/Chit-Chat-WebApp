@@ -84,19 +84,17 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
     if (currentGroupChat === null) {
         return <EmptyChatFragment />
     }
-    const sendBy=(message:GroupMessageModel)=>{
-        const sender = currentGroupChat.members.find(
-            (member) => member.username === message.from
-        );
-        return sender?.profileImage;
+    const sendBy = (message: GroupMessageModel) => {
+        const sender = currentGroupChat.members.find((member) => member.username === message.from)
+        return sender?.profileImage
     }
 
     const getSeenBy = (message: GroupMessageModel) => {
         // return profile image of users who have seen the message except the sender
         return message.seenBy
             .filter((item) => item !== username)
-            .map((item)=> {
-                const member = currentGroupChat.members.find((member) => member.username === item);
+            .map((item) => {
+                const member = currentGroupChat.members.find((member) => member.username === item)
                 return member?.profileImage
             })
     }
@@ -184,8 +182,8 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                     {message.type === GroupMessageType.TypeCreatedGroup && <ItemChatHelloMessage />}
                     {/*Member left message*/}
                     {message.type === GroupMessageType.TypeLeavedMember && (
-                        <div className="w-full flex justify-center py-1">
-                            <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                        <div className='w-full flex justify-center py-1'>
+                            <span className='text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full'>
                                 {message.from} left the group
                             </span>
                         </div>

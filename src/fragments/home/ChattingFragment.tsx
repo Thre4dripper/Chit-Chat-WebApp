@@ -63,12 +63,9 @@ const ChattingFragment: React.FC = () => {
         }
     }
 
-    if(!currentChatId?.includes('-')){
-        return <GroupChattingFragment/>
+    if (!currentChatId?.includes('-')) {
+        return <GroupChattingFragment />
     }
-
-
-
 
     return (
         <div

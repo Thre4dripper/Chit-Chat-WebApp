@@ -1,4 +1,13 @@
-import { collection, documentId, Firestore, getDoc, doc, onSnapshot, query, where } from 'firebase/firestore'
+import {
+    collection,
+    documentId,
+    Firestore,
+    getDoc,
+    doc,
+    onSnapshot,
+    query,
+    where,
+} from 'firebase/firestore'
 import GroupChatModel from '../../models/group.chat.model.ts'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 
@@ -33,8 +42,9 @@ class CommonGroups {
                 (snapshot) => {
                     const commonGroups = snapshot.docs
                         .map((d) => d.data() as GroupChatModel)
-                        .filter((group) =>
-                            group.members?.some((m) => m.username === otherUsername) ?? false
+                        .filter(
+                            (group) =>
+                                group.members?.some((m) => m.username === otherUsername) ?? false
                         )
                     onSuccess(commonGroups)
                 },
