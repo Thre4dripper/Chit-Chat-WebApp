@@ -51,13 +51,13 @@ class SendChat {
     }
 
     static SendSticker(
-        firestore:Firestore,
-        chatModel:ChatModel,
+        firestore: Firestore,
+        chatModel: ChatModel,
         stickerIndex: number,
-        from:string,
-        to:string,
-        chatMessageId:(id: string | null)=>void
-    ){
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
+    ) {
         const id = uuidv4()
 
         const newMessagesList = [
@@ -90,17 +90,16 @@ class SendChat {
                 console.error('Error sending message:', error)
                 chatMessageId(null)
             })
-
     }
 
     static SendImage(
-         firestore:Firestore,
-         chatModel:ChatModel,
-         imageUrl: string,
-         from:string,
-         to:string,
-         chatMessageId:(id: string | null)=>void
-    ){
+        firestore: Firestore,
+        chatModel: ChatModel,
+        imageUrl: string,
+        from: string,
+        to: string,
+        chatMessageId: (id: string | null) => void
+    ) {
         const id = uuidv4()
 
         const newMessagesList = [
@@ -133,7 +132,6 @@ class SendChat {
                 console.error('Error sending message:', error)
                 chatMessageId(null)
             })
-
     }
 }
 

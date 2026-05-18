@@ -2,16 +2,17 @@ import ChatModel from '../../models/user.chat.model.ts'
 import { getStorage, ref, listAll, deleteObject } from 'firebase/storage'
 import { Firestore, doc, setDoc } from 'firebase/firestore'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
-
+import { StorageFolders } from '../../constants/StorageFolders.ts'
 class ClearChat {
     static clearUserChat(
         firestore: Firestore,
         chatModel: ChatModel,
         onSuccess: (done: boolean) => void
     ) {
+        const firstMessage = chatModel.chatMessages[chatModel.chatMessages.length - 1]
         const newChatModel = {
             ...chatModel,
-            chatMessages: [chatModel.chatMessages[chatModel.chatMessages.length - 1]],
+            chatMessages: firstMessage ? [firstMessage] : [],
         }
 
         const docRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, chatModel.chatId)
@@ -30,7 +31,7 @@ class ClearChat {
         chatModel: ChatModel,
         onSuccess: (done: boolean) => void
     ) {
-        const folderPath = `chat_images/${chatModel.chatId}/`
+        const folderPath = `${StorageFolders.CHAT_IMAGES_FOLDER}/${chatModel.chatId}/`
         const folderRef = ref(storage, folderPath)
         listAll(folderRef)
             .then((listResult) => {

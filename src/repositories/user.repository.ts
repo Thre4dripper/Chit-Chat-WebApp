@@ -19,12 +19,8 @@ class UserRepository {
         const user = auth.currentUser
         const username = useLocalStore.getState().username
 
-        if (!user || !username) {
-            onSuccess(false)
-            return
-        }
-
-        GetProfile.getProfile(firestore, user, username, (profile) => {
+        // user will definitely be non-null here, otherwise the home page will not be opened
+        GetProfile.getProfile(firestore, user!, username, (profile) => {
             if (profile) {
                 useHomeStore.getState().setUser(profile)
                 onSuccess(true)

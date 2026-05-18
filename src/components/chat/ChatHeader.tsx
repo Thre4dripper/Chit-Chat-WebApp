@@ -6,8 +6,9 @@ import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 import useHomeStore from '../../store/home.store.ts'
-import {enqueueSnackbar} from 'notistack'
-
+import { enqueueSnackbar } from 'notistack'
+import { ErrorMessages } from '../../constants/ErrorMessages.ts'
+import { SuccessMessages } from '../../constants/SuccessMessages.ts'
 type FeatureType = { id: number; content: string; action: () => void }
 
 const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean>> }> = ({
@@ -41,22 +42,22 @@ const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean
     }
     const favoriteAction = () => {
         setOpenPopper(false)
-        setMessage('Are you sure you want to Add into Favorites?')
-        setTitle('Add To Favorites')
+        setMessage('Are you sure you want to update your favourites?')
+        setTitle('Favourite')
         setActionDetails(2)
         setOpenDialog(true)
     }
     const clearAction = () => {
         setOpenPopper(false)
-        setMessage('Are you sure you want to Clear Chats?')
-        setTitle('Clear Chat')
+        setMessage('Are you sure you want to clear this chat?')
+        setTitle('Clear chat')
         setActionDetails(3)
         setOpenDialog(true)
     }
     const deleteAction = () => {
         setOpenPopper(false)
-        setMessage('Are you sure you want to Delete Chats?')
-        setTitle('Delete Chat')
+        setMessage('Are you sure you want to delete this chat?')
+        setTitle('Delete chat')
         setActionDetails(4)
         setOpenDialog(true)
     }
@@ -66,32 +67,60 @@ const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean
         //  view contact
         if (actionDetails === 1) {
             console.log('working on view model')
-        }
-        //  favourite add remove
-        else if (actionDetails === 2) {
+        } else if (actionDetails === 2) {
             if (!user || !currentChatId) {
-                enqueueSnackbar('Something wrong in chatId in Favourite',{variant:'error',autoHideDuration:3000})
+                console.log('Something wrong in chatId in Favourite')
+                enqueueSnackbar(ErrorMessages.ERROR_UPDATING_FAVOURITE, {
+                    variant: 'error',
+                    autoHideDuration: 3000,
+                })
                 return
             }
             markFavourite(user, currentChatId, (done) => {
                 if (!done) {
-                    enqueueSnackbar('Something wrong in chatId in Favourite',{variant:'error',autoHideDuration:3000})
+                    enqueueSnackbar(ErrorMessages.ERROR_UPDATING_FAVOURITE, {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                    })
                     return
                 }
+                const wasAlreadyFavourite = user.favourites.includes(currentChatId)
                 setUser(done)
-                console.log('wtf you did this omg')
+                console.log('favourite updated')
+                enqueueSnackbar(
+                    wasAlreadyFavourite
+                        ? SuccessMessages.FAVOURITE_CLEARED_SUCCESSFULLY
+                        : SuccessMessages.FAVOURITE_MARKED_SUCCESSFULLY,
+                    { variant: 'success', autoHideDuration: 3000 }
+                )
             })
-        }
-        //  clear Chats
-        else if (actionDetails === 3) {
-            clearChat(currentChat, (sucesss) => {
-                if (!sucesss) enqueueSnackbar('Something wrong in Clear Chat',{variant:'error',autoHideDuration:3000})
+        } else if (actionDetails === 3) {
+            clearChat(currentChat, (success) => {
+                if (!success) {
+                    enqueueSnackbar(ErrorMessages.ERROR_CLEARING_CHAT, {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                    })
+                    return
+                }
+                enqueueSnackbar(SuccessMessages.CHAT_CLEARED_SUCCESSFULLY, {
+                    variant: 'success',
+                    autoHideDuration: 3000,
+                })
             })
-        }
-        //  delete chats
-        else if (actionDetails === 4) {
-            deleteChat(currentChat, (sucesss) => {
-                if (!sucesss) enqueueSnackbar('Something wrong in Delete Chat',{variant:'error',autoHideDuration:3000})
+        } else if (actionDetails === 4) {
+            deleteChat(currentChat, (success) => {
+                if (!success) {
+                    enqueueSnackbar(ErrorMessages.ERROR_DELETING_CHAT, {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                    })
+                    return
+                }
+                enqueueSnackbar(SuccessMessages.CHAT_DELETED_SUCCESSFULLY, {
+                    variant: 'success',
+                    autoHideDuration: 3000,
+                })
             })
         }
     }

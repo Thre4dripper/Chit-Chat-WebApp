@@ -8,4 +8,10 @@ export const ErrorMessages = {
 
     //group related errors
     ERROR_UPDATING_GROUP_IMAGE: 'Error updating group image',
+
+    //chat related errors
+    ERROR_SENDING_IMAGE: 'Error sending image',
+    ERROR_UPDATING_FAVOURITE: 'Error updating favourite',
+    ERROR_CLEARING_CHAT: 'Error clearing chat',
+    ERROR_DELETING_CHAT: 'Error deleting chat',
 }

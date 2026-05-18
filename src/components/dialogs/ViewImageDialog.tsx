@@ -1,5 +1,5 @@
-import React,{useState,useEffect} from 'react'
-import {Box} from '@mui/material'
+import React, { useState, useEffect } from 'react'
+import { Box } from '@mui/material'
 interface ViewImageDialogProps {
     open: boolean
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -12,15 +12,15 @@ interface ViewImageDialogProps {
 }
 
 const ViewImageDialog: React.FC<ViewImageDialogProps> = ({
-                                                             open,
-                                                             setOpen,
-                                                             image,
-                                                             zoomIntensity,
-                                                             delay,
-                                                             initialZoomLevel,
-                                                             minZoomLevel,
-                                                             maxZoomLevel,
-                                                         }) => {
+    open,
+    setOpen,
+    image,
+    zoomIntensity,
+    delay,
+    initialZoomLevel,
+    minZoomLevel,
+    maxZoomLevel,
+}) => {
     const [zoomLevel, setZoomLevel] = useState<number>(initialZoomLevel)
     const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
 

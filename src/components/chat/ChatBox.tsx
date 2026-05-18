@@ -13,14 +13,15 @@ import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 import ChatMessageModel from '../../models/chat.message.model.ts'
 import { Fab } from '@mui/material'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
-import {enqueueSnackbar} from 'notistack'
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import { enqueueSnackbar } from 'notistack'
 
 interface ChatBoxProps {
-    setImageSrc: React.Dispatch<SetStateAction<string|null>>
-    setImageOpen:React.Dispatch<SetStateAction<boolean>>
+    setImageSrc: React.Dispatch<SetStateAction<string | null>>
+    setImageOpen: React.Dispatch<SetStateAction<boolean>>
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({setImageSrc,setImageOpen}) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
     const username = useLocalStore((state) => state.username)
 
@@ -34,22 +35,16 @@ const ChatBox: React.FC<ChatBoxProps> = ({setImageSrc,setImageOpen}) => {
         setDragging(true)
     }
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
+        e.preventDefault()
+        setDragging(false)
+        const file = e.dataTransfer.files[0]
         if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImageSrc(reader.result as string);
-                setImageOpen(true)
-            };
-            reader.readAsDataURL(file);
-        }else{
-            setDragging(false)
-            enqueueSnackbar('Only Images allowed ',{ variant: 'error', autoHideDuration: 3000 })
+            setImageSrc(URL.createObjectURL(file))
+            setImageOpen(true)
+        } else {
+            enqueueSnackbar('Only Images allowed ', { variant: 'error', autoHideDuration: 3000 })
         }
     }
-
-
 
     useEffect(() => {
         // Create an IntersectionObserver to observe the last chat message
@@ -183,30 +178,49 @@ const ChatBox: React.FC<ChatBoxProps> = ({setImageSrc,setImageOpen}) => {
         <div
             onDragOver={handleDragging}
             onDrop={handleDrop}
-            onDragLeave={()=>setDragging(false)}
+            onDragLeave={() => setDragging(false)}
             className={
-                `z-0 flex-1 ${dragging?"bg-slate-400 border-4 border-dotted border-blue-400 ":"bg-white"} overflow-y-scroll flex flex-col-reverse relative ` +
+                `z-0 flex-1 ${dragging ? 'bg-slate-400 border-4 border-dotted border-blue-400 ' : 'bg-white'} overflow-y-scroll flex flex-col-reverse relative ` +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full h-full'
             }>
-            {currentChat.chatMessages.map((message, index) => (
-                <div
-                    className={'flex gap-2'}
-                    key={message.id}
-                    ref={index === 0 ? observerTarget : null}>
-                    {/*First Message*/}
-                    {message.type === ChatMessageType.TypeFirstMessage && <ItemChatHelloMessage />}
-                    {/*text Message*/}
-                    {message.type === ChatMessageType.TypeText && <TextMessage message={message} />}
-                    {/*Image Message*/}
-                    {message.type === ChatMessageType.TypeImage && (
-                        <ImageMessage message={message} />
-                    )}
-                    {/*Sticker Message*/}
-                    {message.type === ChatMessageType.TypeSticker && (
-                        <StickerMessage message={message} />
-                    )}
+            {!dragging &&
+                currentChat.chatMessages.map((message, index) => (
+                    <div
+                        className={'flex gap-2'}
+                        key={message.id}
+                        ref={index === 0 ? observerTarget : null}>
+                        {/*First Message*/}
+                        {message.type === ChatMessageType.TypeFirstMessage && (
+                            <ItemChatHelloMessage />
+                        )}
+                        {/*text Message*/}
+                        {message.type === ChatMessageType.TypeText && (
+                            <TextMessage message={message} />
+                        )}
+                        {/*Image Message*/}
+                        {message.type === ChatMessageType.TypeImage && (
+                            <ImageMessage message={message} />
+                        )}
+                        {/*Sticker Message*/}
+                        {message.type === ChatMessageType.TypeSticker && (
+                            <StickerMessage message={message} />
+                        )}
+                    </div>
+                ))}
+            {dragging && (
+                <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[#075e54]/90 z-50'>
+                    <div className='flex flex-col items-center'>
+                        <div className='rounded-full bg-white p-4 mb-4 shadow-lg'>
+                            <AddPhotoAlternateIcon
+                                sx={{ width: 48, height: 48, color: '#25d366' }}
+                            />
+                        </div>
+                        <div className='text-white text-xl font-medium drop-shadow-lg'>
+                            Drop your image here
+                        </div>
+                    </div>
                 </div>
-            ))}
+            )}
             <Fab
                 sx={{
                     'position': 'fixed',

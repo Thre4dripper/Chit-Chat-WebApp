@@ -12,6 +12,7 @@ import {
 import useAuthStore from '../../store/auth.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
+import logo from '../../assets/logo.png'
 
 interface LogoutConfirmationProps {
     open: boolean
@@ -31,7 +32,7 @@ const LogoutConfirmation: React.FC<LogoutConfirmationProps> = ({ open, handleClo
         <Dialog open={open} onClose={handleClose} fullWidth={true}>
             <DialogTitle>
                 <div className={'flex flex-row items-center justify-start gap-4'}>
-                    <Avatar src={'/src/assets/logo.png'} />
+                    <Avatar src={logo} />
                     Logout
                 </div>
             </DialogTitle>

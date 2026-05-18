@@ -12,7 +12,7 @@ type homeChatState = {
 }
 type homeChatActions = {
     setHomeChats: () => void
-    startChat: (dmUser: UserModel) => void
+    startChat: (newChatUser: UserModel) => void
 }
 
 const useHomeChatsStore = create<homeChatState & homeChatActions>()(

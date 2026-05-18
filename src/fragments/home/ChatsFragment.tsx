@@ -27,7 +27,6 @@ const ChatsFragment: React.FC<{
             : false
     })
 
-
     return (
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>

@@ -20,13 +20,13 @@ jobs:
             should_format: ${{ steps.format.outputs.should_format }}
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
                   token: '${{ secrets.GITHUB_TOKEN }}'
                   ref: ${{ github.head_ref }} # Use the PR branch
 
             - name: Setup Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version: '20'
                   registry-url: 'https://registry.npmjs.org'

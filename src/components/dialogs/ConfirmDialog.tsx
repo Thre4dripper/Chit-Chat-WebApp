@@ -9,25 +9,29 @@ import {
     Divider,
     Avatar,
 } from '@mui/material'
-
-
+import logo from '../../assets/logo.png'
 interface ConfirmDialogProps {
     open: boolean
     handleClose: () => void
     title: string
-    message:string
-    action:()=>void
+    message: string
+    action: (() => void) | (() => Promise<void>)
     width?: number
-
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, handleClose,title,message,action,width }) => {
-
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+    open,
+    handleClose,
+    title,
+    message,
+    action,
+    width,
+}) => {
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={!width}>
             <DialogTitle>
                 <div className={'flex flex-row items-center justify-start gap-4'}>
-                    <Avatar src={'/src/assets/logo.png'} />
+                    <Avatar src={logo} />
                     {title}
                 </div>
             </DialogTitle>
