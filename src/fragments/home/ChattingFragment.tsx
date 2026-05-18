@@ -52,13 +52,13 @@ const ChattingFragment: React.FC = () => {
         for (const item of items) {
             if (item.type.startsWith('image/')) {
                 const file = item.getAsFile()
-                const reader = new FileReader()
-                reader.onload = (ev) => {
-                    const result = ev.target?.result
-                    if (typeof result === 'string') setImageSrc(result)
-                    setImageOpen(true)
+                if (!file) continue
+                if (imageSrc?.startsWith('blob:')) {
+                    URL.revokeObjectURL(imageSrc)
                 }
-                if (file) reader.readAsDataURL(file)
+                setImageSrc(URL.createObjectURL(file))
+                setImageOpen(true)
+                break
             }
         }
     }
