@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import useAuthStore from '../store/auth.store.ts'
 import LottieLoading from './LottieLoading.tsx'
 import useLocalStore from '../store/local.store.ts'

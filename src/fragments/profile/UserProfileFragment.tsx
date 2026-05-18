@@ -3,7 +3,7 @@ import { Box, Paper, Typography, Avatar, IconButton, Button } from '@mui/materia
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutlined'
 import useHomeStore from '../../store/home.store.ts'
 import LottieLoading from '../../components/LottieLoading.tsx'
 import InfoIcon from '@mui/icons-material/Info'
@@ -103,7 +103,7 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
                     src={user.profileImage}
                     alt={user.name}
                     sx={{ width: 200, height: 200, fontSize: 100 }}
-                    imgProps={{ referrerPolicy: 'no-referrer' }}
+                    slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
                 />
                 <Button
                     variant={'text'}

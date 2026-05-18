@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import ButtonsFragment from '../fragments/auth/ButtonsFragment.tsx'
 import Canvas from '../fragments/auth/Canvas.tsx'
 import useAuthStore from '../store/auth.store.ts'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import useLocalStore from '../store/local.store.ts'
 import { enqueueSnackbar } from 'notistack'
 

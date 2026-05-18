@@ -4,7 +4,7 @@ import {
     Send,
     FavoriteBorder,
     Clear,
-    DeleteOutline,
+    DeleteOutlined,
     Notifications,
 } from '@mui/icons-material'
 import emptyImageIconData from '../../assets/lottie/no_photos.json'
@@ -119,7 +119,7 @@ const ViewProfile: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolea
 
                 <div className='flex items-center px-4 py-3'>
                     <IconButton size='small'>
-                        <DeleteOutline className='text-red-600' />
+                        <DeleteOutlined className='text-red-600' />
                     </IconButton>
                     <Typography variant='body1' className='ml-2 text-blue-gray-700'>
                         Delete Chat

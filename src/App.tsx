@@ -1,6 +1,6 @@
 import React from 'react'
 import HomeScreen from './screens/HomeScreen.tsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router'
 import AuthScreen from './screens/AuthScreen.tsx'
 import ProtectiveRoute from './components/ProtectiveRoute.tsx'
 

@@ -10,7 +10,7 @@ import VirtualizedStickerGrid from '../listItems/ItemSticker.tsx'
 interface ChatInputProps {
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     handlePaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
-    fileInputRef: React.RefObject<HTMLInputElement>
+    fileInputRef: React.RefObject<HTMLInputElement | null>
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ handlePaste, fileInputRef, handleFileChange }) => {

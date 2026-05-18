@@ -10,7 +10,7 @@ import useChatDetailsStore from '../../store/chat.details.store.ts'
 interface ChatInputProps {
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     handlePaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
-    fileInputRef: React.RefObject<HTMLInputElement>
+    fileInputRef: React.RefObject<HTMLInputElement | null>
 }
 
 const GroupChatInput: React.FC<ChatInputProps> = ({
