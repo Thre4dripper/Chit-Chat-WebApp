@@ -182,6 +182,14 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                     ref={index === 0 ? observerTarget : null}>
                     {/*First Message*/}
                     {message.type === GroupMessageType.TypeCreatedGroup && <ItemChatHelloMessage />}
+                    {/*Member left message*/}
+                    {message.type === GroupMessageType.TypeLeavedMember && (
+                        <div className="w-full flex justify-center py-1">
+                            <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                {message.from} left the group
+                            </span>
+                        </div>
+                    )}
                     {/*text Message*/}
                     {message.type === GroupMessageType.TypeText && (
                         <TextMessage message={message} />
