@@ -35,16 +35,12 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
     }
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
+        setDragging(false)
         const file = e.dataTransfer.files[0]
         if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader()
-            reader.onload = () => {
-                setImageSrc(reader.result as string)
-                setImageOpen(true)
-            }
-            reader.readAsDataURL(file)
+            setImageSrc(URL.createObjectURL(file))
+            setImageOpen(true)
         } else {
-            setDragging(false)
             enqueueSnackbar('Only Images allowed ', { variant: 'error', autoHideDuration: 3000 })
         }
     }
