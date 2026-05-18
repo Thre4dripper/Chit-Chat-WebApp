@@ -3,7 +3,7 @@ import { GlobalConstants } from '../../constants/GlobalConstants.ts'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ChatIcon from '@mui/icons-material/Chat'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
-import React, { SetStateAction } from 'react'
+import React, { Fragment, SetStateAction } from 'react'
 import ItemChat from '../../components/listItems/ItemChat.tsx'
 import ItemFavChat from '../../components/listItems/ItemFavChat.tsx'
 import ItemGroup from '../../components/listItems/ItemGroup.tsx'
@@ -157,7 +157,7 @@ const ChatsFragment: React.FC<{
                         <div className={'flex flex-col'}>
                             {homeChats.map((chat) => {
                                 return (
-                                    <>
+                                    <Fragment key={chat.id}>
                                         {chat.userChat ? (
                                             <ItemChat
                                                 key={chat.id}
@@ -235,7 +235,7 @@ const ChatsFragment: React.FC<{
                                                 ).length as number}
                                             />
                                         )}
-                                    </>
+                                    </Fragment>
                                 )
                             })}
                         </div>
