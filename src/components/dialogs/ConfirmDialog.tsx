@@ -10,7 +10,6 @@ import {
     Avatar,
 } from '@mui/material'
 import logo from '../../assets/logo.png'
-
 interface ConfirmDialogProps {
     open: boolean
     handleClose: () => void
