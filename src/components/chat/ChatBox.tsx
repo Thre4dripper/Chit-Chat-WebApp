@@ -211,7 +211,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                 <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[#075e54]/90 z-50'>
                     <div className='flex flex-col items-center'>
                         <div className='rounded-full bg-white p-4 mb-4 shadow-lg'>
-                            <AddPhotoAlternateIcon sx={{ width: 48, height: 48, color: '#25d366' }} />
+                            <AddPhotoAlternateIcon
+                                sx={{ width: 48, height: 48, color: '#25d366' }}
+                            />
                         </div>
                         <div className='text-white text-xl font-medium drop-shadow-lg'>
                             Drop your image here
