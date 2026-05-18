@@ -110,13 +110,10 @@ class SendGroupChat {
 
         const updatedChatModel = { ...groupChatModel, messages: newMessagesList }
 
-        const docRef = doc(firestore, FirestoreCollections.CHATS_COLLECTION, groupChatModel.id)
+        const docRef = doc(firestore, FirestoreCollections.GROUPS_COLLECTION, groupChatModel.id)
 
         setDoc(docRef, updatedChatModel, { merge: true })
             .then(() => {
-                // if (!chatModel.mutedBy.includes(to)) {
-                //     // TODO send notification to the user
-                // }
                 chatMessageId(id)
             })
             .catch((error) => {
