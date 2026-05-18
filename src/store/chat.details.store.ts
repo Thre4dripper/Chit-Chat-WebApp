@@ -6,6 +6,8 @@ import UserChatsRepository from '../repositories/user.chats.repository'
 import GroupChatsRepository from '../repositories/group.chats.repository.ts'
 import GroupChatModel from '../models/group.chat.model'
 import UserModel from '../models/user.model.ts'
+import useLocalStore from './local.store.ts'
+import { ChatType } from '../enums/ChatType.ts'
 
 type ChatDetailsState = {
     currentChatId: string | null
@@ -31,7 +33,20 @@ type ChatDetailsActions = {
         to: string,
         onSuccess?: (id: string | null) => void
     ) => void
-    setCurrentChatId: (chatId: string) => void
+    sendGroupTextMessage: (groupChatModel: GroupChatModel, text: string, from: string) => void
+    sendGroupStickerMessage: (
+        groupChatModel: GroupChatModel,
+        stickerIndex: number,
+        from: string
+    ) => void
+    sendGroupImageMessage: (
+        groupChatModel: GroupChatModel,
+        image: File,
+        from: string,
+        onSuccess: (id: string | null) => void
+    ) => void
+    setCurrentChatId: (chatId: string, chatType: ChatType) => void
+    exitGroup: () => void
     favouriteChat: (
         userModel: UserModel,
         favourite: string,
@@ -66,14 +81,15 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
                 GroupChatsRepository.getLiveGroupChatById(chatId, (group) => {
                     set((state) => {
                         if (group && state.currentChatId === chatId) {
+                            GroupChatsRepository.updateGroupSeen(group)
                             state.groupChatDetails = group
                         }
                     })
                 })
             },
-            setCurrentChatId: (chatId) => {
+            setCurrentChatId: (chatId, chatType) => {
                 set({ currentChatId: chatId })
-                if (chatId.includes('-')) {
+                if (chatType === ChatType.USER) {
                     useChatDetailsStore.getState().setChatDetails(chatId)
                     set({ groupChatDetails: null })
                 } else {
@@ -97,6 +113,32 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
                     onSuccess?.(id)
                 })
             },
+            sendGroupTextMessage: (groupChatModel, text, from) => {
+                GroupChatsRepository.sendGroupTextMessage(groupChatModel, text, from, (id) => {
+                    console.log('group text sent', id)
+                })
+            },
+            sendGroupStickerMessage: (groupChatModel, stickerIndex, from) => {
+                GroupChatsRepository.sendGroupSticker(groupChatModel, stickerIndex, from, (id) => {
+                    console.log('group sticker sent', id)
+                })
+            },
+            sendGroupImageMessage: (groupChatModel, image, from, onSuccess) => {
+                GroupChatsRepository.sendGroupImage(groupChatModel, image, from, (id) => {
+                    console.log('group image sent', id)
+                    onSuccess(id)
+                })
+            },
+            exitGroup: () => {
+                const groupChatModel = useChatDetailsStore.getState().groupChatDetails
+                const username = useLocalStore.getState().username
+                if (!groupChatModel || !username) return
+                GroupChatsRepository.exitGroup(groupChatModel, username, (success) => {
+                    if (success) {
+                        set({ groupChatDetails: null, currentChatId: null })
+                    }
+                })
+            },
             favouriteChat: (userModel, favourite, onSuccess) => {
                 UserChatsRepository.favouriteChat(userModel, favourite, onSuccess)
             },
@@ -111,3 +153,4 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
 )
 
 export default useChatDetailsStore
+
