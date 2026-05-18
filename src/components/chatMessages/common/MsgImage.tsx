@@ -22,7 +22,7 @@ const MsgImage: React.FC<LeftImageProps> = ({ image }) => {
                             target.onerror = null
                             target.src = 'https://placehold.co/600x400?text=Loading...'
                         }}
-                        alt='not working'
+                        alt='Message attachment'
                     />
                 </div>
             </ButtonBase>

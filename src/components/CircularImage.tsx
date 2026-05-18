@@ -7,14 +7,14 @@ interface CircularImageProps {
     alt?: string
 }
 
-const CircularImage: React.FC<CircularImageProps> = ({ image, size }) => {
+const CircularImage: React.FC<CircularImageProps> = ({ image, size, alt = '' }) => {
     return (
         <div className={'flex flex-col justify-center'}>
             <IconButton>
                 <div className={'rounded-full bg-white overflow-clip'}>
                     <img
                         src={image}
-                        alt={''}
+                        alt={alt}
                         style={{
                             width: size,
                             height: size,

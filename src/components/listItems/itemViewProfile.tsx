@@ -10,10 +10,23 @@ import {
 import emptyImageIconData from '../../assets/lottie/no_photos.json'
 import Lottie from 'lottie-react'
 import React, { SetStateAction } from 'react' // Import the JSON data
+import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useLocalStore from '../../store/local.store.ts'
+import ChatUtils from '../../utils/ChatUtils.ts'
 
 const ViewProfile: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean>> }> = ({
     setIsViewing,
 }) => {
+    const currentChat = useChatDetailsStore((state) => state.chatDetails)
+    const username = useLocalStore((state) => state.username)
+
+    if (!currentChat || !username) return null
+
+    const profileImage = ChatUtils.getUserChatProfileImage(currentChat, username)
+    const profileUsername = ChatUtils.getUserChatUsername(currentChat, username)
+    const profileStatus = ChatUtils.getUserChatStatus(currentChat, username)
+    const profileInitial = profileUsername.charAt(0).toUpperCase()
+
     return (
         <div className='bg-slate-900/90 rounded-3xl shadow-md h-full w-full z-50'>
             {/* Header */}
@@ -28,14 +41,16 @@ const ViewProfile: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolea
 
             {/* Profile Info */}
             <div className='flex flex-col items-center py-6'>
-                <Avatar sx={{ width: 80, height: 80, bgcolor: 'grey.400', fontSize: '2rem' }}>
-                    S
+                <Avatar
+                    src={profileImage}
+                    sx={{ width: 80, height: 80, bgcolor: 'grey.400', fontSize: '2rem' }}>
+                    {profileInitial}
                 </Avatar>
                 <Typography color='white' variant='h6' className='mt-2 font-semibold'>
-                    shaddy
+                    {profileUsername}
                 </Typography>
                 <Typography variant='subtitle2' color='white'>
-                    Shaddy
+                    {profileStatus || 'No status'}
                 </Typography>
             </div>
             <div className={'bg-white rounded-3xl mt-2'}>

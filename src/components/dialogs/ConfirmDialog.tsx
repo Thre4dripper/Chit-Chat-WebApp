@@ -9,6 +9,7 @@ import {
     Divider,
     Avatar,
 } from '@mui/material'
+import logo from '../../assets/logo.png'
 
 interface ConfirmDialogProps {
     open: boolean
@@ -31,7 +32,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <Dialog open={open} onClose={handleClose} fullWidth={!width}>
             <DialogTitle>
                 <div className={'flex flex-row items-center justify-start gap-4'}>
-                    <Avatar src={'/src/assets/logo.png'} />
+                    <Avatar src={logo} />
                     {title}
                 </div>
             </DialogTitle>
