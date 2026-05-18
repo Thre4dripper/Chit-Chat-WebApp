@@ -155,7 +155,7 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                             ) : (
                                 searchedUsers.map((user) => {
                                     const selected = selectedUsers.some(
-                                        (u) => u === user
+                                        (u) => u.chatId === user.chatId
                                     )
                                     return (
                                         <Box
