@@ -205,7 +205,7 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                             />
                         </Button>
                         {groupIcon && (
-                            <Typography variant='body2' color='gray'>
+                            <Typography variant='body2' sx={{ color: 'gray' }}>
                                 Selected: {groupIcon.name}
                             </Typography>
                         )}

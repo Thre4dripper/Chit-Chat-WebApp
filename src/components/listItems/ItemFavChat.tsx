@@ -19,7 +19,7 @@ const ItemFavChat: React.FC<FavChatProps> = ({ chatId, image, name }) => {
             className={'flex flex-col items-center'}
             onClick={() => setCurrentChatId(chatId, ChatType.USER)}>
             <CircularImage image={image} size={80} />
-            <Typography variant='subtitle1' color='white' align='center'>
+            <Typography variant='subtitle1' sx={{ color: 'white' }} align='center'>
                 {name}
             </Typography>
         </Box>

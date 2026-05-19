@@ -31,7 +31,7 @@ const ChatsFragment: React.FC<{
         <div className={'h-screen flex flex-col'}>
             <div className={'h-14 m-4 flex flex-row'}>
                 <div className={'flex flex-col justify-center'}>
-                    <Typography className={'select-none'} color={'white'} variant={'h4'}>
+                    <Typography className={'select-none'} sx={{ color: 'white' }} variant={'h4'}>
                         {GlobalConstants.APP_NAME}
                     </Typography>
                 </div>
@@ -108,7 +108,7 @@ const ChatsFragment: React.FC<{
                             <div className={'flex flex-row m-4'}>
                                 <Typography
                                     className={'select-none'}
-                                    color={'white'}
+                                    sx={{ color: 'white' }}
                                     variant={'h6'}>
                                     Favourites
                                 </Typography>
@@ -150,7 +150,7 @@ const ChatsFragment: React.FC<{
                 {homeChats.length > 0 ? (
                     <div>
                         <div className={'flex flex-col m-4'}>
-                            <Typography className={'select-none'} color={'white'} variant={'h6'}>
+                            <Typography className={'select-none'} sx={{ color: 'white' }} variant={'h6'}>
                                 Chats
                             </Typography>
                         </div>
@@ -244,7 +244,7 @@ const ChatsFragment: React.FC<{
                     </div>
                 ) : (
                     <div className={'flex justify-center items-center h-3/4'}>
-                        <Typography color={'gray'} variant={'h6'}>
+                        <Typography sx={{ color: 'gray' }} variant={'h6'}>
                             No chats found
                         </Typography>
                     </div>

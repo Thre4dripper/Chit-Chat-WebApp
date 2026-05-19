@@ -46,10 +46,10 @@ const ViewProfile: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolea
                     sx={{ width: 80, height: 80, bgcolor: 'grey.400', fontSize: '2rem' }}>
                     {profileInitial}
                 </Avatar>
-                <Typography color='white' variant='h6' className='mt-2 font-semibold'>
+                <Typography sx={{ color: 'white' }} variant='h6' className='mt-2 font-semibold'>
                     {profileUsername}
                 </Typography>
-                <Typography variant='subtitle2' color='white'>
+                <Typography variant='subtitle2' sx={{ color: 'white' }}>
                     {profileStatus || 'No status'}
                 </Typography>
             </div>

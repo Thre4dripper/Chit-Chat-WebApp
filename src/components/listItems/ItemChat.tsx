@@ -40,19 +40,19 @@ const ItemChat: React.FC<ItemChatProps> = ({
                         <div style={{ textOverflow: 'ellipsis' }} className={'text-white text-lg'}>
                             {primaryText}
                         </div>
-                        <Typography variant={'subtitle2'} color={'gray'}>
+                        <Typography variant={'subtitle2'} sx={{ color: 'gray' }}>
                             {time}
                         </Typography>
                     </div>
                     <div className={'flex flex-row justify-between'}>
                         {secondaryText ? (
-                            <Typography variant={'subtitle2'} color={'gray'}>
+                            <Typography variant={'subtitle2'} sx={{ color: 'gray' }}>
                                 {secondaryText.length >= 30
                                     ? secondaryText.slice(0, 20) + '...'
                                     : secondaryText}
                             </Typography>
                         ) : (
-                            <Typography variant={'subtitle2'} color={'gray'}>
+                            <Typography variant={'subtitle2'} sx={{ color: 'gray' }}>
                                 <PhotoIcon /> Photo/sticker
                             </Typography>
                         )}

@@ -32,7 +32,7 @@ const ButtonsFragment: React.FC<ButtonsFragmentProps> = ({
                     style={{
                         backgroundColor: '#615e93',
                     }}>
-                    <Typography component='h1' variant='h5' color={'white'}>
+                    <Typography component='h1' variant='h5' sx={{ color: 'white' }}>
                         {GlobalConstants.APP_NAME}
                     </Typography>
                 </div>
