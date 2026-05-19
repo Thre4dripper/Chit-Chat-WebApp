@@ -44,7 +44,7 @@ const ButtonsFragment: React.FC<ButtonsFragmentProps> = ({
                             alignItems: 'center',
                             gap: 2,
                         }}>
-                        <Avatar sx={{ bgcolor: 'secondary.main' }} className={'hidden'}>
+                        <Avatar sx={{ bgcolor: 'secondary.main', display: 'none' }}>
                             <img src={logo} alt='logo' className={'w-10'} />
                         </Avatar>
                         <Typography component='h1' variant='h5'>
