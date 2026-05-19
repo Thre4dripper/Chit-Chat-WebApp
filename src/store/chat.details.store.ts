@@ -46,6 +46,7 @@ type ChatDetailsActions = {
         onSuccess: (id: string | null) => void
     ) => void
     setCurrentChatId: (chatId: string, chatType: ChatType) => void
+    clearCurrentChat: () => void
     exitGroup: () => void
     favouriteChat: (
         userModel: UserModel,
@@ -96,6 +97,9 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
                     useChatDetailsStore.getState().setGroupChatDetails(chatId)
                     set({ chatDetails: null })
                 }
+            },
+            clearCurrentChat: () => {
+                set({ currentChatId: null, chatDetails: null, groupChatDetails: null })
             },
             sendTextMessage: (chatModel, text, from, to) => {
                 UserChatsRepository.sendTextMessage(chatModel, text, from, to, (id) => {

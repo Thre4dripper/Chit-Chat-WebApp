@@ -9,10 +9,12 @@ import { Button } from '@mui/material'
 import ViewProfile from '../../components/listItems/itemViewProfile.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import GroupChattingFragment from './GroupChattingFragment.tsx'
+import EmptyChatFragment from './EmptyChatFragment.tsx'
 
 const ChattingFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const currentChatId = useChatDetailsStore((state) => state.currentChatId)
+    const clearCurrentChat = useChatDetailsStore((state) => state.clearCurrentChat)
     const [imageOpen, setImageOpen] = useState(false)
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
@@ -35,6 +37,18 @@ const ChattingFragment: React.FC = () => {
             }
         }
     }, [imageSrc])
+
+    useEffect(() => {
+        const handleEscCloseChat = (e: KeyboardEvent) => {
+            if (e.key !== 'Escape') return
+            const hasOpenModal = Boolean(document.querySelector('[role="dialog"][aria-modal="true"]'))
+            if (hasOpenModal) return
+            clearCurrentChat()
+        }
+
+        window.addEventListener('keydown', handleEscCloseChat)
+        return () => window.removeEventListener('keydown', handleEscCloseChat)
+    }, [clearCurrentChat])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -63,7 +77,11 @@ const ChattingFragment: React.FC = () => {
         }
     }
 
-    if (!currentChatId?.includes('-')) {
+    if (currentChatId === null) {
+        return <EmptyChatFragment />
+    }
+
+    if (!currentChatId.includes('-')) {
         return <GroupChattingFragment />
     }
 
