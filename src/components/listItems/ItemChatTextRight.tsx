@@ -22,7 +22,7 @@ const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({ seen, message, ti
                     style={{ backgroundColor: rightMessageColor }}
                     className={
                         'shadow-slate-950/20 shadow-md ' +
-                        'max-w-[36rem] w-full ' +
+                        'max-w-xl w-full ' +
                         'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl'
                     }>
                     <MsgText message={message ?? ''} className={'text-white/80'} />
