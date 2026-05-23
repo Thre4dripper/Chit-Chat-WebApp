@@ -11,6 +11,7 @@ import StorageUtils from '../utils/StorageUtils.ts'
 import { StorageFolders } from '../constants/StorageFolders.ts'
 import { ErrorMessages } from '../constants/ErrorMessages.ts'
 import { SuccessMessages } from '../constants/SuccessMessages.ts'
+import UpdateUserStatus from '../firebase/profile/UpdateUserStatus.ts'
 
 class UserRepository {
     static getUserDetails(onSuccess: (isSuccess: boolean) => void) {
@@ -121,6 +122,26 @@ class UserRepository {
                 )
             }
         )
+    }
+
+    static setUserOnline(onSuccess: (success: boolean) => void) {
+        const firestore = getFirestore()
+        const username = useLocalStore.getState().username
+        if (!username) {
+            onSuccess(false)
+            return
+        }
+        UpdateUserStatus.setOnline(firestore, username, onSuccess)
+    }
+
+    static setUserLastSeen(onSuccess: (success: boolean) => void) {
+        const firestore = getFirestore()
+        const username = useLocalStore.getState().username
+        if (!username) {
+            onSuccess(false)
+            return
+        }
+        UpdateUserStatus.setLastSeen(firestore, username, onSuccess)
     }
 }
 
