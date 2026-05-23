@@ -4,6 +4,7 @@ import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import { v4 as uuidv4 } from 'uuid'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 import { doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
+import UserNotification from '../messaging/UserNotification.ts'
 
 class SendChat {
     static sendTextMessage(
@@ -40,7 +41,7 @@ class SendChat {
         setDoc(docRef, updatedChatModel, { merge: true })
             .then(() => {
                 if (!chatModel.mutedBy.includes(to)) {
-                    // TODO send notification to the user
+                    UserNotification.sendTextNotification(firestore, chatModel, from, to, text)
                 }
                 chatMessageId(id)
             })
@@ -82,7 +83,7 @@ class SendChat {
         setDoc(docRef, updatedChatModel, { merge: true })
             .then(() => {
                 if (!chatModel.mutedBy.includes(to)) {
-                    // TODO send notification to the user
+                    UserNotification.sendStickerNotification(firestore, chatModel, from, to)
                 }
                 chatMessageId(id)
             })
@@ -124,7 +125,7 @@ class SendChat {
         setDoc(docRef, updatedChatModel, { merge: true })
             .then(() => {
                 if (!chatModel.mutedBy.includes(to)) {
-                    // TODO send notification to the user
+                    UserNotification.sendImageNotification(firestore, chatModel, from, to, imageUrl)
                 }
                 chatMessageId(id)
             })

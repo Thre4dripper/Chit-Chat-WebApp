@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { FirestoreCollections } from '../../constants/FireStoreCollections.ts'
 import { doc, Firestore, setDoc, Timestamp } from 'firebase/firestore'
 import { GroupMessageType } from '../../enums/GroupMessageType.ts'
+import GroupNotification from '../messaging/GroupNotification.ts'
 
 class SendGroupChat {
     static sendTextMessage(
@@ -36,6 +37,7 @@ class SendGroupChat {
 
         setDoc(docRef, updatedChatModel, { merge: true })
             .then(() => {
+                GroupNotification.sendTextNotification(firestore, groupChatModel, from, text)
                 chatMessageId(id)
             })
             .catch((error) => {
@@ -76,6 +78,7 @@ class SendGroupChat {
                 // if (!chatModel.mutedBy.includes(to)) {
                 //     // TODO send notification to the user
                 // }
+                GroupNotification.sendStickerNotification(firestore, groupChatModel, from)
                 chatMessageId(id)
             })
             .catch((error) => {
@@ -113,6 +116,7 @@ class SendGroupChat {
 
         setDoc(docRef, updatedChatModel, { merge: true })
             .then(() => {
+                GroupNotification.sendImageNotification(firestore, groupChatModel, from, imageUrl)
                 chatMessageId(id)
             })
             .catch((error) => {
