@@ -3,11 +3,13 @@ import { IconButton, Menu, MenuItem } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import React, { useState } from 'react'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useGroupChatStore from '../../store/group.chat.store.ts'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 
 const GroupChatHeader: React.FC = () => {
-    const groupChat = useChatDetailsStore((state) => state.groupChatDetails)
-    const exitGroup = useChatDetailsStore((state) => state.exitGroup)
+    const groupChat = useGroupChatStore((state) => state.groupChatDetails)
+    const exitGroup = useGroupChatStore((state) => state.exitGroup)
+    const setIsViewingGroupProfile = useChatDetailsStore((state) => state.setIsViewingGroupProfile)
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null)
     const [exitConfirmOpen, setExitConfirmOpen] = useState(false)
 
@@ -40,6 +42,13 @@ const GroupChatHeader: React.FC = () => {
                         anchorEl={menuAnchor}
                         open={Boolean(menuAnchor)}
                         onClose={() => setMenuAnchor(null)}>
+                        <MenuItem
+                            onClick={() => {
+                                setMenuAnchor(null)
+                                setIsViewingGroupProfile(true)
+                            }}>
+                            View Group Details
+                        </MenuItem>
                         <MenuItem
                             onClick={() => {
                                 setMenuAnchor(null)
