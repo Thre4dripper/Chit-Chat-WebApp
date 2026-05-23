@@ -17,6 +17,7 @@ const ChatsFragment: React.FC<{
     setLogoutDialogState: React.Dispatch<SetStateAction<boolean>>
     setGroupDialogOpen: React.Dispatch<SetStateAction<boolean>>
 }> = ({ openProfile, setDialogState, setLogoutDialogState, setGroupDialogOpen }) => {
+    const [searchTerm, setSearchTerm] = React.useState('')
     const { user } = useHomeStore()
     const homeChats = useHomeChatsStore((state) => state.homeChats)
     const favouriteList = useHomeStore((state) => state.user)?.favourites
@@ -25,6 +26,23 @@ const ChatsFragment: React.FC<{
         return favouriteList && chat.userChat
             ? favouriteList.includes(chat.userChat?.chatId)
             : false
+    })
+
+    // Filter chats based on search term
+    const filteredChats = homeChats.filter((chat) => {
+        const searchLower = searchTerm.toLowerCase()
+        if (chat.userChat) {
+            // For DM chats, search by username
+            const username =
+                chat.userChat.dmChatUser1.username === user?.username
+                    ? chat.userChat.dmChatUser2.username
+                    : chat.userChat.dmChatUser1.username
+            return username.toLowerCase().includes(searchLower)
+        } else if (chat.groupChat) {
+            // For group chats, search by group name
+            return chat.groupChat.name.toLowerCase().includes(searchLower)
+        }
+        return false
     })
 
     return (
@@ -85,6 +103,8 @@ const ChatsFragment: React.FC<{
             <div>
                 <div className={'mx-4 flex'}>
                     <input
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         className={'flex-1 bg-slate-600 rounded-md h-10 px-4 py-2'}
                         style={{
                             backgroundColor: '#1e2a31',
@@ -147,7 +167,7 @@ const ChatsFragment: React.FC<{
                 )}
 
                 {/*Chats list*/}
-                {homeChats.length > 0 ? (
+                {filteredChats.length > 0 ? (
                     <div>
                         <div className={'flex flex-col m-4'}>
                             <Typography className={'select-none'} sx={{ color: 'white' }} variant={'h6'}>
@@ -155,7 +175,7 @@ const ChatsFragment: React.FC<{
                             </Typography>
                         </div>
                         <div className={'flex flex-col'}>
-                            {homeChats.map((chat) => {
+                            {filteredChats.map((chat) => {
                                 return (
                                     <Fragment key={chat.id}>
                                         {chat.userChat ? (
