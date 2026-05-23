@@ -17,6 +17,7 @@ import MarkFavourite from '../firebase/chats/MarkFavourite.ts'
 import userModel from '../models/user.model.ts'
 import StorageUtils from '../utils/StorageUtils.ts'
 import { StorageFolders } from '../constants/StorageFolders.ts'
+import MuteChat from '../firebase/chats/MuteChat.ts'
 
 class UserChatsRepository {
     static getAllUserChats() {
@@ -164,6 +165,16 @@ class UserChatsRepository {
                 onSuccess(isImagesDeleted)
             })
         })
+    }
+
+    static muteUnMuteChat(
+        chatModel: ChatModel,
+        username: string,
+        isMute: boolean,
+        onSuccess: (success: boolean) => void
+    ) {
+        const firestore = getFirestore(firebaseApp)
+        MuteChat.muteUnMuteChat(firestore, chatModel, username, isMute, onSuccess)
     }
 }
 
