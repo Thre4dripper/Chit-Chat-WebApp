@@ -17,12 +17,10 @@ const GroupChattingFragment: React.FC = () => {
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
 
-    const groupChatMessage = useChatDetailsStore((state) => state.groupChatDetails)
-    const sendGroupImageMessage = useChatDetailsStore((state) => state.sendGroupImageMessage)
+    const groupChatMessage = useGroupChatStore((state) => state.groupChatDetails)
+    const sendGroupImageMessage = useGroupChatStore((state) => state.sendGroupImageMessage)
     const username = useLocalStore((state) => state.username)
-
-    //  view profile
-    const [isViewing, setIsViewing] = useState<boolean>(false)
+    const isViewingGroupProfile = useChatDetailsStore((state) => state.isViewingGroupProfile)
 
     const clearSelectedImage = () => {
         if (imageSrc?.startsWith('blob:')) {

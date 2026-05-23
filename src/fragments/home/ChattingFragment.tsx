@@ -15,12 +15,10 @@ const ChattingFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const currentChatId = useChatDetailsStore((state) => state.currentChatId)
     const clearCurrentChat = useChatDetailsStore((state) => state.clearCurrentChat)
+    const isViewingProfile = useChatDetailsStore((state) => state.isViewingProfile)
     const [imageOpen, setImageOpen] = useState(false)
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
-
-    //  view profile
-    const [isViewing, setIsViewing] = useState<boolean>(false)
 
     const clearSelectedImage = () => {
         if (imageSrc?.startsWith('blob:')) {
@@ -86,57 +84,42 @@ const ChattingFragment: React.FC = () => {
     }
 
     return (
-        <div
-            className={
-                'bg-blue-50 h-screen rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl'
-            }>
-            <div className={'flex flex-col h-screen'}>
-                {isViewing ? (
-                    <ViewProfile setIsViewing={setIsViewing} />
+        <div className='bg-blue-50 h-screen rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl flex flex-row overflow-hidden'>
+            {/* Chat area */}
+            <div className='flex flex-col flex-1 min-w-0'>
+                <ChatHeader />
+
+                {imageOpen && (
+                    <button
+                        className='fixed inset-0 bg-black bg-opacity-40 z-40'
+                        onClick={() => setSelectedImage(true)}></button>
+                )}
+
+                {imageOpen ? (
+                    <div className='relative overflow-hidden w-full h-full bg-slate-400 flex justify-center items-center z-50'>
+                        <ImageSendFragment
+                            image={imageSrc}
+                            cropShape='rect'
+                            onConfirmed={clearSelectedImage}
+                        />
+                        <Button
+                            color='error'
+                            onClick={clearSelectedImage}
+                            sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10, width: '50px' }}
+                            endIcon={<CloseIcon sx={{ width: '100%', height: '100%' }} />}
+                        />
+                    </div>
                 ) : (
                     <>
-                        <ChatHeader setIsViewing={setIsViewing} />
-
-                        {imageOpen && (
-                            <button
-                                className='fixed inset-0 bg-black bg-opacity-40 z-40'
-                                onClick={() => setSelectedImage(true)}></button>
-                        )}
-
-                        {imageOpen ? (
-                            <div className='relative  overflow-hidden w-full h-full bg-slate-400 flex justify-center items-center z-50'>
-                                <ImageSendFragment
-                                    image={imageSrc}
-                                    cropShape='rect'
-                                    onConfirmed={clearSelectedImage}
-                                />
-                                <Button
-                                    color='error'
-                                    onClick={clearSelectedImage}
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 10,
-                                        right: 10,
-                                        zIndex: 10,
-                                        width: '50px',
-                                    }}
-                                    endIcon={
-                                        <CloseIcon sx={{ width: '100%', height: '100%' }} />
-                                    }></Button>
-                            </div>
-                        ) : (
-                            <>
-                                <ChatBox setImageOpen={setImageOpen} setImageSrc={setImageSrc} />
-
-                                <ChatInput
-                                    handlePaste={handlePaste}
-                                    fileInputRef={fileInputRef}
-                                    handleFileChange={handleFileChange}
-                                />
-                            </>
-                        )}
+                        <ChatBox setImageOpen={setImageOpen} setImageSrc={setImageSrc} />
+                        <ChatInput
+                            handlePaste={handlePaste}
+                            fileInputRef={fileInputRef}
+                            handleFileChange={handleFileChange}
+                        />
                     </>
                 )}
+
                 <ConfirmDialog
                     open={selectedImage}
                     handleClose={() => setSelectedImage(false)}
@@ -148,6 +131,13 @@ const ChattingFragment: React.FC = () => {
                     }}
                 />
             </div>
+
+            {/* Profile panel — slides in on the right */}
+            {isViewingProfile && (
+                <div className='w-80 shrink-0 border-l border-slate-200 h-full overflow-y-auto'>
+                    <ViewProfile />
+                </div>
+            )}
         </div>
     )
 }

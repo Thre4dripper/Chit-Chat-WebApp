@@ -3,22 +3,23 @@ import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import ChatModel from '../models/user.chat.model'
 import UserChatsRepository from '../repositories/user.chats.repository'
-import GroupChatsRepository from '../repositories/group.chats.repository.ts'
-import GroupChatModel from '../models/group.chat.model'
 import UserModel from '../models/user.model.ts'
-import useLocalStore from './local.store.ts'
 import { ChatType } from '../enums/ChatType.ts'
+import useGroupChatStore from './group.chat.store.ts'
+
+// Mirrors ChatViewModel in Android
 
 type ChatDetailsState = {
     currentChatId: string | null
     chatDetails: ChatModel | null
-    groupChatDetails: GroupChatModel | null
+    // Panel visibility — mirrors Android navigation stack (profile activities)
+    isViewingProfile: boolean
+    isViewingGroupProfile: boolean
 }
 
 type ChatDetailsActions = {
     updateSeen: (chat: ChatModel | null) => void
     setChatDetails: (chatId: string) => void
-    setGroupChatDetails: (chatId: string) => void
     sendTextMessage: (chatModel: ChatModel, text: string, from: string, to: string) => void
     sendStickerMessage: (
         chatModel: ChatModel,
@@ -33,28 +34,20 @@ type ChatDetailsActions = {
         to: string,
         onSuccess?: (id: string | null) => void
     ) => void
-    sendGroupTextMessage: (groupChatModel: GroupChatModel, text: string, from: string) => void
-    sendGroupStickerMessage: (
-        groupChatModel: GroupChatModel,
-        stickerIndex: number,
-        from: string
-    ) => void
-    sendGroupImageMessage: (
-        groupChatModel: GroupChatModel,
-        image: File,
-        from: string,
-        onSuccess: (id: string | null) => void
-    ) => void
     setCurrentChatId: (chatId: string, chatType: ChatType) => void
     clearCurrentChat: () => void
-    exitGroup: () => void
+    // Mirrors ChatViewModel.favouriteChat
     favouriteChat: (
         userModel: UserModel,
         favourite: string,
         onSuccess: (newModel: UserModel | null) => void
     ) => void
+    // Mirrors ChatViewModel.clearChat / deletedChat
     clearChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
     deleteChat: (chatModel: ChatModel, success: (check: boolean) => void) => void
+    // Profile panel visibility (replaces prop drilling)
+    setIsViewingProfile: (value: boolean) => void
+    setIsViewingGroupProfile: (value: boolean) => void
 }
 
 const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
@@ -62,12 +55,15 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
         immer((set) => ({
             currentChatId: null,
             chatDetails: null,
-            groupChatDetails: null,
+            isViewingProfile: false,
+            isViewingGroupProfile: false,
+
             updateSeen: (chat) => {
                 if (chat) {
                     UserChatsRepository.updateSeen(chat)
                 }
             },
+
             setChatDetails: (chatId) => {
                 UserChatsRepository.getLiveUserChatById(chatId, (chat) => {
                     set((state) => {
@@ -78,79 +74,65 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
                     })
                 })
             },
-            setGroupChatDetails: (chatId) => {
-                GroupChatsRepository.getLiveGroupChatById(chatId, (group) => {
-                    set((state) => {
-                        if (group && state.currentChatId === chatId) {
-                            GroupChatsRepository.updateGroupSeen(group)
-                            state.groupChatDetails = group
-                        }
-                    })
-                })
-            },
+
             setCurrentChatId: (chatId, chatType) => {
-                set({ currentChatId: chatId })
+                set({ currentChatId: chatId, isViewingProfile: false, isViewingGroupProfile: false })
                 if (chatType === ChatType.USER) {
                     useChatDetailsStore.getState().setChatDetails(chatId)
-                    set({ groupChatDetails: null })
+                    useGroupChatStore.getState().clearGroupChat()
                 } else {
-                    useChatDetailsStore.getState().setGroupChatDetails(chatId)
+                    useGroupChatStore.getState().setGroupChatDetails(chatId)
                     set({ chatDetails: null })
                 }
             },
+
             clearCurrentChat: () => {
-                set({ currentChatId: null, chatDetails: null, groupChatDetails: null })
+                set({
+                    currentChatId: null,
+                    chatDetails: null,
+                    isViewingProfile: false,
+                    isViewingGroupProfile: false,
+                })
+                useGroupChatStore.getState().clearGroupChat()
             },
+
             sendTextMessage: (chatModel, text, from, to) => {
                 UserChatsRepository.sendTextMessage(chatModel, text, from, to, (id) => {
                     console.log('message sent', id)
                 })
             },
+
             sendStickerMessage: (chatModel, stickerIndex, from, to) => {
                 UserChatsRepository.sendSticker(chatModel, stickerIndex, from, to, (id) => {
                     console.log('sticker sent', id)
                 })
             },
+
             sendImageMessage: (chatModel, image, from, to, onSuccess) => {
                 UserChatsRepository.sendImage(chatModel, image, from, to, (id) => {
                     console.log('message sent', id)
                     onSuccess?.(id)
                 })
             },
-            sendGroupTextMessage: (groupChatModel, text, from) => {
-                GroupChatsRepository.sendGroupTextMessage(groupChatModel, text, from, (id) => {
-                    console.log('group text sent', id)
-                })
-            },
-            sendGroupStickerMessage: (groupChatModel, stickerIndex, from) => {
-                GroupChatsRepository.sendGroupSticker(groupChatModel, stickerIndex, from, (id) => {
-                    console.log('group sticker sent', id)
-                })
-            },
-            sendGroupImageMessage: (groupChatModel, image, from, onSuccess) => {
-                GroupChatsRepository.sendGroupImage(groupChatModel, image, from, (id) => {
-                    console.log('group image sent', id)
-                    onSuccess(id)
-                })
-            },
-            exitGroup: () => {
-                const groupChatModel = useChatDetailsStore.getState().groupChatDetails
-                const username = useLocalStore.getState().username
-                if (!groupChatModel || !username) return
-                GroupChatsRepository.exitGroup(groupChatModel, username, (success) => {
-                    if (success) {
-                        set({ groupChatDetails: null, currentChatId: null })
-                    }
-                })
-            },
+
             favouriteChat: (userModel, favourite, onSuccess) => {
                 UserChatsRepository.favouriteChat(userModel, favourite, onSuccess)
             },
+
             clearChat: (chatModel, onSuccess) => {
                 UserChatsRepository.clearChat(chatModel, onSuccess)
             },
+
             deleteChat: (chatModel, onSuccess) => {
                 UserChatsRepository.deleteChat(chatModel, onSuccess)
+            },
+
+            setIsViewingProfile: (value) => {
+                set({ isViewingProfile: value })
+            },
+
+            setIsViewingGroupProfile: (value) => {
+                set({ isViewingGroupProfile: value })
             },
         }))
     )
