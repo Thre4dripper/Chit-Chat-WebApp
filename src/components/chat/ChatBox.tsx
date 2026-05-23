@@ -205,6 +205,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                         {message.type === ChatMessageType.TypeSticker && (
                             <StickerMessage message={message} />
                         )}
+                            {/*Deleted Message*/}
+                            {message.type === ChatMessageType.TypeDeletedMessage && (
+                                <div className='w-full flex justify-center py-2'>
+                                    <span className='text-sm text-gray-400 italic'>This message was deleted</span>
+                                </div>
+                            )}
                     </div>
                 ))}
             {dragging && (
