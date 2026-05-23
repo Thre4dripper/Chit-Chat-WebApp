@@ -11,9 +11,10 @@ import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
 import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
 import ChatMessageModel from '../../models/chat.message.model.ts'
-import { Fab } from '@mui/material'
+import { Fab, Popover, Avatar, IconButton } from '@mui/material'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import CloseIcon from '@mui/icons-material/Close'
 import { enqueueSnackbar } from 'notistack'
 
 interface ChatBoxProps {
@@ -29,6 +30,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
     const observerTarget = useRef(null)
 
     const [dragging, setDragging] = useState<boolean>(false)
+    const [seenByAnchor, setSeenByAnchor] = useState<HTMLElement | null>(null)
+    const [seenByDMUsers, setSeenByDMUsers] = useState<{ username: string; profileImage: string }[]>([])
 
     const handleDragging = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
@@ -96,6 +99,20 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                     : currentChat.dmChatUser2.profileImage
             )
     }
+
+    const getSeenByDMUsers = (message: ChatMessageModel) => {
+        return message.seenBy
+            .filter((item) => item !== message.from)
+            .map((item) => ({
+                username: item,
+                profileImage:
+                    currentChat.dmChatUser1.username === item
+                        ? currentChat.dmChatUser1.profileImage
+                        : currentChat.dmChatUser2.profileImage,
+            }))
+    }
+
+    const dmContentTypes = [ChatMessageType.TypeText, ChatMessageType.TypeImage, ChatMessageType.TypeSticker]
     const TextMessage = ({ message }: { message: ChatMessageModel }) => {
         if (message.from !== username) {
             return (
@@ -115,6 +132,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                     seen={getSeenBy(message)}
                     message={message.text as string}
                     time={message.time}
+                    onSeenByClick={(anchor) => {
+                        setSeenByAnchor(anchor)
+                        setSeenByDMUsers(getSeenByDMUsers(message))
+                    }}
                 />
             )
         }
@@ -142,6 +163,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                     seen={getSeenBy(message)}
                     image={message.image}
                     time={message.time}
+                    onSeenByClick={(anchor) => {
+                        setSeenByAnchor(anchor)
+                        setSeenByDMUsers(getSeenByDMUsers(message))
+                    }}
                 />
             )
         }
@@ -169,6 +194,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                     seen={getSeenBy(message)}
                     sticker={message.sticker}
                     time={message.time}
+                    onSeenByClick={(anchor) => {
+                        setSeenByAnchor(anchor)
+                        setSeenByDMUsers(getSeenByDMUsers(message))
+                    }}
                 />
             )
         }
@@ -184,11 +213,18 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full h-full'
             }>
             {!dragging &&
-                currentChat.chatMessages.map((message, index) => (
+                currentChat.chatMessages.map((message, index) => {
+                    const isOwnContent = message.from === username && dmContentTypes.includes(message.type)
+                    return (
                     <div
-                        className={'flex gap-2'}
+                        className={'flex gap-2' + (isOwnContent ? ' cursor-context-menu' : '')}
                         key={message.id}
-                        ref={index === 0 ? observerTarget : null}>
+                        ref={index === 0 ? observerTarget : null}
+                        onContextMenu={isOwnContent ? (e) => {
+                            e.preventDefault()
+                            setSeenByAnchor(e.currentTarget)
+                            setSeenByDMUsers(getSeenByDMUsers(message))
+                        } : undefined}>
                         {/*First Message*/}
                         {message.type === ChatMessageType.TypeFirstMessage && (
                             <ItemChatHelloMessage />
@@ -212,7 +248,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                                 </div>
                             )}
                     </div>
-                ))}
+                    )
+                })
+            }
             {dragging && (
                 <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[#075e54]/90 z-50'>
                     <div className='flex flex-col items-center'>
@@ -227,6 +265,32 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                     </div>
                 </div>
             )}
+            <Popover
+                open={Boolean(seenByAnchor)}
+                anchorEl={seenByAnchor}
+                onClose={() => setSeenByAnchor(null)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
+                <div className='p-3 min-w-45'>
+                    <div className='flex items-center justify-between mb-2'>
+                        <span className='text-sm font-semibold text-gray-700'>Seen By</span>
+                        <IconButton size='small' onClick={() => setSeenByAnchor(null)}>
+                            <CloseIcon fontSize='small' />
+                        </IconButton>
+                    </div>
+                    {seenByDMUsers.length === 0 ? (
+                        <p className='text-sm text-gray-400 px-1 pb-1'>No one has seen this</p>
+                    ) : (
+                        seenByDMUsers.map((u) => (
+                            <div key={u.username} className='flex items-center gap-2 py-1 px-1'>
+                                <Avatar src={u.profileImage} alt={u.username} slotProps={{ img: { referrerPolicy: 'no-referrer' } }} sx={{ width: 28, height: 28 }} />
+                                <span className='text-sm text-gray-700'>{u.username}</span>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </Popover>
             <Fab
                 sx={{
                     'position': 'fixed',
