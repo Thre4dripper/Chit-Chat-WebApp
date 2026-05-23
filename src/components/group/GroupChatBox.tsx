@@ -209,13 +209,18 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                         <TextMessage message={message} />
                     )}
                     {/*Image Message*/}
-                    {/* eslint-disable-next-line react/prop-types */}
                     {message.type === GroupMessageType.TypeImage && (
                         <ImageMessage message={message} />
                     )}
                     {/*Sticker Message*/}
                     {message.type === GroupMessageType.TypeSticker && (
                         <StickerMessage message={message} />
+                    )}
+                    {/*Deleted Message*/}
+                    {message.type === GroupMessageType.TypeDeletedMessage && (
+                        <div className='w-full flex justify-center py-2'>
+                            <span className='text-sm text-gray-400 italic'>This message was deleted</span>
+                        </div>
                     )}
                 </div>
             ))}
