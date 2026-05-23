@@ -7,9 +7,10 @@ interface ItemChatTextRightProps {
     seen: string[]
     message: string
     time: Timestamp
+    onSeenByClick: (anchor: HTMLElement) => void
 }
 
-const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({ seen, message, time }) => {
+const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({ seen, message, time, onSeenByClick }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -31,7 +32,16 @@ const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({ seen, message, ti
                     <div className={'flex flex-row-reverse'}>
                         {seen.map((item) => {
                             return (
-                                <div key={item} className={'-ml-6'}>
+                                <div
+                                    key={item}
+                                    className='-ml-6 cursor-pointer'
+                                    role='button'
+                                    tabIndex={0}
+                                    onClick={(e) => onSeenByClick(e.currentTarget)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ')
+                                            onSeenByClick(e.currentTarget)
+                                    }}>
                                     <CircularImage image={item} size={20} alt={'Sender Image'} />
                                 </div>
                             )

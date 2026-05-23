@@ -7,9 +7,10 @@ interface ItemChatStickerRightProps {
     seen: string[]
     sticker: number
     time: Timestamp
+    onSeenByClick: (anchor: HTMLElement) => void
 }
 
-const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, sticker, time }) => {
+const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, sticker, time, onSeenByClick }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -19,7 +20,7 @@ const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, stick
             <div>
                 <div
                     className={
-                        'max-w-[36rem] w-full ' +
+                        'max-w-xl w-full ' +
                         'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl flex justify-end'
                     }>
                     <MsgSticker stickerData={stickerValue(sticker) ?? ''} />
@@ -28,7 +29,16 @@ const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, stick
                     <div className={'flex flex-row-reverse'}>
                         {seen.map((item) => {
                             return (
-                                <div key={item} className={'-ml-6'}>
+                                <div
+                                    key={item}
+                                    className='-ml-6 cursor-pointer'
+                                    role='button'
+                                    tabIndex={0}
+                                    onClick={(e) => onSeenByClick(e.currentTarget)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ')
+                                            onSeenByClick(e.currentTarget)
+                                    }}>
                                     <CircularImage image={item} size={20} alt={'Sender Image'} />
                                 </div>
                             )

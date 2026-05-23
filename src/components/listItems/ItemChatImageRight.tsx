@@ -7,9 +7,10 @@ interface ItemChatImageRightProps {
     image: string
     time: Timestamp
     seen: string[]
+    onSeenByClick: (anchor: HTMLElement) => void
 }
 
-const ItemChatImageRight: React.FC<ItemChatImageRightProps> = ({ seen, image, time }) => {
+const ItemChatImageRight: React.FC<ItemChatImageRightProps> = ({ seen, image, time, onSeenByClick }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -22,7 +23,7 @@ const ItemChatImageRight: React.FC<ItemChatImageRightProps> = ({ seen, image, ti
                     style={{ backgroundColor: rightMessageColor }}
                     className={
                         'shadow-slate-950/20 shadow-md ' +
-                        'min-w-[16rem] max-w-[36rem] w-full ' +
+                        'min-w-[16rem] max-w-xl w-full ' +
                         'rounded-tl-3xl rounded-bl-3xl rounded-br-lg rounded-tr-3xl overflow-hidden'
                     }>
                     <MsgImage image={image ?? ''} />
@@ -31,7 +32,16 @@ const ItemChatImageRight: React.FC<ItemChatImageRightProps> = ({ seen, image, ti
                     <div className={'flex flex-row-reverse'}>
                         {seen.map((item) => {
                             return (
-                                <div key={item} className={'-ml-6'}>
+                                <div
+                                    key={item}
+                                    className='-ml-6 cursor-pointer'
+                                    role='button'
+                                    tabIndex={0}
+                                    onClick={(e) => onSeenByClick(e.currentTarget)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ')
+                                            onSeenByClick(e.currentTarget)
+                                    }}>
                                     <CircularImage image={item} size={20} alt={'Sender Image'} />
                                 </div>
                             )

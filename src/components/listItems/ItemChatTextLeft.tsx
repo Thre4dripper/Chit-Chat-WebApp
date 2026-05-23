@@ -31,7 +31,7 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, messa
                     style={{ backgroundColor: leftMessageColor }}
                     className={
                         'shadow-slate-950/20 shadow-md ' +
-                        'min-w-[16rem] max-w-[36rem] w-full ' +
+                        'min-w-[16rem] max-w-xl w-full ' +
                         'rounded-tl-3xl rounded-bl-lg rounded-br-3xl rounded-tr-3xl overflow-hidden'
                     }>
                     <MsgText message={message ?? ''} className={'text-black/80'} />
