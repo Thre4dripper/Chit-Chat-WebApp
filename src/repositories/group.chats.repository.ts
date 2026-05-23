@@ -13,6 +13,7 @@ import useHomeChatsStore from '../store/home.chats.store.ts'
 import { ChatType } from '../enums/ChatType.ts'
 import homeChatModel from '../models/home.chat.model.ts'
 import { v4 as uuid } from 'uuid'
+import MuteGroup from '../firebase/groups/MuteGroup.ts'
 
 class GroupChatsRepository {
     static getAllGroupChats() {
@@ -98,6 +99,16 @@ class GroupChatsRepository {
     ) {
         const firestore = getFirestore(firebaseApp)
         ExitGroup.exitGroup(firestore, groupChatModel, username, onSuccess)
+    }
+
+    static muteUnMuteGroupChat(
+        groupChat: GroupChatModel,
+        username: string,
+        isMute: boolean,
+        onSuccess: (success: boolean) => void
+    ) {
+        const firestore = getFirestore(firebaseApp)
+        MuteGroup.muteUnMuteGroupChat(firestore, groupChat, username, isMute, onSuccess)
     }
 }
 
