@@ -2,6 +2,7 @@ import { Divider, Typography } from '@mui/material'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useGroupChatStore from '../../store/group.chat.store.ts'
 import PhotoIcon from '@mui/icons-material/Photo'
 import { ChatType } from '../../enums/ChatType.ts'
 
@@ -24,7 +25,7 @@ const ItemGroup: React.FC<ItemGroupProps> = ({
 }) => {
     const displayName =
         primaryText && primaryText.length > 20 ? primaryText.substring(0, 24) + '...' : primaryText
-    const currentChat = useChatDetailsStore((state) => state.groupChatDetails)
+    const currentChat = useGroupChatStore((state) => state.groupChatDetails)
     const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
 
     return (

@@ -2,14 +2,16 @@ import { Timestamp } from '@firebase/firestore'
 import MsgText from '../chatMessages/common/MsgText.tsx'
 import React from 'react'
 import CircularImage from '../CircularImage.tsx'
+import { IconButton } from '@mui/material'
 
 interface ItemChatTextLeftProps {
     profileImage: string
     message: string
     time: Timestamp
+    onAvatarClick?: () => void
 }
 
-const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, message, time }) => {
+const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, message, time, onAvatarClick }) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -17,9 +19,13 @@ const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, messa
     const leftMessageColor = '#DAE2FF'
     return (
         <>
-            <div>
+            {onAvatarClick ? (
+                <IconButton onClick={onAvatarClick} sx={{ padding: 0 }}>
+                    <CircularImage image={profileImage} size={28} alt={'Profile image'} />
+                </IconButton>
+            ) : (
                 <CircularImage image={profileImage} size={28} alt={'Profile image'} />
-            </div>
+            )}
             <div>
                 <div
                     style={{ backgroundColor: leftMessageColor }}

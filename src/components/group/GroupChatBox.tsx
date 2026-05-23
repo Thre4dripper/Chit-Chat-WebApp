@@ -1,6 +1,9 @@
 import React, { SetStateAction, useEffect, useRef, useState } from 'react'
+import useGroupChatStore from '../../store/group.chat.store.ts'
+import useGroupProfileStore from '../../store/group.profile.store.ts'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
+import { ChatType } from '../../enums/ChatType.ts'
 import ItemChatTextLeft from '../listItems/ItemChatTextLeft.tsx'
 import ItemChatImageLeft from '../listItems/ItemChatImageLeft.tsx'
 import ItemChatStickerLeft from '../listItems/ItemChatStickerLeft.tsx'
@@ -21,8 +24,10 @@ interface GroupChatBoxProps {
 }
 
 const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
-    const currentGroupChat = useChatDetailsStore((state) => state.groupChatDetails)
+    const currentGroupChat = useGroupChatStore((state) => state.groupChatDetails)
     const username = useLocalStore((state) => state.username)
+    const findGroupMember = useGroupProfileStore((state) => state.findGroupMember)
+    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
 
     const [showGotoBottomButton, setShowGotoBottomButton] = useState(false)
     const observerTarget = useRef(null)
@@ -84,9 +89,17 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
     if (currentGroupChat === null) {
         return <EmptyChatFragment />
     }
+
     const sendBy = (message: GroupMessageModel) => {
         const sender = currentGroupChat.members.find((member) => member.username === message.from)
         return sender?.profileImage
+    }
+
+    const handleAvatarClick = (memberUsername: string) => {
+        findGroupMember(memberUsername, (chatId) => {
+            if (!chatId) return
+            setCurrentChatId(chatId, ChatType.USER)
+        })
     }
 
     const getSeenBy = (message: GroupMessageModel) => {
@@ -105,6 +118,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                     profileImage={sendBy(message) ?? ''}
                     message={message.text as string}
                     time={message.time}
+                    onAvatarClick={() => handleAvatarClick(message.from)}
                 />
             )
         } else {
@@ -128,6 +142,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                     profileImage={sendBy(message) ?? ''}
                     image={message.image}
                     time={message.time}
+                    onAvatarClick={() => handleAvatarClick(message.from)}
                 />
             )
         } else {
@@ -151,6 +166,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                     profileImage={sendBy(message) ?? ''}
                     sticker={message.sticker}
                     time={message.time}
+                    onAvatarClick={() => handleAvatarClick(message.from)}
                 />
             )
         } else {

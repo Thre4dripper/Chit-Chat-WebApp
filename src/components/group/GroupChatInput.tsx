@@ -5,7 +5,7 @@ import ImageIcon from '@mui/icons-material/Image'
 import SendIcon from '@mui/icons-material/Send'
 import useLocalStore from '../../store/local.store.ts'
 import VirtualizedStickerGrid from '../listItems/ItemSticker.tsx'
-import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useGroupChatStore from '../../store/group.chat.store.ts'
 
 interface ChatInputProps {
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -22,9 +22,9 @@ const GroupChatInput: React.FC<ChatInputProps> = ({
     const [stickerOpen, setStickerOpen] = useState(false)
 
     const DrawerRef = useRef<HTMLButtonElement | null>(null)
-    const groupChatMessage = useChatDetailsStore((state) => state.groupChatDetails)
-    const sendGroupTextMessage = useChatDetailsStore((state) => state.sendGroupTextMessage)
-    const sendGroupStickerMessage = useChatDetailsStore((state) => state.sendGroupStickerMessage)
+    const groupChatMessage = useGroupChatStore((state) => state.groupChatDetails)
+    const sendGroupTextMessage = useGroupChatStore((state) => state.sendGroupTextMessage)
+    const sendGroupStickerMessage = useGroupChatStore((state) => state.sendGroupStickerMessage)
     const username = useLocalStore((state) => state.username)
 
     const handleSendMessage = () => {
