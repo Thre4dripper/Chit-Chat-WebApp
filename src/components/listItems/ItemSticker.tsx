@@ -54,13 +54,13 @@ const StickerItem = ({
                 onClick={handleSendSticker}>
                 {showLottie ? (
                     <Lottie
-                        className='max-h-[80px] max-w-[80px]'
+                        className='max-h-20 max-w-20'
                         animationData={asset}
                         loop={false}
                         autoPlay
                     />
                 ) : (
-                    <div className='w-[80px] h-[80px] rounded-xl bg-gradient-to-br from-red-300 to-blue-300 animate-pulse' />
+                    <div className='w-20 h-20 rounded-xl bg-linear-to-br from-red-300 to-blue-300 animate-pulse' />
                 )}
             </ButtonBase>
         </div>

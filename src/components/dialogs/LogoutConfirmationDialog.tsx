@@ -13,6 +13,7 @@ import useAuthStore from '../../store/auth.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
 import logo from '../../assets/logo.png'
+import UserRepository from '../../repositories/user.repository.ts'
 
 interface LogoutConfirmationProps {
     open: boolean
@@ -23,6 +24,13 @@ const LogoutConfirmation: React.FC<LogoutConfirmationProps> = ({ open, handleClo
     const { logout } = useAuthStore()
     const setUsername = useLocalStore((state) => state.setUsername)
     const logoutUser = async () => {
+        // Set user status to "LastSeen" before logging out
+        UserRepository.setUserLastSeen(() => {
+            performLogout()
+        })
+    }
+
+    const performLogout = async () => {
         await logout()
         setUsername(null)
         useHomeChatsStore.setState({ homeChats: [] })

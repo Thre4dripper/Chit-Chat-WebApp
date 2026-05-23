@@ -175,7 +175,7 @@ const ImageSendFragment: React.FC<ImageSendFragmentProps> = ({
                             ref={imgRef}
                             src={image}
                             alt='To Crop'
-                            className='w-full h-[400px] object-contain mx-auto'
+                            className='w-full h-100 object-contain mx-auto'
                             onLoad={handleImageLoad}
                         />
                     </ReactCrop>

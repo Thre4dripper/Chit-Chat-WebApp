@@ -166,7 +166,7 @@ const ChatHeader: React.FC = () => {
         },
         {
             id: 2,
-            content: 'Favorite',
+            content: user?.favourites?.includes(currentChatId ?? '') ? 'Unfavourite' : 'Favourite',
             action: favoriteAction,
         },
         {
@@ -189,7 +189,7 @@ const ChatHeader: React.FC = () => {
                 }>
                 <IconButton
                     onClick={() => {
-                        setIsViewing(true)
+                        setIsViewingProfile(true)
                     }}>
                     <CircularImage
                         image={

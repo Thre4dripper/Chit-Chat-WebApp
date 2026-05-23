@@ -1,5 +1,5 @@
 import React, { SetStateAction } from 'react'
-import { Box, Paper, Typography, Avatar, IconButton, Button } from '@mui/material'
+import { Box, Paper, Typography, Avatar, IconButton, Button, CircularProgress } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import Person2Icon from '@mui/icons-material/Person2'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
@@ -14,6 +14,7 @@ import StorageUtils from '../../utils/StorageUtils.ts'
 interface UserProfileFragmentProps {
     openProfile: React.Dispatch<SetStateAction<boolean>>
     setBrowsedImage: React.Dispatch<React.SetStateAction<string | null>>
+    isUploadingPicture: boolean
 }
 
 export interface DialogState {
@@ -25,6 +26,7 @@ export interface DialogState {
 const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
     openProfile,
     setBrowsedImage,
+    isUploadingPicture,
 }) => {
     const user = useHomeStore((state) => state.user)
 
@@ -99,12 +101,19 @@ const UserProfileFragment: React.FC<UserProfileFragmentProps> = ({
                     backgroundColor: 'transparent',
                     padding: '30px 20px',
                 }}>
-                <Avatar
-                    src={user.profileImage}
-                    alt={user.name}
-                    sx={{ width: 200, height: 200, fontSize: 100 }}
-                    slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
-                />
+                <div className='relative'>
+                    <Avatar
+                        src={user.profileImage}
+                        alt={user.name}
+                        sx={{ width: 200, height: 200, fontSize: 100 }}
+                        slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+                    />
+                    {isUploadingPicture && (
+                        <div className='absolute inset-0 flex items-center justify-center bg-black/40 rounded-full'>
+                            <CircularProgress size={48} sx={{ color: 'white' }} />
+                        </div>
+                    )}
+                </div>
                 <Button
                     variant={'text'}
                     onClick={browseProfilePic}

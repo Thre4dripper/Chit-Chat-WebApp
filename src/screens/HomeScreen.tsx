@@ -100,14 +100,23 @@ const HomeScreen: React.FC = () => {
                                 aspect={1}
                                 outputSize={{ width: 300, height: 300 }}
                                 onCancel={() => setBrowseImage(null)}
-                                onConfirmed={() => {
+                                onConfirmed={(file) => {
                                     setBrowseImage(null)
+                                    setIsUploadingPicture(true)
+                                    updateProfilePicture(file, (message) => {
+                                        enqueueSnackbar(message, {
+                                            variant: 'success',
+                                            autoHideDuration: 3000,
+                                        })
+                                        setIsUploadingPicture(false)
+                                    })
                                 }}
                             />
                         ) : (
                             <UserProfileFragment
                                 openProfile={setProfileOpen}
                                 setBrowsedImage={setBrowseImage}
+                                isUploadingPicture={isUploadingPicture}
                             />
                         )}
                     </>

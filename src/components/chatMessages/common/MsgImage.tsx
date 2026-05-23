@@ -13,7 +13,7 @@ const MsgImage: React.FC<LeftImageProps> = ({ image }) => {
             <ButtonBase
                 className='flex items-center justify-center'
                 onClick={() => setOpenView(true)}>
-                <div className='m-1.5 w-[250px] h-[250px] overflow-hidden rounded-3xl'>
+                <div className='m-1.5 w-62.5 h-62.5 overflow-hidden rounded-3xl'>
                     <img
                         src={image}
                         className='w-full h-full object-cover'

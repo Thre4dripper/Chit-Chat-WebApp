@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { Paper } from '@mui/material'
 import Button from '@mui/material/Button'
 import { centerCrop, convertToPixelCrop, Crop, makeAspectCrop, ReactCrop } from 'react-image-crop'
@@ -6,10 +6,6 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Typography from '@mui/material/Typography'
 import { CropRotate, Save } from '@mui/icons-material'
 import CustomSmoothSlider from '../../components/CustomSmoothSlider.tsx'
-import StorageUtils from '../../utils/StorageUtils.ts'
-import useUserDetailsStore from '../../store/user.details.store.ts'
-import { enqueueSnackbar } from 'notistack'
-import { SuccessMessages } from '../../constants/SuccessMessages.ts'
 
 interface OutputSize {
     width: number
@@ -22,7 +18,7 @@ interface ImageCropFragmentProps {
     outputSize: OutputSize
     image: string | null
     onCancel: () => void
-    onConfirmed: (image: File) => void
+    onConfirmed: (file: File) => void
 }
 
 const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
@@ -107,8 +103,6 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
         )
     }
 
-    const [loading, setLoading] = useState(false)
-    const updateProfilePicture = useUserDetailsStore((state) => state.updateProfilePicture)
     const generateImage = (canvas: HTMLCanvasElement) => {
         const maxWidth = outputSize.width
         const maxHeight = outputSize.height
@@ -149,29 +143,10 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                         lastModified: Date.now(),
                     })
 
-                    const reader = new FileReader()
-                    reader.readAsDataURL(file)
-                    reader.onloadend = () => {
-                        const base64data = reader.result
-                        if (typeof base64data === 'string') {
-                            setLoading(true)
-                            updateProfilePicture(file, (message) => {
-                                enqueueSnackbar(message, {
-                                    variant: 'success',
-                                    autoHideDuration: 3000,
-                                })
-                                if (
-                                    message === SuccessMessages.PROFILE_PICTURE_UPDATED_SUCCESSFULLY
-                                ) {
-                                    onConfirmed(StorageUtils.base64ToFile(base64data, 'profilePic'))
-                                }
-                                setLoading(false)
-                            })
-                        }
-                    }
+                    onConfirmed(file)
                 },
                 'image/jpeg',
-                0.8 // Adjust compression quality if needed
+                0.8
             )
         }
     }
@@ -258,8 +233,6 @@ const ImageCropFragment: React.FC<ImageCropFragmentProps> = ({
                             onClick={() => {
                                 generateImage(canvasRef.current!)
                             }}
-                            loading={loading}
-                            loadingPosition={'start'}
                             startIcon={<Save />}>
                             Confirm
                         </Button>

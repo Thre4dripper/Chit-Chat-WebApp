@@ -56,18 +56,23 @@ class ExitGroup {
             // If group has no members left, delete the group (mirrors Android GroupsRepository.exitGroup)
             if (newMembers.length === 0) {
                 await deleteDoc(groupRef)
-                const storage = getStorage()
-                const deleteFolder = async (path: string) => {
-                    const folderRef = ref(storage, path)
-                    const result = await listAll(folderRef)
-                    await Promise.all(result.items.map((item) => deleteObject(item)))
-                }
-                await deleteFolder(`${StorageFolders.GROUP_IMAGES_FOLDER}/${groupChatModel.id}/`)
-                const hasImages = groupChatModel.messages.some(
-                    (m) => m.type === GroupMessageType.TypeImage
-                )
-                if (hasImages) {
-                    await deleteFolder(`${StorageFolders.CHAT_IMAGES_FOLDER}/${groupChatModel.id}/`)
+                // Best-effort storage cleanup — don't block success if paths don't exist
+                try {
+                    const storage = getStorage()
+                    const deleteFolder = async (path: string) => {
+                        const folderRef = ref(storage, path)
+                        const result = await listAll(folderRef)
+                        await Promise.all(result.items.map((item) => deleteObject(item)))
+                    }
+                    await deleteFolder(`${StorageFolders.GROUP_IMAGES_FOLDER}/${groupChatModel.id}/`)
+                    const hasImages = groupChatModel.messages.some(
+                        (m) => m.type === GroupMessageType.TypeImage
+                    )
+                    if (hasImages) {
+                        await deleteFolder(`${StorageFolders.CHAT_IMAGES_FOLDER}/${groupChatModel.id}/`)
+                    }
+                } catch {
+                    // Storage paths may not exist; Firestore deletion already succeeded
                 }
             }
 
