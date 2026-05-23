@@ -1,8 +1,9 @@
 import CircularImage from '../CircularImage.tsx'
 import { IconButton, Popper, ClickAwayListener, Paper, ListItem, ListItemText } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import React, { SetStateAction, useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
+import useChatProfileStore from '../../store/chat.profile.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 import useHomeStore from '../../store/home.store.ts'
@@ -11,11 +12,32 @@ import { ErrorMessages } from '../../constants/ErrorMessages.ts'
 import { SuccessMessages } from '../../constants/SuccessMessages.ts'
 type FeatureType = { id: number; content: string; action: () => void }
 
-const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean>> }> = ({
-    setIsViewing,
-}) => {
+/** Converts a raw Firestore status string into a display label and colour class. */
+function parseStatus(raw: string): { label: string; colour: string } {
+    if (raw === 'Online') return { label: 'Online', colour: 'text-green-500' }
+    if (raw.startsWith('LastSeen')) {
+        const seconds = parseInt(raw.replace('LastSeen', ''), 10)
+        if (!isNaN(seconds)) {
+            const date = new Date(seconds * 1000)
+            const now = new Date()
+            const isToday =
+                date.getDate() === now.getDate() &&
+                date.getMonth() === now.getMonth() &&
+                date.getFullYear() === now.getFullYear()
+            const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+            const label = isToday
+                ? `Last seen at ${timeStr}`
+                : `Last seen ${date.toLocaleDateString([], { month: 'short', day: 'numeric' })} at ${timeStr}`
+            return { label, colour: 'text-yellow-500' }
+        }
+    }
+    return { label: raw, colour: 'text-gray-400' }
+}
+
+const ChatHeader: React.FC = () => {
     //  zustand states
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
+    const setIsViewingProfile = useChatDetailsStore((state) => state.setIsViewingProfile)
     const username = useLocalStore((state) => state.username)
     const user = useHomeStore((state) => state.user)
     const setUser = useHomeStore((state) => state.setUser)
@@ -23,9 +45,13 @@ const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean
     const deleteChat = useChatDetailsStore((state) => state.deleteChat)
     const clearChat = useChatDetailsStore((state) => state.clearChat)
     const markFavourite = useChatDetailsStore((state) => state.favouriteChat)
+    const partnerStatus = useChatProfileStore((state) => state.partnerStatus)
+    const subscribePartnerStatus = useChatProfileStore((state) => state.subscribePartnerStatus)
 
     const [openPopper, setOpenPopper] = useState(false)
     const popperRef = useRef(null)
+
+    const { label: statusLabel, colour: statusColour } = parseStatus(partnerStatus)
 
     //  confirm box
     const [title, setTitle] = useState<string>('')
@@ -33,11 +59,18 @@ const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean
     const [openDialog, setOpenDialog] = useState(false)
     const [actionDetails, setActionDetails] = useState<1 | 2 | 3 | 4 | null>(null)
 
+    // Subscribe to partner status via store (mirrors ChatViewModel.listenUserStatus)
+    useEffect(() => {
+        if (!currentChat || !username) return
+        const unsubscribe = subscribePartnerStatus(currentChat, username)
+        return () => unsubscribe()
+    }, [currentChat, username])
+
     if (!currentChat) return <></>
 
     const viewContactAction = () => {
         setOpenPopper(false)
-        setIsViewing(true)
+        setIsViewingProfile(true)
         setActionDetails(1)
     }
     const favoriteAction = () => {
@@ -175,8 +208,9 @@ const ChatHeader: React.FC<{ setIsViewing: React.Dispatch<SetStateAction<boolean
                                 : currentChat?.dmChatUser2.username}
                         </span>
                     </div>
-                    <div className={'flex flex-row justify-between'}>
-                        <span className={'text-green-600 font-medium text-sm'}>{'Online'}</span>
+                    <div className={'flex flex-row items-center gap-1'}>
+                        <span className={`w-2 h-2 rounded-full ${partnerStatus === 'Online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                        <span className={`font-medium text-sm ${statusColour}`}>{statusLabel}</span>
                     </div>
                 </div>
                 <div>
