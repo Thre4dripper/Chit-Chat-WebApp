@@ -12,7 +12,9 @@ import ItemChatImageRight from '../listItems/ItemChatImageRight.tsx'
 import ItemChatStickerRight from '../listItems/ItemChatStickerRight.tsx'
 import EmptyChatFragment from '../../fragments/home/EmptyChatFragment.tsx'
 import ItemChatHelloMessage from '../listItems/ItemChatHelloMessage.tsx'
-import { Fab } from '@mui/material'
+import { Fab, Popover, Avatar, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { GroupChatUserModel } from '../../models/group.chat.model.ts'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import { enqueueSnackbar } from 'notistack'
 import GroupMessageModel from '../../models/group.message.model.ts'
@@ -33,6 +35,8 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
     const observerTarget = useRef(null)
 
     const [dragging, setDragging] = useState<boolean>(false)
+    const [seenByAnchor, setSeenByAnchor] = useState<HTMLElement | null>(null)
+    const [seenByUsers, setSeenByUsers] = useState<GroupChatUserModel[]>([])
 
     const handleDragging = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
@@ -102,16 +106,21 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         })
     }
 
-    const getSeenBy = (message: GroupMessageModel) => {
-        // return profile image of users who have seen the message except the sender
+    const getSeenByMembers = (message: GroupMessageModel): GroupChatUserModel[] => {
         return message.seenBy
-            .filter((item) => item !== username)
-            .map((item) => {
-                const member = currentGroupChat.members.find((member) => member.username === item)
-                return member?.profileImage
+            .filter((item) => item !== message.from)
+            .flatMap((item) => {
+                const member = currentGroupChat.members.find((m) => m.username === item)
+                return member ? [member] : []
             })
     }
+
+    const handleSeenByClick = (message: GroupMessageModel) => (anchor: HTMLElement) => {
+        setSeenByAnchor(anchor)
+        setSeenByUsers(getSeenByMembers(message))
+    }
     const TextMessage = ({ message }: { message: GroupMessageModel }) => {
+        const seenImages = getSeenByMembers(message).map((m) => m.profileImage)
         if (message.from !== username) {
             return (
                 <ItemChatTextLeft
@@ -124,9 +133,10 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         } else {
             return (
                 <ItemChatTextRight
-                    seen={getSeenBy(message).filter((s): s is string => s !== undefined)}
+                    seen={seenImages}
                     message={message.text as string}
                     time={message.time}
+                    onSeenByClick={handleSeenByClick(message)}
                 />
             )
         }
@@ -136,6 +146,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         if (message.image === null || message.image === undefined) {
             return null
         }
+        const seenImages = getSeenByMembers(message).map((m) => m.profileImage)
         if (message.from !== username) {
             return (
                 <ItemChatImageLeft
@@ -148,9 +159,10 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         } else {
             return (
                 <ItemChatImageRight
-                    seen={getSeenBy(message).filter((s): s is string => s !== undefined)}
+                    seen={seenImages}
                     image={message.image}
                     time={message.time}
+                    onSeenByClick={handleSeenByClick(message)}
                 />
             )
         }
@@ -160,6 +172,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         if (message.sticker === null || message.sticker === undefined) {
             return null
         }
+        const seenStickers = getSeenByMembers(message).map((m) => m.profileImage)
         if (message.from !== username) {
             return (
                 <ItemChatStickerLeft
@@ -172,9 +185,10 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
         } else {
             return (
                 <ItemChatStickerRight
-                    seen={getSeenBy(message).filter((s): s is string => s !== undefined)}
+                    seen={seenStickers}
                     sticker={message.sticker}
                     time={message.time}
+                    onSeenByClick={handleSeenByClick(message)}
                 />
             )
         }
@@ -189,11 +203,18 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                 `z-0 flex-1 ${dragging ? 'bg-slate-400 border-4 border-dotted border-blue-400 ' : 'bg-white'} overflow-y-scroll flex flex-col-reverse relative ` +
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full h-full'
             }>
-            {currentGroupChat.messages.map((message, index) => (
+            {currentGroupChat.messages.map((message, index) => {
+                const isOwnContent = message.from === username && [GroupMessageType.TypeText, GroupMessageType.TypeImage, GroupMessageType.TypeSticker].includes(message.type)
+                return (
                 <div
-                    className={'flex gap-2'}
+                    className={'flex gap-2' + (isOwnContent ? ' cursor-context-menu' : '')}
                     key={message.id}
-                    ref={index === 0 ? observerTarget : null}>
+                    ref={index === 0 ? observerTarget : null}
+                    onContextMenu={isOwnContent ? (e) => {
+                        e.preventDefault()
+                        setSeenByAnchor(e.currentTarget)
+                        setSeenByUsers(getSeenByMembers(message))
+                    } : undefined}>
                     {/*First Message*/}
                     {message.type === GroupMessageType.TypeCreatedGroup && <ItemChatHelloMessage />}
                     {/*Member left message*/}
@@ -223,7 +244,48 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                         </div>
                     )}
                 </div>
-            ))}
+                )
+            })}
+            <Popover
+                open={Boolean(seenByAnchor)}
+                anchorEl={seenByAnchor}
+                onClose={() => setSeenByAnchor(null)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
+                <div className='p-3 min-w-45'>
+                    <div className='flex items-center justify-between mb-2'>
+                        <span className='text-sm font-semibold text-gray-700'>Seen By</span>
+                        <IconButton size='small' onClick={() => setSeenByAnchor(null)}>
+                            <CloseIcon fontSize='small' />
+                        </IconButton>
+                    </div>
+                    {seenByUsers.length === 0 ? (
+                        <p className='text-sm text-gray-400 px-1 pb-1'>No one has seen this</p>
+                    ) : (
+                        seenByUsers.map((member) => (
+                            <div
+                                key={member.username}
+                                className='flex items-center gap-2 py-1 px-1 rounded-lg cursor-pointer hover:bg-gray-100'
+                                role='button'
+                                tabIndex={0}
+                                onClick={() => {
+                                    setSeenByAnchor(null)
+                                    handleAvatarClick(member.username)
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        setSeenByAnchor(null)
+                                        handleAvatarClick(member.username)
+                                    }
+                                }}>
+                                <Avatar src={member.profileImage} alt={member.username} slotProps={{ img: { referrerPolicy: 'no-referrer' } }} sx={{ width: 28, height: 28 }} />
+                                <span className='text-sm text-gray-700'>{member.username}</span>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </Popover>
             <Fab
                 sx={{
                     'position': 'fixed',
