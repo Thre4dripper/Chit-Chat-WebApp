@@ -5,6 +5,11 @@ import UserModel from '../models/user.model.ts'
 import HomeRepository from '../repositories/home.repository.ts'
 import useLocalStore from './local.store.ts'
 import UserRepository from '../repositories/user.repository.ts'
+import { getToken } from 'firebase/messaging'
+import firebaseMessaging from '../firebase/FirebaseMessaging.ts'
+import { getFirestore } from 'firebase/firestore'
+import firebaseApp from '../firebase/FirebaseInit.ts'
+import UpdateToken from '../firebase/user/UpdateToken.ts'
 
 type HomeState = {
     user: UserModel | null
@@ -22,7 +27,6 @@ type HomeActions = {
 }
 
 const initUserDetails = (onSuccess: () => void) => {
-    // TODO fetch fcm token here like android
     const setUsername = useLocalStore.getState().setUsername
 
     HomeRepository.getUsername((username) => {
@@ -38,7 +42,27 @@ const initUserDetails = (onSuccess: () => void) => {
             return
         }
 
-        // TODO write update status and token code
+        // Ask for notification permission, then register the FCM token.
+        // requestPermission() shows the browser prompt on first call;
+        // subsequent calls are a no-op and just return the current state.
+        if ('Notification' in window) {
+            Notification.requestPermission().then((permission) => {
+                if (permission !== 'granted') return
+                getToken(firebaseMessaging, {
+                    vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+                })
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            useLocalStore.getState().setFcmToken(currentToken)
+                            const firestore = getFirestore(firebaseApp)
+                            UpdateToken.updateFCMToken(firestore, username, currentToken)
+                        }
+                    })
+                    .catch((err) => console.error('FCM token error:', err))
+            })
+        }
+
+        // TODO write update status code
     })
 }
 

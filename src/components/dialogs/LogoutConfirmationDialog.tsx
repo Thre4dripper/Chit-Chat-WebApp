@@ -14,6 +14,8 @@ import useLocalStore from '../../store/local.store.ts'
 import useHomeChatsStore from '../../store/home.chats.store.ts'
 import logo from '../../assets/logo.png'
 import UserRepository from '../../repositories/user.repository.ts'
+import { getFirestore } from 'firebase/firestore'
+import UpdateToken from '../../firebase/user/UpdateToken.ts'
 
 interface LogoutConfirmationProps {
     open: boolean
@@ -31,6 +33,14 @@ const LogoutConfirmation: React.FC<LogoutConfirmationProps> = ({ open, handleClo
     }
 
     const performLogout = async () => {
+        // Clear FCM token before signing out (mirrors Android UserRepository.updateToken)
+        const username = useLocalStore.getState().username
+        if (username) {
+            const firestore = getFirestore()
+            UpdateToken.updateFCMToken(firestore, username, '')
+        }
+        useLocalStore.getState().setFcmToken(null)
+
         await logout()
         setUsername(null)
         useHomeChatsStore.setState({ homeChats: [] })
