@@ -3,11 +3,9 @@ import ChatsFragment from '../fragments/home/ChatsFragment.tsx'
 import UserProfileFragment from '../fragments/profile/UserProfileFragment.tsx'
 import useHomeStore from '../store/home.store.ts'
 import LottieLoading from '../components/LottieLoading.tsx'
-import { useNavigate } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 import CompleteProfileFragment from '../fragments/profile/CompleteProfileFragment.tsx'
 import ImageCropFragment from '../fragments/profile/ImageCropFragment.tsx'
-import AddChatsFragment from '../fragments/profile/AddChatsFragment.tsx'
-import ChattingFragment from '../fragments/home/ChattingFragment.tsx'
 import AddChatDialog from '../components/dialogs/AddChatDialog.tsx'
 import GroupChatDialog from '../components/dialogs/AddGroupDialog.tsx'
 import useHomeChatsStore from '../store/home.chats.store.ts'
@@ -26,7 +24,6 @@ const HomeScreen: React.FC = () => {
     const checkUserRegistration = useHomeStore((state) => state.checkUserRegistration)
     const isLoading = useHomeStore((state) => state.isLoading)
     const user = useHomeStore((state) => state.user)
-    const chats = useHomeChatsStore((state) => state.homeChats)
     const updateProfilePicture = useUserDetailsStore((state) => state.updateProfilePicture)
     const [logoutConfirmOpen, setLogoutConfirmOpen] = React.useState<boolean>(false)
 
@@ -43,7 +40,17 @@ const HomeScreen: React.FC = () => {
                 useHomeChatsStore.getState().setHomeChats()
             }
         })
-    }, [checkUserRegistration, navigate])
+    }, [checkUserRegistration])
+
+    // SW sends postMessage({ type: 'SW_NAVIGATE', path }) when a notification is clicked
+    // and the app window is already open. React Router handles the SPA navigation.
+    useEffect(() => {
+        const handleSwMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'SW_NAVIGATE') navigate(event.data.path)
+        }
+        navigator.serviceWorker.addEventListener('message', handleSwMessage)
+        return () => navigator.serviceWorker.removeEventListener('message', handleSwMessage)
+    }, [navigate])
 
     // Status lifecycle: online/lastseen on focus, blur, visibility, tab close
     // Only starts after the user is fully loaded (username available)
@@ -132,10 +139,8 @@ const HomeScreen: React.FC = () => {
             <div className={'flex-1 w-2/3 rounded-3xl'}>
                 {showCompleteProfile ? (
                     <CompleteProfileFragment />
-                ) : chats.length === 0 ? (
-                    <AddChatsFragment dialogState={dialogState} setDialogState={setDialogState} />
                 ) : (
-                    <ChattingFragment />
+                    <Outlet context={{ dialogState, setDialogState }} />
                 )}
             </div>
             <AddChatDialog dialogState={dialogState} setDialogState={setDialogState} />

@@ -1,8 +1,7 @@
 import { Typography, Box } from '@mui/material'
 import CircularImage from '../CircularImage.tsx'
 import React from 'react'
-import useChatDetailsStore from '../../store/chat.details.store.ts'
-import { ChatType } from '../../enums/ChatType.ts'
+import { useNavigate } from 'react-router'
 
 interface FavChatProps {
     chatId: string
@@ -11,13 +10,12 @@ interface FavChatProps {
 }
 
 const ItemFavChat: React.FC<FavChatProps> = ({ chatId, image, name }) => {
-    // const currentChat = useChatDetailsStore((state) => state.chatDetails)
-    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
+    const navigate = useNavigate()
 
     return (
         <Box
             className={'flex flex-col items-center'}
-            onClick={() => setCurrentChatId(chatId, ChatType.USER)}>
+            onClick={() => navigate('/chat/' + chatId)}>
             <CircularImage image={image} size={80} />
             <Typography variant='subtitle1' sx={{ color: 'white' }} align='center'>
                 {name}

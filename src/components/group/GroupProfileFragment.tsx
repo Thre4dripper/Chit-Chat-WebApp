@@ -9,9 +9,9 @@ import { GroupMessageType } from '../../enums/GroupMessageType.ts'
 import emptyImageIconData from '../../assets/lottie/no_photos.json'
 import Lottie from 'lottie-react'
 import { enqueueSnackbar } from 'notistack'
-import { ChatType } from '../../enums/ChatType.ts'
 import ImageCropFragment from '../../fragments/profile/ImageCropFragment.tsx'
 import StorageUtils from '../../utils/StorageUtils.ts'
+import { useNavigate } from 'react-router'
 
 // Mirrors GroupProfileActivity + GroupProfileViewModel in Android
 
@@ -22,8 +22,8 @@ const GroupProfileFragment: React.FC = () => {
     const findGroupMember = useGroupProfileStore((state) => state.findGroupMember)
     const updateGroupImage = useGroupProfileStore((state) => state.updateGroupImage)
     const setIsViewingGroupProfile = useChatDetailsStore((state) => state.setIsViewingGroupProfile)
-    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
     const username = useLocalStore((state) => state.username)
+    const navigate = useNavigate()
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [groupBrowsedImage, setGroupBrowsedImage] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
@@ -65,7 +65,7 @@ const GroupProfileFragment: React.FC = () => {
                 enqueueSnackbar('Could not find user', { variant: 'error', autoHideDuration: 2000 })
                 return
             }
-            setCurrentChatId(chatId, ChatType.USER)
+            navigate('/chat/' + chatId)
             setIsViewingGroupProfile(false)
         })
     }

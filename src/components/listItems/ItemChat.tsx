@@ -3,7 +3,7 @@ import React from 'react'
 import CircularImage from '../CircularImage.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import PhotoIcon from '@mui/icons-material/Photo'
-import { ChatType } from '../../enums/ChatType.ts'
+import { useNavigate } from 'react-router'
 
 interface ItemChatProps {
     chatId: string
@@ -26,12 +26,12 @@ const ItemChat: React.FC<ItemChatProps> = ({
         primaryText = primaryText.substring(0, 24) + '...'
     }
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
-    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
+    const navigate = useNavigate()
 
     return (
         <div>
             <button
-                onClick={() => setCurrentChatId(chatId, ChatType.USER)}
+                onClick={() => navigate('/chat/' + chatId)}
                 className={`${currentChat?.chatId === chatId ? 'bg-slate-900' : ''} w-full flex flex-row gap-4 px-4 py-2 select-none cursor-pointer hover:bg-slate-900 active:bg-slate-800`}>
                 <CircularImage image={image} size={48} />
                 <div className={'flex flex-col flex-auto justify-center'}>

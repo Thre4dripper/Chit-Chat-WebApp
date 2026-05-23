@@ -10,15 +10,16 @@ import ViewProfile from '../../components/listItems/itemViewProfile.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import GroupChattingFragment from './GroupChattingFragment.tsx'
 import EmptyChatFragment from './EmptyChatFragment.tsx'
+import { useNavigate } from 'react-router'
 
 const ChattingFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const currentChatId = useChatDetailsStore((state) => state.currentChatId)
-    const clearCurrentChat = useChatDetailsStore((state) => state.clearCurrentChat)
     const isViewingProfile = useChatDetailsStore((state) => state.isViewingProfile)
     const [imageOpen, setImageOpen] = useState(false)
     const [imageSrc, setImageSrc] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<boolean>(false)
+    const navigate = useNavigate()
 
     const clearSelectedImage = () => {
         if (imageSrc?.startsWith('blob:')) {
@@ -41,12 +42,12 @@ const ChattingFragment: React.FC = () => {
             if (e.key !== 'Escape') return
             const hasOpenModal = Boolean(document.querySelector('[role="dialog"][aria-modal="true"]'))
             if (hasOpenModal) return
-            clearCurrentChat()
+            navigate('/')
         }
 
         window.addEventListener('keydown', handleEscCloseChat)
         return () => window.removeEventListener('keydown', handleEscCloseChat)
-    }, [clearCurrentChat])
+    }, [navigate])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]

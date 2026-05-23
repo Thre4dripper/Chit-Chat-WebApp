@@ -21,7 +21,7 @@ import { enqueueSnackbar } from 'notistack'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
 import { ErrorMessages } from '../../constants/ErrorMessages.ts'
 import { SuccessMessages } from '../../constants/SuccessMessages.ts'
-import { ChatType } from '../../enums/ChatType.ts'
+import { useNavigate } from 'react-router'
 
 const ViewProfile: React.FC = () => {
     const currentChat = useChatDetailsStore((state) => state.chatDetails)
@@ -29,10 +29,10 @@ const ViewProfile: React.FC = () => {
     const clearChat = useChatDetailsStore((state) => state.clearChat)
     const deleteChat = useChatDetailsStore((state) => state.deleteChat)
     const markFavourite = useChatDetailsStore((state) => state.favouriteChat)
-    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
     const username = useLocalStore((state) => state.username)
     const user = useHomeStore((state) => state.user)
     const setUser = useHomeStore((state) => state.setUser)
+    const navigate = useNavigate()
     const partnerName = useChatProfileStore((state) => state.partnerName)
     const partnerBio = useChatProfileStore((state) => state.partnerBio)
     const commonGroups = useChatProfileStore((state) => state.commonGroups)
@@ -117,7 +117,7 @@ const ViewProfile: React.FC = () => {
     }
 
     const handleGroupClick = (groupId: string) => {
-        setCurrentChatId(groupId, ChatType.GROUP)
+        navigate('/group/' + groupId)
         setIsViewingProfile(false)
     }
 

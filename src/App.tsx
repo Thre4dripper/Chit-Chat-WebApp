@@ -5,6 +5,9 @@ import AuthScreen from './screens/AuthScreen.tsx'
 import ProtectiveRoute from './components/ProtectiveRoute.tsx'
 import MobileScreen from './screens/MobileScreen.tsx'
 import { useMediaQuery } from '@mui/material'
+import HomeIndexRoute from './screens/routes/HomeIndexRoute.tsx'
+import DmChatRoute from './screens/routes/DmChatRoute.tsx'
+import GroupChatRoute from './screens/routes/GroupChatRoute.tsx'
 
 const router = createBrowserRouter([
     {
@@ -14,6 +17,11 @@ const router = createBrowserRouter([
                 <HomeScreen />
             </ProtectiveRoute>
         ),
+        children: [
+            { index: true, element: <HomeIndexRoute /> },
+            { path: 'chat/:chatId', element: <DmChatRoute /> },
+            { path: 'group/:groupId', element: <GroupChatRoute /> },
+        ],
     },
     {
         path: '/auth',

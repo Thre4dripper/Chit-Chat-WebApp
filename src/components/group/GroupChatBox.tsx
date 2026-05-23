@@ -1,9 +1,8 @@
 import React, { SetStateAction, useEffect, useRef, useState } from 'react'
 import useGroupChatStore from '../../store/group.chat.store.ts'
 import useGroupProfileStore from '../../store/group.profile.store.ts'
-import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
-import { ChatType } from '../../enums/ChatType.ts'
+import { useNavigate } from 'react-router'
 import ItemChatTextLeft from '../listItems/ItemChatTextLeft.tsx'
 import ItemChatImageLeft from '../listItems/ItemChatImageLeft.tsx'
 import ItemChatStickerLeft from '../listItems/ItemChatStickerLeft.tsx'
@@ -29,7 +28,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
     const currentGroupChat = useGroupChatStore((state) => state.groupChatDetails)
     const username = useLocalStore((state) => state.username)
     const findGroupMember = useGroupProfileStore((state) => state.findGroupMember)
-    const setCurrentChatId = useChatDetailsStore((state) => state.setCurrentChatId)
+    const navigate = useNavigate()
 
     const [showGotoBottomButton, setShowGotoBottomButton] = useState(false)
     const observerTarget = useRef(null)
@@ -102,7 +101,7 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
     const handleAvatarClick = (memberUsername: string) => {
         findGroupMember(memberUsername, (chatId) => {
             if (!chatId) return
-            setCurrentChatId(chatId, ChatType.USER)
+            navigate('/chat/' + chatId)
         })
     }
 
