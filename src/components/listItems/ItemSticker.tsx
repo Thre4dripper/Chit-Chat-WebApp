@@ -2,7 +2,7 @@ import { ButtonBase } from '@mui/material'
 import Lottie from 'lottie-react'
 import { stickerMap } from '../../enums/stickerMap.ts'
 import Box from '@mui/material/Box'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useLocalStore from '../../store/local.store.ts'
 
@@ -24,9 +24,26 @@ const StickerItem = ({
     onStickerSelect?: (index: number) => void
 }) => {
     const [showLottie, setShowLottie] = useState(false)
+    const ref = useRef<HTMLDivElement>(null)
     const sendSticker = useChatDetailsStore((state) => state.sendStickerMessage)
     const username = useLocalStore((state) => state.username)
     const chatDetails = useChatDetailsStore((state) => state.chatDetails)
+
+    useEffect(() => {
+        const el = ref.current
+        if (!el) return
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setShowLottie(true)
+                    observer.disconnect()
+                }
+            },
+            { threshold: 0.1 }
+        )
+        observer.observe(el)
+        return () => observer.disconnect()
+    }, [])
 
     const handleSendSticker = () => {
         if (onStickerSelect) {
@@ -46,9 +63,8 @@ const StickerItem = ({
     }
 
     return (
-        <div className='rounded-2xl w-fit overflow-hidden'>
+        <div ref={ref} className='rounded-2xl w-fit overflow-hidden'>
             <ButtonBase
-                onMouseEnter={() => setShowLottie(true)}
                 className='block'
                 sx={{ width: 100, height: 100 }}
                 onClick={handleSendSticker}>
@@ -56,7 +72,7 @@ const StickerItem = ({
                     <Lottie
                         className='max-h-20 max-w-20'
                         animationData={asset}
-                        loop={false}
+                        loop={true}
                         autoPlay
                     />
                 ) : (
