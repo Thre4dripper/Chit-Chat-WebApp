@@ -12,7 +12,7 @@ const CompleteProfileFragment: React.FC = () => {
             }>
             <div className={'flex flex-col'}>
                 <Lottie
-                    className={'max-h-[300px] max-w-[300px]'}
+                    className={'max-h-75 max-w-75'}
                     animationData={completeProfile}
                     loop={true}
                     autoPlay={true}

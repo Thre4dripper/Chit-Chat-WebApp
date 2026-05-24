@@ -1,4 +1,6 @@
-const FCM_URL = 'https://6753fab93e069e74e144.appwrite.global'
+const FCM_URL = import.meta.env.VITE_LAMBDA_FCM_URL as string
+const FCM_API_KEY = import.meta.env.VITE_LAMBDA_FCM_API_KEY as string
+const FCM_AUTH_TOKEN = import.meta.env.VITE_LAMBDA_FCM_AUTH_TOKEN as string
 
 interface NotificationPayload {
     deviceToken: string
@@ -14,6 +16,8 @@ class Messaging {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'x-api-key': FCM_API_KEY,
+                    'Authorization': `Bearer ${FCM_AUTH_TOKEN}`,
                 },
                 body: JSON.stringify(payload),
             })
