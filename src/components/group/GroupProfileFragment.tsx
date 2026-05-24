@@ -1,6 +1,7 @@
 import { Avatar, IconButton, Typography, Switch, Divider, CircularProgress } from '@mui/material'
 import { Close, Notifications, ExitToApp, PhotoCamera } from '@mui/icons-material'
 import React, { useRef, useState } from 'react'
+import ViewImageDialog from '../dialogs/ViewImageDialog.tsx'
 import useChatDetailsStore from '../../store/chat.details.store.ts'
 import useGroupChatStore from '../../store/group.chat.store.ts'
 import useGroupProfileStore from '../../store/group.profile.store.ts'
@@ -27,6 +28,7 @@ const GroupProfileFragment: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [groupBrowsedImage, setGroupBrowsedImage] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
+    const [viewImageSrc, setViewImageSrc] = useState<string | null>(null)
 
     if (!groupChat || !username) return null
 
@@ -164,12 +166,17 @@ const GroupProfileFragment: React.FC = () => {
                     ) : (
                         <div className='flex flex-wrap gap-2 max-h-36 overflow-y-auto'>
                             {mediaMessages.map((msg) => (
-                                <img
+                                <button
                                     key={msg.id}
-                                    src={msg.image ?? undefined}
-                                    alt='media'
-                                    className='h-20 w-20 object-cover rounded-xl cursor-pointer hover:opacity-80 transition-opacity'
-                                />
+                                    type='button'
+                                    className='p-0 border-0 bg-transparent'
+                                    onClick={() => setViewImageSrc(msg.image!)}>
+                                    <img
+                                        src={msg.image ?? undefined}
+                                        alt='media'
+                                        className='h-20 w-20 object-cover rounded-xl cursor-pointer hover:opacity-80 transition-opacity'
+                                    />
+                                </button>
                             ))}
                         </div>
                     )}
@@ -226,6 +233,16 @@ const GroupProfileFragment: React.FC = () => {
                     </Typography>
                 </button>
             </div>
+            <ViewImageDialog
+                open={!!viewImageSrc}
+                setOpen={(val) => { if (!val) setViewImageSrc(null) }}
+                image={viewImageSrc ?? ''}
+                zoomIntensity={10}
+                delay={0.2}
+                initialZoomLevel={1}
+                minZoomLevel={1}
+                maxZoomLevel={2.5}
+            />
         </div>
     )
 }
