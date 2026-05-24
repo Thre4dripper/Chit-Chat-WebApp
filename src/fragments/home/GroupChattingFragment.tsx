@@ -97,7 +97,13 @@ const GroupChattingFragment: React.FC = () => {
                         <Button
                             color='error'
                             onClick={clearSelectedImage}
-                            sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10, width: '50px' }}
+                            sx={{
+                                position: 'absolute',
+                                top: 10,
+                                right: 10,
+                                zIndex: 10,
+                                width: '50px',
+                            }}
                             endIcon={<CloseIcon sx={{ width: '100%', height: '100%' }} />}
                         />
                     </div>

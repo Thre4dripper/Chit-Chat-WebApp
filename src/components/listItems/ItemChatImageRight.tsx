@@ -10,7 +10,12 @@ interface ItemChatImageRightProps {
     onSeenByClick: (anchor: HTMLElement) => void
 }
 
-const ItemChatImageRight: React.FC<ItemChatImageRightProps> = ({ seen, image, time, onSeenByClick }) => {
+const ItemChatImageRight: React.FC<ItemChatImageRightProps> = ({
+    seen,
+    image,
+    time,
+    onSeenByClick,
+}) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',

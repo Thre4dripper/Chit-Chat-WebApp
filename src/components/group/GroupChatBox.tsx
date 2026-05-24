@@ -203,46 +203,60 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                 'scrollbar-thin scrollbar-thumb-slate-500/50 scrollbar-track-white scrollbar-thumb-rounded-full h-full'
             }>
             {currentGroupChat.messages.map((message, index) => {
-                const isOwnContent = message.from === username && [GroupMessageType.TypeText, GroupMessageType.TypeImage, GroupMessageType.TypeSticker].includes(message.type)
+                const isOwnContent =
+                    message.from === username &&
+                    [
+                        GroupMessageType.TypeText,
+                        GroupMessageType.TypeImage,
+                        GroupMessageType.TypeSticker,
+                    ].includes(message.type)
                 return (
-                <div
-                    className={'flex gap-2' + (isOwnContent ? ' cursor-context-menu' : '')}
-                    key={message.id}
-                    ref={index === 0 ? observerTarget : null}
-                    onContextMenu={isOwnContent ? (e) => {
-                        e.preventDefault()
-                        setSeenByAnchor(e.currentTarget)
-                        setSeenByUsers(getSeenByMembers(message))
-                    } : undefined}>
-                    {/*First Message*/}
-                    {message.type === GroupMessageType.TypeCreatedGroup && <ItemChatHelloMessage />}
-                    {/*Member left message*/}
-                    {message.type === GroupMessageType.TypeLeavedMember && (
-                        <div className='w-full flex justify-center py-1'>
-                            <span className='text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full'>
-                                {message.from} left the group
-                            </span>
-                        </div>
-                    )}
-                    {/*text Message*/}
-                    {message.type === GroupMessageType.TypeText && (
-                        <TextMessage message={message} />
-                    )}
-                    {/*Image Message*/}
-                    {message.type === GroupMessageType.TypeImage && (
-                        <ImageMessage message={message} />
-                    )}
-                    {/*Sticker Message*/}
-                    {message.type === GroupMessageType.TypeSticker && (
-                        <StickerMessage message={message} />
-                    )}
-                    {/*Deleted Message*/}
-                    {message.type === GroupMessageType.TypeDeletedMessage && (
-                        <div className='w-full flex justify-center py-2'>
-                            <span className='text-sm text-gray-400 italic'>This message was deleted</span>
-                        </div>
-                    )}
-                </div>
+                    <div
+                        className={'flex gap-2' + (isOwnContent ? ' cursor-context-menu' : '')}
+                        key={message.id}
+                        ref={index === 0 ? observerTarget : null}
+                        onContextMenu={
+                            isOwnContent
+                                ? (e) => {
+                                      e.preventDefault()
+                                      setSeenByAnchor(e.currentTarget)
+                                      setSeenByUsers(getSeenByMembers(message))
+                                  }
+                                : undefined
+                        }>
+                        {/*First Message*/}
+                        {message.type === GroupMessageType.TypeCreatedGroup && (
+                            <ItemChatHelloMessage />
+                        )}
+                        {/*Member left message*/}
+                        {message.type === GroupMessageType.TypeLeavedMember && (
+                            <div className='w-full flex justify-center py-1'>
+                                <span className='text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full'>
+                                    {message.from} left the group
+                                </span>
+                            </div>
+                        )}
+                        {/*text Message*/}
+                        {message.type === GroupMessageType.TypeText && (
+                            <TextMessage message={message} />
+                        )}
+                        {/*Image Message*/}
+                        {message.type === GroupMessageType.TypeImage && (
+                            <ImageMessage message={message} />
+                        )}
+                        {/*Sticker Message*/}
+                        {message.type === GroupMessageType.TypeSticker && (
+                            <StickerMessage message={message} />
+                        )}
+                        {/*Deleted Message*/}
+                        {message.type === GroupMessageType.TypeDeletedMessage && (
+                            <div className='w-full flex justify-center py-2'>
+                                <span className='text-sm text-gray-400 italic'>
+                                    This message was deleted
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 )
             })}
             <Popover
@@ -278,7 +292,12 @@ const GroupChatBox: React.FC<GroupChatBoxProps> = ({ setImageSrc, setImageOpen }
                                         handleAvatarClick(member.username)
                                     }
                                 }}>
-                                <Avatar src={member.profileImage} alt={member.username} slotProps={{ img: { referrerPolicy: 'no-referrer' } }} sx={{ width: 28, height: 28 }} />
+                                <Avatar
+                                    src={member.profileImage}
+                                    alt={member.username}
+                                    slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+                                    sx={{ width: 28, height: 28 }}
+                                />
                                 <span className='text-sm text-gray-700'>{member.username}</span>
                             </div>
                         ))

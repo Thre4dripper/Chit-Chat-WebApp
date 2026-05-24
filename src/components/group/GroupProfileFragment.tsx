@@ -39,9 +39,15 @@ const GroupProfileFragment: React.FC = () => {
     const handleMuteToggle = (newValue: boolean) => {
         muteUnMuteGroup(groupChat, username, newValue, (success) => {
             if (success) {
-                enqueueSnackbar(newValue ? 'Group muted' : 'Group unmuted', { variant: 'success', autoHideDuration: 2000 })
+                enqueueSnackbar(newValue ? 'Group muted' : 'Group unmuted', {
+                    variant: 'success',
+                    autoHideDuration: 2000,
+                })
             } else {
-                enqueueSnackbar('Error updating mute status', { variant: 'error', autoHideDuration: 2000 })
+                enqueueSnackbar('Error updating mute status', {
+                    variant: 'error',
+                    autoHideDuration: 2000,
+                })
             }
         })
     }
@@ -94,7 +100,10 @@ const GroupProfileFragment: React.FC = () => {
                                 setIsUploading(false)
                                 enqueueSnackbar(
                                     success ? 'Group image updated' : 'Error updating group image',
-                                    { variant: success ? 'success' : 'error', autoHideDuration: 2500 }
+                                    {
+                                        variant: success ? 'success' : 'error',
+                                        autoHideDuration: 2500,
+                                    }
                                 )
                             })
                         }}
@@ -123,14 +132,14 @@ const GroupProfileFragment: React.FC = () => {
                     <IconButton
                         onClick={() => fileInputRef.current?.click()}
                         sx={{
-                            position: 'absolute',
-                            bottom: 0,
-                            right: -4,
-                            bgcolor: 'rgba(255,255,255,0.9)',
+                            'position': 'absolute',
+                            'bottom': 0,
+                            'right': -4,
+                            'bgcolor': 'rgba(255,255,255,0.9)',
                             '&:hover': { bgcolor: 'white' },
-                            width: 28,
-                            height: 28,
-                            boxShadow: 1,
+                            'width': 28,
+                            'height': 28,
+                            'boxShadow': 1,
                         }}>
                         <PhotoCamera sx={{ fontSize: '1rem', color: '#1a2744' }} />
                     </IconButton>
@@ -143,7 +152,13 @@ const GroupProfileFragment: React.FC = () => {
                     />
                 </div>
 
-                <Typography sx={{ color: 'white', fontWeight: 700, fontSize: '1.15rem', textAlign: 'center' }}>
+                <Typography
+                    sx={{
+                        color: 'white',
+                        fontWeight: 700,
+                        fontSize: '1.15rem',
+                        textAlign: 'center',
+                    }}>
                     {groupChat.name}
                 </Typography>
                 <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem', mt: 0.3 }}>
@@ -153,15 +168,21 @@ const GroupProfileFragment: React.FC = () => {
 
             {/* White card */}
             <div className='bg-white rounded-t-3xl flex-1 pb-2'>
-
                 {/* Medias */}
                 <div className='px-4 pt-4 pb-2'>
-                    <Typography variant='subtitle1' sx={{ color: '#1a237e', fontWeight: 700, mb: 1 }}>
+                    <Typography
+                        variant='subtitle1'
+                        sx={{ color: '#1a237e', fontWeight: 700, mb: 1 }}>
                         Medias
                     </Typography>
                     {mediaMessages.length === 0 ? (
                         <div className='flex justify-center items-center h-20 rounded-xl bg-gray-100'>
-                            <Lottie className='max-h-16 max-w-16' animationData={emptyImageIconData} loop autoPlay />
+                            <Lottie
+                                className='max-h-16 max-w-16'
+                                animationData={emptyImageIconData}
+                                loop
+                                autoPlay
+                            />
                         </div>
                     ) : (
                         <div className='flex flex-wrap gap-2 max-h-36 overflow-y-auto'>
@@ -190,14 +211,19 @@ const GroupProfileFragment: React.FC = () => {
                         <Notifications sx={{ color: '#1a237e' }} />
                         <Typography variant='body1'>Mute Notifications</Typography>
                     </div>
-                    <Switch checked={isMuted} onChange={(e) => handleMuteToggle(e.target.checked)} />
+                    <Switch
+                        checked={isMuted}
+                        onChange={(e) => handleMuteToggle(e.target.checked)}
+                    />
                 </div>
 
                 <Divider />
 
                 {/* Members */}
                 <div className='px-4 py-3'>
-                    <Typography variant='subtitle1' sx={{ color: '#1a237e', fontWeight: 700, mb: 1 }}>
+                    <Typography
+                        variant='subtitle1'
+                        sx={{ color: '#1a237e', fontWeight: 700, mb: 1 }}>
                         Members ({groupChat.members.length})
                     </Typography>
                     <div className='space-y-1 max-h-52 overflow-y-auto'>
@@ -209,11 +235,19 @@ const GroupProfileFragment: React.FC = () => {
                                 onClick={() => handleMemberClick(member.username)}>
                                 <Avatar
                                     src={member.profileImage || undefined}
-                                    sx={{ width: 40, height: 40, bgcolor: '#6366f1', fontSize: '0.95rem', flexShrink: 0 }}>
+                                    sx={{
+                                        width: 40,
+                                        height: 40,
+                                        bgcolor: '#6366f1',
+                                        fontSize: '0.95rem',
+                                        flexShrink: 0,
+                                    }}>
                                     {member.username.charAt(0).toUpperCase()}
                                 </Avatar>
                                 <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                                    {member.username === username ? `${member.username} (You)` : member.username}
+                                    {member.username === username
+                                        ? `${member.username} (You)`
+                                        : member.username}
                                 </Typography>
                             </button>
                         ))}
@@ -235,7 +269,9 @@ const GroupProfileFragment: React.FC = () => {
             </div>
             <ViewImageDialog
                 open={!!viewImageSrc}
-                setOpen={(val) => { if (!val) setViewImageSrc(null) }}
+                setOpen={(val) => {
+                    if (!val) setViewImageSrc(null)
+                }}
                 image={viewImageSrc ?? ''}
                 zoomIntensity={10}
                 delay={0.2}

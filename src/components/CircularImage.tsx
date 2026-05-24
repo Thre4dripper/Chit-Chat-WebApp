@@ -14,11 +14,20 @@ const CircularImage: React.FC<CircularImageProps> = ({ image, size, alt = '', is
             <IconButton>
                 <div className={'rounded-full p-0.5 bg-white'}>
                     {isGroup ? (
-                        <Avatar alt={alt} src={image} slotProps={{ img: { referrerPolicy: 'no-referrer' } }} sx={{ width: size, height: size }}>
+                        <Avatar
+                            alt={alt}
+                            src={image}
+                            slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+                            sx={{ width: size, height: size }}>
                             <GroupsIcon />
                         </Avatar>
                     ) : (
-                        <Avatar alt={alt} src={image} slotProps={{ img: { referrerPolicy: 'no-referrer' } }} sx={{ width: size, height: size }} />
+                        <Avatar
+                            alt={alt}
+                            src={image}
+                            slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+                            sx={{ width: size, height: size }}
+                        />
                     )}
                 </div>
             </IconButton>

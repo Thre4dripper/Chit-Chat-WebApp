@@ -170,7 +170,10 @@ const ChatsFragment: React.FC<{
                 {filteredChats.length > 0 ? (
                     <div>
                         <div className={'flex flex-col m-4'}>
-                            <Typography className={'select-none'} sx={{ color: 'white' }} variant={'h6'}>
+                            <Typography
+                                className={'select-none'}
+                                sx={{ color: 'white' }}
+                                variant={'h6'}>
                                 Chats
                             </Typography>
                         </div>

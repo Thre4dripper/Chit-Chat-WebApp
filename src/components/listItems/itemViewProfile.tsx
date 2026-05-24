@@ -43,7 +43,9 @@ const ViewProfile: React.FC = () => {
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [confirmTitle, setConfirmTitle] = useState('')
     const [confirmMessage, setConfirmMessage] = useState('')
-    const [pendingAction, setPendingAction] = useState<'favourite' | 'clear' | 'delete' | null>(null)
+    const [pendingAction, setPendingAction] = useState<'favourite' | 'clear' | 'delete' | null>(
+        null
+    )
     const [viewImageSrc, setViewImageSrc] = useState<string | null>(null)
 
     useEffect(() => {
@@ -64,9 +66,15 @@ const ViewProfile: React.FC = () => {
     const handleMuteToggle = (newValue: boolean) => {
         muteUnMuteChat(currentChat, username, newValue, (success) => {
             if (success) {
-                enqueueSnackbar(newValue ? 'Chat muted' : 'Chat unmuted', { variant: 'success', autoHideDuration: 2000 })
+                enqueueSnackbar(newValue ? 'Chat muted' : 'Chat unmuted', {
+                    variant: 'success',
+                    autoHideDuration: 2000,
+                })
             } else {
-                enqueueSnackbar('Error updating mute status', { variant: 'error', autoHideDuration: 2000 })
+                enqueueSnackbar('Error updating mute status', {
+                    variant: 'error',
+                    autoHideDuration: 2000,
+                })
             }
         })
     }
@@ -92,25 +100,48 @@ const ViewProfile: React.FC = () => {
             if (!user) return
             markFavourite(user, currentChat.chatId, (done) => {
                 if (!done) {
-                    enqueueSnackbar(ErrorMessages.ERROR_UPDATING_FAVOURITE, { variant: 'error', autoHideDuration: 3000 })
+                    enqueueSnackbar(ErrorMessages.ERROR_UPDATING_FAVOURITE, {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                    })
                     return
                 }
                 const wasAlreadyFavourite = user.favourites.includes(currentChat.chatId)
                 setUser(done)
                 enqueueSnackbar(
-                    wasAlreadyFavourite ? SuccessMessages.FAVOURITE_CLEARED_SUCCESSFULLY : SuccessMessages.FAVOURITE_MARKED_SUCCESSFULLY,
+                    wasAlreadyFavourite
+                        ? SuccessMessages.FAVOURITE_CLEARED_SUCCESSFULLY
+                        : SuccessMessages.FAVOURITE_MARKED_SUCCESSFULLY,
                     { variant: 'success', autoHideDuration: 3000 }
                 )
             })
         } else if (pendingAction === 'clear') {
             clearChat(currentChat, (success) => {
-                if (!success) { enqueueSnackbar(ErrorMessages.ERROR_CLEARING_CHAT, { variant: 'error', autoHideDuration: 3000 }); return }
-                enqueueSnackbar(SuccessMessages.CHAT_CLEARED_SUCCESSFULLY, { variant: 'success', autoHideDuration: 3000 })
+                if (!success) {
+                    enqueueSnackbar(ErrorMessages.ERROR_CLEARING_CHAT, {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                    })
+                    return
+                }
+                enqueueSnackbar(SuccessMessages.CHAT_CLEARED_SUCCESSFULLY, {
+                    variant: 'success',
+                    autoHideDuration: 3000,
+                })
             })
         } else if (pendingAction === 'delete') {
             deleteChat(currentChat, (success) => {
-                if (!success) { enqueueSnackbar(ErrorMessages.ERROR_DELETING_CHAT, { variant: 'error', autoHideDuration: 3000 }); return }
-                enqueueSnackbar(SuccessMessages.CHAT_DELETED_SUCCESSFULLY, { variant: 'success', autoHideDuration: 3000 })
+                if (!success) {
+                    enqueueSnackbar(ErrorMessages.ERROR_DELETING_CHAT, {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                    })
+                    return
+                }
+                enqueueSnackbar(SuccessMessages.CHAT_DELETED_SUCCESSFULLY, {
+                    variant: 'success',
+                    autoHideDuration: 3000,
+                })
                 setIsViewingProfile(false)
             })
         }
@@ -132,26 +163,53 @@ const ViewProfile: React.FC = () => {
                 <div className='relative flex flex-col items-center pt-10 pb-6 px-4'>
                     <IconButton
                         onClick={() => setIsViewingProfile(false)}
-                        sx={{ position: 'absolute', top: 8, right: 8, color: 'rgba(255,255,255,0.7)' }}>
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            color: 'rgba(255,255,255,0.7)',
+                        }}>
                         <Close />
                     </IconButton>
 
-                    <Avatar src={profileImage} sx={{ width: 88, height: 88, bgcolor: '#6366f1', fontSize: '2.2rem', mb: 1.5 }}>
+                    <Avatar
+                        src={profileImage}
+                        sx={{
+                            width: 88,
+                            height: 88,
+                            bgcolor: '#6366f1',
+                            fontSize: '2.2rem',
+                            mb: 1.5,
+                        }}>
                         {profileInitial}
                     </Avatar>
 
-                    <Typography sx={{ color: 'white', fontWeight: 700, fontSize: '1.15rem', lineHeight: 1.2, textAlign: 'center' }}>
+                    <Typography
+                        sx={{
+                            color: 'white',
+                            fontWeight: 700,
+                            fontSize: '1.15rem',
+                            lineHeight: 1.2,
+                            textAlign: 'center',
+                        }}>
                         {partnerName || profileUsername}
                     </Typography>
 
                     {partnerName && partnerName !== profileUsername && (
-                        <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.78rem', mt: 0.3 }}>
+                        <Typography
+                            sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.78rem', mt: 0.3 }}>
                             @{profileUsername}
                         </Typography>
                     )}
 
                     {partnerBio ? (
-                        <Typography sx={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.82rem', mt: 0.75, textAlign: 'center' }}>
+                        <Typography
+                            sx={{
+                                color: 'rgba(255,255,255,0.72)',
+                                fontSize: '0.82rem',
+                                mt: 0.75,
+                                textAlign: 'center',
+                            }}>
                             {partnerBio}
                         </Typography>
                     ) : null}
@@ -159,15 +217,21 @@ const ViewProfile: React.FC = () => {
 
                 {/* White card */}
                 <div className='bg-white rounded-t-3xl flex-1 pb-2'>
-
                     {/* Medias */}
                     <div className='px-4 pt-4 pb-2'>
-                        <Typography variant='subtitle1' sx={{ color: '#1a237e', fontWeight: 700, mb: 1 }}>
+                        <Typography
+                            variant='subtitle1'
+                            sx={{ color: '#1a237e', fontWeight: 700, mb: 1 }}>
                             Medias
                         </Typography>
                         {mediaMessages.length === 0 ? (
                             <div className='flex justify-center items-center h-20 rounded-xl bg-gray-100'>
-                                <Lottie className='max-h-16 max-w-16' animationData={emptyImageIconData} loop autoPlay />
+                                <Lottie
+                                    className='max-h-16 max-w-16'
+                                    animationData={emptyImageIconData}
+                                    loop
+                                    autoPlay
+                                />
                             </div>
                         ) : (
                             <div className='flex flex-wrap gap-2 max-h-36 overflow-y-auto'>
@@ -196,7 +260,10 @@ const ViewProfile: React.FC = () => {
                             <Notifications sx={{ color: '#1a237e' }} />
                             <Typography variant='body1'>Mute Notifications</Typography>
                         </div>
-                        <Switch checked={isMuted} onChange={(e) => handleMuteToggle(e.target.checked)} />
+                        <Switch
+                            checked={isMuted}
+                            onChange={(e) => handleMuteToggle(e.target.checked)}
+                        />
                     </div>
 
                     <Divider />
@@ -205,7 +272,9 @@ const ViewProfile: React.FC = () => {
                     <div className='px-4 py-3'>
                         <div className='flex items-center gap-1.5 mb-2'>
                             <Group sx={{ color: '#1a237e', fontSize: '1.15rem' }} />
-                            <Typography variant='subtitle1' sx={{ color: '#1a237e', fontWeight: 700 }}>
+                            <Typography
+                                variant='subtitle1'
+                                sx={{ color: '#1a237e', fontWeight: 700 }}>
                                 Groups in Common
                             </Typography>
                         </div>
@@ -223,16 +292,34 @@ const ViewProfile: React.FC = () => {
                                         onClick={() => handleGroupClick(group.id)}>
                                         <Avatar
                                             src={group.image ?? undefined}
-                                            sx={{ width: 44, height: 44, bgcolor: '#3b82f6', fontSize: '1.05rem', flexShrink: 0 }}>
+                                            sx={{
+                                                width: 44,
+                                                height: 44,
+                                                bgcolor: '#3b82f6',
+                                                fontSize: '1.05rem',
+                                                flexShrink: 0,
+                                            }}>
                                             {group.name.charAt(0).toUpperCase()}
                                         </Avatar>
                                         <div className='flex flex-col min-w-0'>
-                                            <Typography variant='body2' sx={{ fontWeight: 700, lineHeight: 1.3, fontSize: '0.875rem' }}>
+                                            <Typography
+                                                variant='body2'
+                                                sx={{
+                                                    fontWeight: 700,
+                                                    lineHeight: 1.3,
+                                                    fontSize: '0.875rem',
+                                                }}>
                                                 {group.name}
                                             </Typography>
                                             <Typography
                                                 variant='caption'
-                                                sx={{ color: 'text.secondary', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.4 }}>
+                                                sx={{
+                                                    color: 'text.secondary',
+                                                    whiteSpace: 'nowrap',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    lineHeight: 1.4,
+                                                }}>
                                                 {group.members.map((m) => m.username).join(', ')}
                                             </Typography>
                                         </div>
@@ -254,7 +341,9 @@ const ViewProfile: React.FC = () => {
                         ) : (
                             <FavoriteBorder sx={{ color: '#e53935', fontSize: '1.3rem' }} />
                         )}
-                        <Typography variant='body1'>{isFavourite ? 'Unfavourite' : 'Favourite'}</Typography>
+                        <Typography variant='body1'>
+                            {isFavourite ? 'Unfavourite' : 'Favourite'}
+                        </Typography>
                     </button>
 
                     <Divider />
@@ -292,7 +381,9 @@ const ViewProfile: React.FC = () => {
             />
             <ViewImageDialog
                 open={!!viewImageSrc}
-                setOpen={(val) => { if (!val) setViewImageSrc(null) }}
+                setOpen={(val) => {
+                    if (!val) setViewImageSrc(null)
+                }}
                 image={viewImageSrc ?? ''}
                 zoomIntensity={10}
                 delay={0.2}

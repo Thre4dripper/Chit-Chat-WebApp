@@ -10,7 +10,12 @@ interface ItemChatTextRightProps {
     onSeenByClick: (anchor: HTMLElement) => void
 }
 
-const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({ seen, message, time, onSeenByClick }) => {
+const ItemChatTextRight: React.FC<ItemChatTextRightProps> = ({
+    seen,
+    message,
+    time,
+    onSeenByClick,
+}) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',

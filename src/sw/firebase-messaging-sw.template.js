@@ -60,9 +60,7 @@ self.addEventListener('notificationclick', (event) => {
 
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-            const existingClient = windowClients.find((c) =>
-                c.url.startsWith(self.location.origin)
-            )
+            const existingClient = windowClients.find((c) => c.url.startsWith(self.location.origin))
             if (existingClient) {
                 return existingClient.focus().then(() => {
                     existingClient.postMessage({ type: 'SW_NAVIGATE', path })

@@ -34,7 +34,11 @@ class UpdateUserStatus {
     /**
      * Set user status to "Online"
      */
-    static setOnline(firestore: Firestore, username: string, onSuccess: (success: boolean) => void) {
+    static setOnline(
+        firestore: Firestore,
+        username: string,
+        onSuccess: (success: boolean) => void
+    ) {
         this.setUserStatus(firestore, username, 'Online', onSuccess)
     }
 

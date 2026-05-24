@@ -64,12 +64,16 @@ class ExitGroup {
                         const result = await listAll(folderRef)
                         await Promise.all(result.items.map((item) => deleteObject(item)))
                     }
-                    await deleteFolder(`${StorageFolders.GROUP_IMAGES_FOLDER}/${groupChatModel.id}/`)
+                    await deleteFolder(
+                        `${StorageFolders.GROUP_IMAGES_FOLDER}/${groupChatModel.id}/`
+                    )
                     const hasImages = groupChatModel.messages.some(
                         (m) => m.type === GroupMessageType.TypeImage
                     )
                     if (hasImages) {
-                        await deleteFolder(`${StorageFolders.CHAT_IMAGES_FOLDER}/${groupChatModel.id}/`)
+                        await deleteFolder(
+                            `${StorageFolders.CHAT_IMAGES_FOLDER}/${groupChatModel.id}/`
+                        )
                     }
                 } catch {
                     // Storage paths may not exist; Firestore deletion already succeeded

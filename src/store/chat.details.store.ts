@@ -76,7 +76,11 @@ const useChatDetailsStore = create<ChatDetailsState & ChatDetailsActions>()(
             },
 
             setCurrentChatId: (chatId, chatType) => {
-                set({ currentChatId: chatId, isViewingProfile: false, isViewingGroupProfile: false })
+                set({
+                    currentChatId: chatId,
+                    isViewingProfile: false,
+                    isViewingGroupProfile: false,
+                })
                 if (chatType === ChatType.USER) {
                     useChatDetailsStore.getState().setChatDetails(chatId)
                     useGroupChatStore.getState().clearGroupChat()

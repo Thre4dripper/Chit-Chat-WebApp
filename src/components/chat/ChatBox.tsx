@@ -31,7 +31,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
 
     const [dragging, setDragging] = useState<boolean>(false)
     const [seenByAnchor, setSeenByAnchor] = useState<HTMLElement | null>(null)
-    const [seenByDMUsers, setSeenByDMUsers] = useState<{ username: string; profileImage: string }[]>([])
+    const [seenByDMUsers, setSeenByDMUsers] = useState<
+        { username: string; profileImage: string }[]
+    >([])
 
     const handleDragging = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
@@ -112,7 +114,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
             }))
     }
 
-    const dmContentTypes = [ChatMessageType.TypeText, ChatMessageType.TypeImage, ChatMessageType.TypeSticker]
+    const dmContentTypes = [
+        ChatMessageType.TypeText,
+        ChatMessageType.TypeImage,
+        ChatMessageType.TypeSticker,
+    ]
     const TextMessage = ({ message }: { message: ChatMessageModel }) => {
         if (message.from !== username) {
             return (
@@ -214,43 +220,49 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
             }>
             {!dragging &&
                 currentChat.chatMessages.map((message, index) => {
-                    const isOwnContent = message.from === username && dmContentTypes.includes(message.type)
+                    const isOwnContent =
+                        message.from === username && dmContentTypes.includes(message.type)
                     return (
-                    <div
-                        className={'flex gap-2' + (isOwnContent ? ' cursor-context-menu' : '')}
-                        key={message.id}
-                        ref={index === 0 ? observerTarget : null}
-                        onContextMenu={isOwnContent ? (e) => {
-                            e.preventDefault()
-                            setSeenByAnchor(e.currentTarget)
-                            setSeenByDMUsers(getSeenByDMUsers(message))
-                        } : undefined}>
-                        {/*First Message*/}
-                        {message.type === ChatMessageType.TypeFirstMessage && (
-                            <ItemChatHelloMessage />
-                        )}
-                        {/*text Message*/}
-                        {message.type === ChatMessageType.TypeText && (
-                            <TextMessage message={message} />
-                        )}
-                        {/*Image Message*/}
-                        {message.type === ChatMessageType.TypeImage && (
-                            <ImageMessage message={message} />
-                        )}
-                        {/*Sticker Message*/}
-                        {message.type === ChatMessageType.TypeSticker && (
-                            <StickerMessage message={message} />
-                        )}
+                        <div
+                            className={'flex gap-2' + (isOwnContent ? ' cursor-context-menu' : '')}
+                            key={message.id}
+                            ref={index === 0 ? observerTarget : null}
+                            onContextMenu={
+                                isOwnContent
+                                    ? (e) => {
+                                          e.preventDefault()
+                                          setSeenByAnchor(e.currentTarget)
+                                          setSeenByDMUsers(getSeenByDMUsers(message))
+                                      }
+                                    : undefined
+                            }>
+                            {/*First Message*/}
+                            {message.type === ChatMessageType.TypeFirstMessage && (
+                                <ItemChatHelloMessage />
+                            )}
+                            {/*text Message*/}
+                            {message.type === ChatMessageType.TypeText && (
+                                <TextMessage message={message} />
+                            )}
+                            {/*Image Message*/}
+                            {message.type === ChatMessageType.TypeImage && (
+                                <ImageMessage message={message} />
+                            )}
+                            {/*Sticker Message*/}
+                            {message.type === ChatMessageType.TypeSticker && (
+                                <StickerMessage message={message} />
+                            )}
                             {/*Deleted Message*/}
                             {message.type === ChatMessageType.TypeDeletedMessage && (
                                 <div className='w-full flex justify-center py-2'>
-                                    <span className='text-sm text-gray-400 italic'>This message was deleted</span>
+                                    <span className='text-sm text-gray-400 italic'>
+                                        This message was deleted
+                                    </span>
                                 </div>
                             )}
-                    </div>
+                        </div>
                     )
-                })
-            }
+                })}
             {dragging && (
                 <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[#075e54]/90 z-50'>
                     <div className='flex flex-col items-center'>
@@ -284,7 +296,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ setImageSrc, setImageOpen }) => {
                     ) : (
                         seenByDMUsers.map((u) => (
                             <div key={u.username} className='flex items-center gap-2 py-1 px-1'>
-                                <Avatar src={u.profileImage} alt={u.username} slotProps={{ img: { referrerPolicy: 'no-referrer' } }} sx={{ width: 28, height: 28 }} />
+                                <Avatar
+                                    src={u.profileImage}
+                                    alt={u.username}
+                                    slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+                                    sx={{ width: 28, height: 28 }}
+                                />
                                 <span className='text-sm text-gray-700'>{u.username}</span>
                             </div>
                         ))

@@ -40,7 +40,9 @@ const ChattingFragment: React.FC = () => {
     useEffect(() => {
         const handleEscCloseChat = (e: KeyboardEvent) => {
             if (e.key !== 'Escape') return
-            const hasOpenModal = Boolean(document.querySelector('[role="dialog"][aria-modal="true"]'))
+            const hasOpenModal = Boolean(
+                document.querySelector('[role="dialog"][aria-modal="true"]')
+            )
             if (hasOpenModal) return
             navigate('/')
         }
@@ -106,7 +108,13 @@ const ChattingFragment: React.FC = () => {
                         <Button
                             color='error'
                             onClick={clearSelectedImage}
-                            sx={{ position: 'absolute', top: 10, right: 10, zIndex: 10, width: '50px' }}
+                            sx={{
+                                position: 'absolute',
+                                top: 10,
+                                right: 10,
+                                zIndex: 10,
+                                width: '50px',
+                            }}
                             endIcon={<CloseIcon sx={{ width: '100%', height: '100%' }} />}
                         />
                     </div>

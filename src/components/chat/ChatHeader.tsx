@@ -24,7 +24,11 @@ function parseStatus(raw: string): { label: string; colour: string } {
                 date.getDate() === now.getDate() &&
                 date.getMonth() === now.getMonth() &&
                 date.getFullYear() === now.getFullYear()
-            const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+            const timeStr = date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+            })
             const label = isToday
                 ? `Last seen at ${timeStr}`
                 : `Last seen ${date.toLocaleDateString([], { month: 'short', day: 'numeric' })} at ${timeStr}`
@@ -209,7 +213,9 @@ const ChatHeader: React.FC = () => {
                         </span>
                     </div>
                     <div className={'flex flex-row items-center gap-1'}>
-                        <span className={`w-2 h-2 rounded-full ${partnerStatus === 'Online' ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                        <span
+                            className={`w-2 h-2 rounded-full ${partnerStatus === 'Online' ? 'bg-green-500' : 'bg-yellow-500'}`}
+                        />
                         <span className={`font-medium text-sm ${statusColour}`}>{statusLabel}</span>
                     </div>
                 </div>
