@@ -19,6 +19,7 @@ import ChatUtils from '../../utils/ChatUtils.ts'
 import { ChatMessageType } from '../../enums/ChatMessageType.ts'
 import { enqueueSnackbar } from 'notistack'
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx'
+import ViewImageDialog from '../dialogs/ViewImageDialog.tsx'
 import { ErrorMessages } from '../../constants/ErrorMessages.ts'
 import { SuccessMessages } from '../../constants/SuccessMessages.ts'
 import { useNavigate } from 'react-router'
@@ -39,20 +40,21 @@ const ViewProfile: React.FC = () => {
     const loadPartnerDetails = useChatProfileStore((state) => state.loadPartnerDetails)
     const loadCommonGroups = useChatProfileStore((state) => state.loadCommonGroups)
     const muteUnMuteChat = useChatProfileStore((state) => state.muteUnMuteChat)
-    const [isMuted, setIsMuted] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [confirmTitle, setConfirmTitle] = useState('')
     const [confirmMessage, setConfirmMessage] = useState('')
     const [pendingAction, setPendingAction] = useState<'favourite' | 'clear' | 'delete' | null>(null)
+    const [viewImageSrc, setViewImageSrc] = useState<string | null>(null)
 
     useEffect(() => {
         if (!currentChat || !username) return
-        setIsMuted(currentChat.mutedBy.includes(username))
         loadPartnerDetails(currentChat, username)
         loadCommonGroups(currentChat, username)
-    }, [currentChat, username])
+    }, [currentChat, username, loadPartnerDetails, loadCommonGroups])
 
     if (!currentChat || !username) return null
+
+    const isMuted = currentChat.mutedBy.includes(username)
 
     const profileImage = ChatUtils.getUserChatProfileImage(currentChat, username)
     const profileUsername = ChatUtils.getUserChatUsername(currentChat, username)
@@ -60,12 +62,10 @@ const ViewProfile: React.FC = () => {
     const isFavourite = user?.favourites?.includes(currentChat.chatId) ?? false
 
     const handleMuteToggle = (newValue: boolean) => {
-        setIsMuted(newValue)
         muteUnMuteChat(currentChat, username, newValue, (success) => {
             if (success) {
                 enqueueSnackbar(newValue ? 'Chat muted' : 'Chat unmuted', { variant: 'success', autoHideDuration: 2000 })
             } else {
-                setIsMuted(!newValue)
                 enqueueSnackbar('Error updating mute status', { variant: 'error', autoHideDuration: 2000 })
             }
         })
@@ -172,12 +172,17 @@ const ViewProfile: React.FC = () => {
                         ) : (
                             <div className='flex flex-wrap gap-2 max-h-36 overflow-y-auto'>
                                 {mediaMessages.map((msg) => (
-                                    <img
+                                    <button
                                         key={msg.id}
-                                        src={msg.image ?? undefined}
-                                        alt='media'
-                                        className='h-20 w-20 object-cover rounded-xl cursor-pointer hover:opacity-80 transition-opacity'
-                                    />
+                                        type='button'
+                                        className='p-0 border-0 bg-transparent'
+                                        onClick={() => setViewImageSrc(msg.image!)}>
+                                        <img
+                                            src={msg.image ?? undefined}
+                                            alt='media'
+                                            className='h-20 w-20 object-cover rounded-xl cursor-pointer hover:opacity-80 transition-opacity'
+                                        />
+                                    </button>
                                 ))}
                             </div>
                         )}
@@ -211,9 +216,10 @@ const ViewProfile: React.FC = () => {
                         ) : (
                             <div>
                                 {commonGroups.map((group) => (
-                                    <div
+                                    <button
                                         key={group.id}
-                                        className='flex items-center gap-3 py-2 px-1 rounded-xl cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors'
+                                        type='button'
+                                        className='flex items-center gap-3 py-2 px-1 rounded-xl w-full text-left cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors'
                                         onClick={() => handleGroupClick(group.id)}>
                                         <Avatar
                                             src={group.image ?? undefined}
@@ -230,7 +236,7 @@ const ViewProfile: React.FC = () => {
                                                 {group.members.map((m) => m.username).join(', ')}
                                             </Typography>
                                         </div>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         )}
@@ -239,8 +245,9 @@ const ViewProfile: React.FC = () => {
                     <Divider />
 
                     {/* Favourite */}
-                    <div
-                        className='flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors'
+                    <button
+                        type='button'
+                        className='flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer hover:bg-gray-50 transition-colors'
                         onClick={() => openConfirm('favourite')}>
                         {isFavourite ? (
                             <Favorite sx={{ color: '#e53935', fontSize: '1.3rem' }} />
@@ -248,29 +255,31 @@ const ViewProfile: React.FC = () => {
                             <FavoriteBorder sx={{ color: '#e53935', fontSize: '1.3rem' }} />
                         )}
                         <Typography variant='body1'>{isFavourite ? 'Unfavourite' : 'Favourite'}</Typography>
-                    </div>
+                    </button>
 
                     <Divider />
 
                     {/* Clear Chat */}
-                    <div
-                        className='flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors'
+                    <button
+                        type='button'
+                        className='flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer hover:bg-gray-50 transition-colors'
                         onClick={() => openConfirm('clear')}>
                         <Clear sx={{ color: '#f97316', fontSize: '1.3rem' }} />
                         <Typography variant='body1'>Clear Chat</Typography>
-                    </div>
+                    </button>
 
                     <Divider />
 
                     {/* Delete Chat */}
-                    <div
-                        className='flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors'
+                    <button
+                        type='button'
+                        className='flex items-center gap-3 px-4 py-3 w-full text-left cursor-pointer hover:bg-gray-50 transition-colors'
                         onClick={() => openConfirm('delete')}>
                         <DeleteOutlined sx={{ color: '#dc2626', fontSize: '1.3rem' }} />
                         <Typography variant='body1' sx={{ color: '#dc2626' }}>
                             Delete Chat
                         </Typography>
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -280,6 +289,16 @@ const ViewProfile: React.FC = () => {
                 title={confirmTitle}
                 message={confirmMessage}
                 action={handleConfirm}
+            />
+            <ViewImageDialog
+                open={!!viewImageSrc}
+                setOpen={(val) => { if (!val) setViewImageSrc(null) }}
+                image={viewImageSrc ?? ''}
+                zoomIntensity={10}
+                delay={0.2}
+                initialZoomLevel={1}
+                minZoomLevel={1}
+                maxZoomLevel={2.5}
             />
         </>
     )
