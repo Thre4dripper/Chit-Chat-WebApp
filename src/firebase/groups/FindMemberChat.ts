@@ -17,12 +17,28 @@ class FindMemberChat {
             chatsRef,
             or(
                 and(
-                    where(`${ChatConstants.DM_CHAT_USER_1}.${UserConstants.USERNAME}`, '==', loggedInUsername),
-                    where(`${ChatConstants.DM_CHAT_USER_2}.${UserConstants.USERNAME}`, '==', memberUsername)
+                    where(
+                        `${ChatConstants.DM_CHAT_USER_1}.${UserConstants.USERNAME}`,
+                        '==',
+                        loggedInUsername
+                    ),
+                    where(
+                        `${ChatConstants.DM_CHAT_USER_2}.${UserConstants.USERNAME}`,
+                        '==',
+                        memberUsername
+                    )
                 ),
                 and(
-                    where(`${ChatConstants.DM_CHAT_USER_1}.${UserConstants.USERNAME}`, '==', memberUsername),
-                    where(`${ChatConstants.DM_CHAT_USER_2}.${UserConstants.USERNAME}`, '==', loggedInUsername)
+                    where(
+                        `${ChatConstants.DM_CHAT_USER_1}.${UserConstants.USERNAME}`,
+                        '==',
+                        memberUsername
+                    ),
+                    where(
+                        `${ChatConstants.DM_CHAT_USER_2}.${UserConstants.USERNAME}`,
+                        '==',
+                        loggedInUsername
+                    )
                 )
             )
         )

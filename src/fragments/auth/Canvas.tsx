@@ -50,16 +50,22 @@ const Canvas: React.FC = () => {
 
         const tick = () => {
             const c = canvasRef.current
-            if (!c) { id = requestAnimationFrame(tick); return }
+            if (!c) {
+                id = requestAnimationFrame(tick)
+                return
+            }
             const ctx = c.getContext('2d')
-            if (!ctx) { id = requestAnimationFrame(tick); return }
+            if (!ctx) {
+                id = requestAnimationFrame(tick)
+                return
+            }
 
             const r = window.devicePixelRatio || 1
             const W = window.innerWidth
             const H = window.innerHeight
             const V = Math.min(W, H) // vmin in px
-            const cx = W * OX        // orbit/oval center X
-            const cy = H * OY        // orbit/oval center Y
+            const cx = W * OX // orbit/oval center X
+            const cy = H * OY // orbit/oval center Y
 
             ctx.clearRect(0, 0, c.width, c.height)
             // Use CSS-pixel coordinates; ratio is handled by the transform
@@ -70,29 +76,37 @@ const Canvas: React.FC = () => {
             // style curves so no blob ever looks like it's just going left-right or up-down.
             const a = glassDegsRef.current * (Math.PI / 180)
             const blobs = [
-                {   // Lavender — 1:2 figure-eight covering full W×H
-                    bx: W * 0.5 + Math.cos(a)           * W * 0.43,
-                    by: H * 0.5 + Math.sin(2 * a)       * H * 0.41,
+                {
+                    // Lavender — 1:2 figure-eight covering full W×H
+                    bx: W * 0.5 + Math.cos(a) * W * 0.43,
+                    by: H * 0.5 + Math.sin(2 * a) * H * 0.41,
                     br: V * 0.14 + V * 0.05 * Math.sin(a * 1.3),
-                    c0: 'rgba(195,155,255,0.78)', c1: 'rgba(195,155,255,0)',
+                    c0: 'rgba(195,155,255,0.78)',
+                    c1: 'rgba(195,155,255,0)',
                 },
-                {   // Rose — 3:2 trefoil-ish path
-                    bx: W * 0.5 + Math.cos(1.5 * a + 1.0) * W * 0.40,
-                    by: H * 0.5 + Math.sin(a       + 0.5) * H * 0.38,
+                {
+                    // Rose — 3:2 trefoil-ish path
+                    bx: W * 0.5 + Math.cos(1.5 * a + 1.0) * W * 0.4,
+                    by: H * 0.5 + Math.sin(a + 0.5) * H * 0.38,
                     br: V * 0.12 + V * 0.04 * Math.sin(a * 0.7 + 2.0),
-                    c0: 'rgba(255,165,195,0.72)', c1: 'rgba(255,165,195,0)',
+                    c0: 'rgba(255,165,195,0.72)',
+                    c1: 'rgba(255,165,195,0)',
                 },
-                {   // Sky blue — 2:3 Lissajous
-                    bx: W * 0.5 + Math.cos(a       + 2.5) * W * 0.43,
+                {
+                    // Sky blue — 2:3 Lissajous
+                    bx: W * 0.5 + Math.cos(a + 2.5) * W * 0.43,
                     by: H * 0.5 + Math.sin(1.5 * a + 1.8) * H * 0.41,
                     br: V * 0.14 + V * 0.04 * Math.sin(a * 0.9 + 1.0),
-                    c0: 'rgba(150,205,255,0.74)', c1: 'rgba(150,205,255,0)',
+                    c0: 'rgba(150,205,255,0.74)',
+                    c1: 'rgba(150,205,255,0)',
                 },
-                {   // Peach — 7:5 slow drift for extra depth
+                {
+                    // Peach — 7:5 slow drift for extra depth
                     bx: W * 0.5 + Math.cos(0.7 * a + 3.7) * W * 0.36,
                     by: H * 0.5 + Math.sin(1.1 * a + 2.8) * H * 0.34,
-                    br: V * 0.10 + V * 0.04 * Math.sin(a * 1.5 + 0.5),
-                    c0: 'rgba(255,205,170,0.68)', c1: 'rgba(255,205,170,0)',
+                    br: V * 0.1 + V * 0.04 * Math.sin(a * 1.5 + 0.5),
+                    c0: 'rgba(255,205,170,0.68)',
+                    c1: 'rgba(255,205,170,0)',
                 },
             ]
             ctx.save()
@@ -133,7 +147,7 @@ const Canvas: React.FC = () => {
             glassDegsRef.current = (glassDegsRef.current + 0.1) % 360
 
             if (flingSpeedRef.current !== 0) {
-                flingSpeedRef.current *= 0.96  // friction damping
+                flingSpeedRef.current *= 0.96 // friction damping
                 elemDegsRef.current = (elemDegsRef.current + flingSpeedRef.current) % 360
                 if (Math.abs(flingSpeedRef.current) < 0.05) flingSpeedRef.current = 0
             } else {
@@ -227,4 +241,3 @@ const Canvas: React.FC = () => {
 }
 
 export default Canvas
-

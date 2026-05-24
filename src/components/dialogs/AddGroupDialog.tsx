@@ -45,7 +45,8 @@ const formatStatus = (status: string): string => {
             if (isToday) return `Last seen today at ${time}`
             const yesterday = new Date(now)
             yesterday.setDate(yesterday.getDate() - 1)
-            if (date.toDateString() === yesterday.toDateString()) return `Last seen yesterday at ${time}`
+            if (date.toDateString() === yesterday.toDateString())
+                return `Last seen yesterday at ${time}`
             return `Last seen ${date.toLocaleDateString([], { month: 'short', day: 'numeric' })} at ${time}`
         }
     }
@@ -125,7 +126,6 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
             open={dialogState}
             sx={{ '& .MuiDialog-paper': { borderRadius: 3, overflow: 'hidden' } }}
             onClose={() => setDialogState(false)}>
-
             {/* Navy accent bar */}
             <Box sx={{ height: 4, bgcolor: NAVY }} />
 
@@ -182,11 +182,13 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                                             onDelete={() => toggleSelect(chat)}
                                             size='small'
                                             sx={{
-                                                bgcolor: 'white',
-                                                border: '1px solid',
-                                                borderColor: 'divider',
-                                                fontWeight: 500,
-                                                '& .MuiChip-deleteIcon': { color: 'text.secondary' },
+                                                'bgcolor': 'white',
+                                                'border': '1px solid',
+                                                'borderColor': 'divider',
+                                                'fontWeight': 500,
+                                                '& .MuiChip-deleteIcon': {
+                                                    color: 'text.secondary',
+                                                },
                                             }}
                                         />
                                     )
@@ -203,8 +205,8 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                                 onChange={handleChange}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
-                                        borderRadius: 2.5,
-                                        bgcolor: '#f5f7fa',
+                                        'borderRadius': 2.5,
+                                        'bgcolor': '#f5f7fa',
                                         '& fieldset': { borderColor: 'transparent' },
                                         '&:hover fieldset': { borderColor: 'divider' },
                                         '&.Mui-focused fieldset': { borderColor: NAVY },
@@ -214,7 +216,12 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                         </Box>
                         <Typography
                             variant='caption'
-                            sx={{ color: 'text.disabled', display: 'block', textAlign: 'center', py: 0.75 }}>
+                            sx={{
+                                color: 'text.disabled',
+                                display: 'block',
+                                textAlign: 'center',
+                                py: 0.75,
+                            }}>
                             Select at least 2 people to create a group
                         </Typography>
 
@@ -223,11 +230,18 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                             {isLoading ? (
                                 <LottieLoading />
                             ) : searchedUsers.length === 0 ? (
-                                <Lottie className='max-h-50 max-w-50' animationData={NoResult} loop autoPlay />
+                                <Lottie
+                                    className='max-h-50 max-w-50'
+                                    animationData={NoResult}
+                                    loop
+                                    autoPlay
+                                />
                             ) : (
                                 searchedUsers.map((chat) => {
                                     const other = getOtherUser(chat)
-                                    const selected = selectedUsers.some((u) => u.chatId === chat.chatId)
+                                    const selected = selectedUsers.some(
+                                        (u) => u.chatId === chat.chatId
+                                    )
                                     const isOnline = other.status === 'Online'
                                     const statusText = formatStatus(other.status)
 
@@ -236,47 +250,86 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                                             key={chat.chatId}
                                             onClick={() => toggleSelect(chat)}
                                             sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 1.5,
-                                                px: 2,
-                                                py: 1,
-                                                cursor: 'pointer',
-                                                borderLeft: selected ? `3px solid ${NAVY}` : '3px solid transparent',
-                                                bgcolor: selected ? 'rgba(29,44,72,0.05)' : 'transparent',
-                                                '&:hover': { bgcolor: selected ? 'rgba(29,44,72,0.07)' : 'rgba(0,0,0,0.03)' },
-                                                transition: 'background 0.12s, border-color 0.12s',
+                                                'display': 'flex',
+                                                'alignItems': 'center',
+                                                'gap': 1.5,
+                                                'px': 2,
+                                                'py': 1,
+                                                'cursor': 'pointer',
+                                                'borderLeft': selected
+                                                    ? `3px solid ${NAVY}`
+                                                    : '3px solid transparent',
+                                                'bgcolor': selected
+                                                    ? 'rgba(29,44,72,0.05)'
+                                                    : 'transparent',
+                                                '&:hover': {
+                                                    bgcolor: selected
+                                                        ? 'rgba(29,44,72,0.07)'
+                                                        : 'rgba(0,0,0,0.03)',
+                                                },
+                                                'transition':
+                                                    'background 0.12s, border-color 0.12s',
                                             }}>
                                             {/* Avatar with online indicator */}
                                             <Badge
                                                 overlap='circular'
-                                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'right',
+                                                }}
                                                 badgeContent={
                                                     isOnline ? (
-                                                        <Box sx={{ width: 10, height: 10, bgcolor: '#4caf50', borderRadius: '50%', border: '2px solid white' }} />
+                                                        <Box
+                                                            sx={{
+                                                                width: 10,
+                                                                height: 10,
+                                                                bgcolor: '#4caf50',
+                                                                borderRadius: '50%',
+                                                                border: '2px solid white',
+                                                            }}
+                                                        />
                                                     ) : null
                                                 }>
-                                                <Avatar src={other.profileImage} sx={{ width: 46, height: 46 }}>
+                                                <Avatar
+                                                    src={other.profileImage}
+                                                    sx={{ width: 46, height: 46 }}>
                                                     {other.username[0].toUpperCase()}
                                                 </Avatar>
                                             </Badge>
 
                                             {/* Name + status */}
                                             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                                                <Typography sx={{ fontWeight: 500, fontSize: '0.9rem', lineHeight: 1.3 }} noWrap>
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 500,
+                                                        fontSize: '0.9rem',
+                                                        lineHeight: 1.3,
+                                                    }}
+                                                    noWrap>
                                                     {other.username}
                                                 </Typography>
                                                 <Typography
                                                     variant='caption'
                                                     noWrap
-                                                    sx={{ color: isOnline ? '#4caf50' : 'text.secondary', display: 'block' }}>
+                                                    sx={{
+                                                        color: isOnline
+                                                            ? '#4caf50'
+                                                            : 'text.secondary',
+                                                        display: 'block',
+                                                    }}>
                                                     {statusText}
                                                 </Typography>
                                             </Box>
 
                                             {/* Check icon */}
                                             {selected && (
-                                                <CheckCircle sx={{ color: NAVY, fontSize: 22, flexShrink: 0 }} />
+                                                <CheckCircle
+                                                    sx={{
+                                                        color: NAVY,
+                                                        fontSize: 22,
+                                                        flexShrink: 0,
+                                                    }}
+                                                />
                                             )}
                                         </Box>
                                     )
@@ -285,26 +338,48 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                         </Box>
                     </>
                 ) : (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2.5, px: 3, py: 3 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: 2.5,
+                            px: 3,
+                            py: 3,
+                        }}>
                         {/* Group icon picker */}
                         <Box
                             onClick={() => iconInputRef.current?.click()}
-                            sx={{ position: 'relative', cursor: 'pointer', '&:hover .cam-overlay': { opacity: 1 } }}>
-                            <Avatar src={groupIconPreview ?? undefined} sx={{ width: 96, height: 96, bgcolor: NAVY }}>
+                            sx={{
+                                'position': 'relative',
+                                'cursor': 'pointer',
+                                '&:hover .cam-overlay': { opacity: 1 },
+                            }}>
+                            <Avatar
+                                src={groupIconPreview ?? undefined}
+                                sx={{ width: 96, height: 96, bgcolor: NAVY }}>
                                 <People sx={{ fontSize: 48 }} />
                             </Avatar>
                             <Box
                                 className='cam-overlay'
                                 sx={{
-                                    position: 'absolute', inset: 0, borderRadius: '50%',
-                                    bgcolor: 'rgba(0,0,0,0.45)', display: 'flex',
-                                    alignItems: 'center', justifyContent: 'center',
-                                    opacity: 0, transition: 'opacity 0.2s',
+                                    position: 'absolute',
+                                    inset: 0,
+                                    borderRadius: '50%',
+                                    bgcolor: 'rgba(0,0,0,0.45)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    opacity: 0,
+                                    transition: 'opacity 0.2s',
                                 }}>
                                 <CameraAlt sx={{ color: 'white', fontSize: 28 }} />
                             </Box>
                             <input
-                                hidden ref={iconInputRef} accept='image/*' type='file'
+                                hidden
+                                ref={iconInputRef}
+                                accept='image/*'
+                                type='file'
                                 onChange={(e) => {
                                     const file = e.target.files?.[0] || null
                                     setGroupIcon(file)
@@ -322,12 +397,24 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                             onChange={(e) => setGroupName(e.target.value)}
                             required
                             fullWidth
-                            sx={{ '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: NAVY }, '& label.Mui-focused': { color: NAVY } }}
+                            sx={{
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: NAVY,
+                                },
+                                '& label.Mui-focused': { color: NAVY },
+                            }}
                         />
 
                         {/* Members preview */}
                         <Box sx={{ width: '100%', bgcolor: '#f8fafd', borderRadius: 2, p: 1.5 }}>
-                            <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                            <Typography
+                                variant='caption'
+                                sx={{
+                                    color: 'text.secondary',
+                                    fontWeight: 600,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: 0.5,
+                                }}>
                                 {selectedUsers.length} Members
                             </Typography>
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mt: 1 }}>
@@ -336,10 +423,18 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                                     return (
                                         <Chip
                                             key={chat.chatId}
-                                            avatar={<Avatar src={other.profileImage}>{other.username[0].toUpperCase()}</Avatar>}
+                                            avatar={
+                                                <Avatar src={other.profileImage}>
+                                                    {other.username[0].toUpperCase()}
+                                                </Avatar>
+                                            }
                                             label={other.username}
                                             size='small'
-                                            sx={{ bgcolor: 'white', border: '1px solid', borderColor: 'divider' }}
+                                            sx={{
+                                                bgcolor: 'white',
+                                                border: '1px solid',
+                                                borderColor: 'divider',
+                                            }}
                                         />
                                     )
                                 })}
@@ -351,9 +446,24 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
 
             <Divider />
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, px: 2, py: 1.5, bgcolor: 'background.paper' }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    px: 2,
+                    py: 1.5,
+                    bgcolor: 'background.paper',
+                }}>
                 {step === 2 && (
-                    <Button variant='outlined' onClick={() => setStep(1)} sx={{ borderColor: NAVY, color: NAVY, '&:hover': { borderColor: NAVY, bgcolor: 'rgba(29,44,72,0.05)' } }}>
+                    <Button
+                        variant='outlined'
+                        onClick={() => setStep(1)}
+                        sx={{
+                            'borderColor': NAVY,
+                            'color': NAVY,
+                            '&:hover': { borderColor: NAVY, bgcolor: 'rgba(29,44,72,0.05)' },
+                        }}>
                         Back
                     </Button>
                 )}
@@ -362,7 +472,11 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                         variant='contained'
                         disabled={selectedUsers.length < 2}
                         onClick={() => setStep(2)}
-                        sx={{ bgcolor: NAVY, '&:hover': { bgcolor: '#243658' }, '&:disabled': { bgcolor: 'rgba(0,0,0,0.12)' } }}>
+                        sx={{
+                            'bgcolor': NAVY,
+                            '&:hover': { bgcolor: '#243658' },
+                            '&:disabled': { bgcolor: 'rgba(0,0,0,0.12)' },
+                        }}>
                         Next
                     </Button>
                 ) : (
@@ -370,7 +484,11 @@ const GroupChatDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDial
                         variant='contained'
                         disabled={!groupName.trim() || isCreating}
                         onClick={handleCreateGroup}
-                        sx={{ bgcolor: NAVY, '&:hover': { bgcolor: '#243658' }, '&:disabled': { bgcolor: 'rgba(0,0,0,0.12)' } }}>
+                        sx={{
+                            'bgcolor': NAVY,
+                            '&:hover': { bgcolor: '#243658' },
+                            '&:disabled': { bgcolor: 'rgba(0,0,0,0.12)' },
+                        }}>
                         {isCreating ? 'Creating...' : 'Create Group'}
                     </Button>
                 )}

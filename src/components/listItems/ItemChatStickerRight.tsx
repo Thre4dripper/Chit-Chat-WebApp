@@ -10,7 +10,12 @@ interface ItemChatStickerRightProps {
     onSeenByClick: (anchor: HTMLElement) => void
 }
 
-const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({ seen, sticker, time, onSeenByClick }) => {
+const ItemChatStickerRight: React.FC<ItemChatStickerRightProps> = ({
+    seen,
+    sticker,
+    time,
+    onSeenByClick,
+}) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',

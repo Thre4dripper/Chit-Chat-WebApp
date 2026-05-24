@@ -23,16 +23,9 @@ type GroupProfileActions = {
     ) => void
     // Mirrors GroupProfileViewModel.findGroupMember
     // 1. Check homeChats (fast in-memory) 2. Query Firestore via FindMemberChat 3. Create DM if none
-    findGroupMember: (
-        memberUsername: string,
-        onSuccess: (chatId: string | null) => void
-    ) => void
+    findGroupMember: (memberUsername: string, onSuccess: (chatId: string | null) => void) => void
     // Mirrors GroupsRepository.updateGroupImage (GroupProfileViewModel.updateGroupImage)
-    updateGroupImage: (
-        groupId: string,
-        image: File,
-        onSuccess: (success: boolean) => void
-    ) => void
+    updateGroupImage: (groupId: string, image: File, onSuccess: (success: boolean) => void) => void
 }
 
 const useGroupProfileStore = create<GroupProfileActions>()(

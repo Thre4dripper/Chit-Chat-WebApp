@@ -69,7 +69,11 @@ const useChatProfileStore = create<ChatProfileState & ChatProfileActions>()(
             subscribePartnerStatus: (chatModel, loggedInUsername) => {
                 const partnerUsername = ChatUtils.getUserChatUsername(chatModel, loggedInUsername)
                 const firestore = getFirestore()
-                const userRef = doc(firestore, FirestoreCollections.USERS_COLLECTION, partnerUsername)
+                const userRef = doc(
+                    firestore,
+                    FirestoreCollections.USERS_COLLECTION,
+                    partnerUsername
+                )
                 const unsubscribe = onSnapshot(userRef, (userSnap) => {
                     if (userSnap.exists()) {
                         const userData = userSnap.data() as UserModel
@@ -84,7 +88,12 @@ const useChatProfileStore = create<ChatProfileState & ChatProfileActions>()(
             },
 
             reset: () => {
-                set({ partnerName: null, partnerBio: null, partnerStatus: 'Online', commonGroups: [] })
+                set({
+                    partnerName: null,
+                    partnerBio: null,
+                    partnerStatus: 'Online',
+                    commonGroups: [],
+                })
             },
         }))
     )

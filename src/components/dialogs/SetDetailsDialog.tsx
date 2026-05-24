@@ -168,7 +168,10 @@ const SetDetailsDialog: React.FC<SetDetailsDialogProps> = ({ dialogState, setDia
                                 error={!!errors.inputValue}
                             />
                         </form>
-                        <Typography variant='body2' color='text.secondary' sx={{ textAlign: 'right' }}>
+                        <Typography
+                            variant='body2'
+                            color='text.secondary'
+                            sx={{ textAlign: 'right' }}>
                             {`${watch('inputValue').length}/${max} characters`}
                         </Typography>
                     </Stack>

@@ -11,7 +11,12 @@ interface ItemChatTextLeftProps {
     onAvatarClick?: () => void
 }
 
-const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({ profileImage, message, time, onAvatarClick }) => {
+const ItemChatTextLeft: React.FC<ItemChatTextLeftProps> = ({
+    profileImage,
+    message,
+    time,
+    onAvatarClick,
+}) => {
     const FormatedTime = time.toDate().toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',

@@ -13,9 +13,7 @@ const ItemFavChat: React.FC<FavChatProps> = ({ chatId, image, name }) => {
     const navigate = useNavigate()
 
     return (
-        <Box
-            className={'flex flex-col items-center'}
-            onClick={() => navigate('/chat/' + chatId)}>
+        <Box className={'flex flex-col items-center'} onClick={() => navigate('/chat/' + chatId)}>
             <CircularImage image={image} size={80} />
             <Typography variant='subtitle1' sx={{ color: 'white' }} align='center'>
                 {name}

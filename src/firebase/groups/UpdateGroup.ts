@@ -8,11 +8,7 @@ import { StorageFolders } from '../../constants/StorageFolders.ts'
 // Mirrors UpdateGroup.kt + GroupsRepository.updateGroupImage() in Android
 
 class UpdateGroup {
-    static updateGroupImage(
-        groupId: string,
-        image: File,
-        callback: (success: boolean) => void
-    ) {
+    static updateGroupImage(groupId: string, image: File, callback: (success: boolean) => void) {
         const storage = getStorage()
         const path = `${StorageFolders.GROUP_IMAGES_FOLDER}/${groupId}`
         StorageUtils.getUrlFromStorage(storage, path, image, (url) => {
