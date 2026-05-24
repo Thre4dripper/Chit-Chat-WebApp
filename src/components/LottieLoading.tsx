@@ -26,7 +26,7 @@ const LottieLoading: React.FC<LottieLoadingProps> = ({
     return (
         <div className={containerClasses}>
             <Lottie
-                className={'max-h-[200px] max-w-[200px]'}
+                className={'max-h-50 max-w-50'}
                 animationData={lottieLoading}
                 loop={true}
                 autoPlay={true}
