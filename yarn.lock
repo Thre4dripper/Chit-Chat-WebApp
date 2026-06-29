@@ -3660,10 +3660,10 @@ react-hook-form@^7.76.0:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.76.0.tgz#b58036cabfac756500115a5a6bebc53a8314f05f"
   integrity sha512-eKtLGgFeSgkHqQD8J59AMZ9a4uD1D83iSIzt4YlTGD7liDen5rrjcUO1rVIGd9yC1gofryjtHbv+4ny4hkLWlw==
 
-react-image-crop@^11.0.10:
-  version "11.0.10"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.0.10.tgz#20fe6e3ff6fe29745a37eac1b4c0e73e6b17f2e0"
-  integrity sha512-+5FfDXUgYLLqBh1Y/uQhIycpHCbXkI50a+nbfkB1C0xXXUTwkisHDo2QCB1SQJyHCqIuia4FeyReqXuMDKWQTQ==
+react-image-crop@^11.1.2:
+  version "11.1.2"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.1.2.tgz#fbf20e58c0b02746d6388d64759c012b0ffde5c2"
+  integrity sha512-+0Pc2fxpwKL4u4oLmdKBw8XSwUceFbXbKEHvFOlsl/MGB1OVNic4uBlAPmEHGXYgoJIq+b63xHbc/aJMG0AVkA==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
