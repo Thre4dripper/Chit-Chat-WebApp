@@ -1,0 +1,30 @@
+# Normalize all text files to LF in the repo and in every working tree,
+# regardless of OS or the user's core.autocrlf setting.
+* text=auto eol=lf
+
+# Windows-only scripts need CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary assets: never touch line endings or diff as text
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.avif  binary
+*.mp3   binary
+*.mp4   binary
+*.webm  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+*.pdf   binary
+*.zip   binary
+
+# Lockfile: keep LF, don't show huge diffs
+yarn.lock text eol=lf -diff linguist-generated
